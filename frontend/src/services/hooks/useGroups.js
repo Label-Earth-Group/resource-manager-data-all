@@ -7,8 +7,9 @@ export const useGroups = () => {
   const [groups, setGroups] = useState(null);
   const fetchGroups = async () => {
     if (
-      !process.env.REACT_APP_COGNITO_USER_POOL_ID &&
-      process.env.REACT_APP_GRAPHQL_API.includes('localhost')
+      !process.env.REACT_APP_COGNITO_USER_POOL_ID
+      // &&
+      // process.env.REACT_APP_GRAPHQL_API.includes('localhost')
     ) {
       setGroups(['Engineers', 'Scientists']);
     } else {

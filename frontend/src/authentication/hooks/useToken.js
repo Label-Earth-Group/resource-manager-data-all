@@ -9,8 +9,9 @@ export const useToken = () => {
   const [token, setToken] = useState(null);
   const fetchAuthToken = async () => {
     if (
-      !process.env.REACT_APP_COGNITO_USER_POOL_ID &&
-      process.env.REACT_APP_GRAPHQL_API.includes('localhost')
+      !process.env.REACT_APP_COGNITO_USER_POOL_ID
+      // &&
+      // process.env.REACT_APP_GRAPHQL_API.includes('localhost')
     ) {
       setToken('localToken');
     } else {
