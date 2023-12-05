@@ -5,7 +5,10 @@ import {
   Link,
   Button,
   Box,
-  Container
+  Container,
+  Autocomplete,
+  TextField,
+  Checkbox
 } from '@mui/material';
 import {
   ChevronRightIcon,
@@ -18,6 +21,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 import StacCollectionListItem from '../components/StacCollectionListItem';
+import { providers, platform, processingLevel, sensorType } from '../constants';
 
 function StacCollectionPageHeader() {
   return (
@@ -96,6 +100,59 @@ const StacCollectionList = () => {
               value={inputValue}
               placeholder="Filter by name"
             />
+          </Box>
+          <Box sx={{ mt: 3 }}>
+            <Grid container xs={12} spacing={2}>
+              <Grid item md={3} sm={6} xs={12}>
+                <Autocomplete
+                  id="providerFilter"
+                  fullWidth
+                  multiple
+                  disableCloseOnSelect
+                  options={providers}
+                  renderInput={(params) => (
+                    <TextField {...params} label="EODAG provider" />
+                  )}
+                  renderOption={(props, option, { selected }) => (
+                    <li {...props}>
+                      <Checkbox checked={selected} />
+                      {option.label}
+                    </li>
+                  )}
+                ></Autocomplete>
+              </Grid>
+              <Grid item md={3} sm={6} xs={12}>
+                <Autocomplete
+                  id="platformFilter"
+                  fullWidth
+                  options={platform}
+                  onChange={() => {}}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Platform" />
+                  )}
+                ></Autocomplete>
+              </Grid>
+              <Grid item md={3} sm={6} xs={12}>
+                <Autocomplete
+                  id="processingLevelFilter"
+                  fullWidth
+                  options={processingLevel}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Processing level" />
+                  )}
+                ></Autocomplete>
+              </Grid>
+              <Grid item md={3} sm={6} xs={12}>
+                <Autocomplete
+                  id="processingLevelFilter"
+                  fullWidth
+                  options={sensorType}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Sensor type" />
+                  )}
+                ></Autocomplete>
+              </Grid>
+            </Grid>
           </Box>
           <Box
             sx={{
