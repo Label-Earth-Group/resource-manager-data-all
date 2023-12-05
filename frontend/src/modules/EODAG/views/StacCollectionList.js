@@ -7,9 +7,17 @@ import {
   Box,
   Container
 } from '@mui/material';
-import { ChevronRightIcon, SearchIcon, useSettings } from 'design';
+import {
+  ChevronRightIcon,
+  SearchIcon,
+  useSettings,
+  SearchInput,
+  CircularProgress
+} from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { useState } from 'react';
+import StacCollectionListItem from '../components/StacCollectionListItem';
 
 function StacCollectionPageHeader() {
   return (
@@ -52,7 +60,7 @@ function StacCollectionPageHeader() {
             to="/console/eodag/search"
             variant="contained"
           >
-            Advanced search
+            Advanced STAC search
           </Button>
         </Box>
       </Grid>
@@ -62,6 +70,11 @@ function StacCollectionPageHeader() {
 
 const StacCollectionList = () => {
   const { settings } = useSettings();
+  const [loading] = useState(false); // TODO
+  const [inputValue, setInputValue] = useState('');
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
   return (
     <>
       <Helmet>
@@ -76,6 +89,31 @@ const StacCollectionList = () => {
       >
         <Container maxWidth={settings.compact ? 'xl' : false}>
           <StacCollectionPageHeader />
+          <Box sx={{ mt: 3 }}>
+            <SearchInput
+              onChange={handleInputChange}
+              onKeyUp={() => {}}
+              value={inputValue}
+              placeholder="Filter by name"
+            />
+          </Box>
+          <Box
+            sx={{
+              flexGrow: 1,
+              mt: 3
+            }}
+          >
+            {loading ? (
+              <CircularProgress />
+            ) : (
+              <Box>
+                <Grid container spacing={3}>
+                  <StacCollectionListItem collection={{ id: 'S1_MSI_L1C' }} />
+                  <StacCollectionListItem collection={{ id: 'S1_MSI_L2A' }} />
+                </Grid>
+              </Box>
+            )}
+          </Box>
         </Container>
       </Box>
     </>

@@ -3,7 +3,7 @@ import * as PropTypes from 'prop-types';
 import { SearchIcon } from '../icons';
 
 export function SearchInput(props) {
-  const { onChange, onKeyUp, value } = props;
+  const { onChange, onKeyUp, value, placeholder } = props;
   return (
     <Card>
       <Box
@@ -25,7 +25,7 @@ export function SearchInput(props) {
             fullWidth
             onChange={onChange}
             onKeyUp={onKeyUp}
-            placeholder="Search"
+            placeholder={placeholder || 'Search'}
             value={value}
           />
         </Box>
@@ -37,5 +37,6 @@ export function SearchInput(props) {
 SearchInput.propTypes = {
   onChange: PropTypes.func,
   onKeyUp: PropTypes.func,
+  placeholder: PropTypes.string,
   value: PropTypes.string
 };
