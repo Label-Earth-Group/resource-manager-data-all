@@ -160,6 +160,9 @@ const AdministrationView = Loadable(
 const StacCollectionList = Loadable(
   lazy(() => import('./modules/EODAG/views/StacCollectionList'))
 );
+const StacSearchView = Loadable(
+  lazy(() => import('./modules/EODAG/views/StacSearchView'))
+);
 
 const routes = [
   {
@@ -188,6 +191,10 @@ const routes = [
           {
             path: 'eodag',
             element: <StacCollectionList />
+          },
+          {
+            path: 'eodag/search',
+            element: <StacSearchView />
           }
         ]
       },

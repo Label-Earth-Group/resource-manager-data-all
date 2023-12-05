@@ -3,15 +3,14 @@ import {
   Typography,
   Breadcrumbs,
   Link,
-  Button,
   Box,
   Container
 } from '@mui/material';
-import { ChevronRightIcon, SearchIcon, useSettings } from 'design';
+import { ChevronRightIcon, useSettings } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
-function StacCollectionPageHeader() {
+function StacSearchPageHeader() {
   return (
     <Grid
       alignItems="center"
@@ -21,7 +20,7 @@ function StacCollectionPageHeader() {
     >
       <Grid item>
         <Typography color="textPrimary" variant="h5">
-          Earth Open Data API Gateway
+          Earth Open Data API Gateway -- Search
         </Typography>
         <Breadcrumbs
           aria-label="breadcrumb"
@@ -40,27 +39,16 @@ function StacCollectionPageHeader() {
           >
             EODAG
           </Link>
+          <Link underline="hover" color="textPrimary">
+            Search
+          </Link>
         </Breadcrumbs>
-      </Grid>
-      <Grid item>
-        <Box sx={{ m: -1 }}>
-          <Button
-            color="primary"
-            component={RouterLink}
-            startIcon={<SearchIcon fontSize="small" />}
-            sx={{ m: 1 }}
-            to="/console/eodag/search"
-            variant="contained"
-          >
-            Advanced search
-          </Button>
-        </Box>
       </Grid>
     </Grid>
   );
 }
 
-const StacCollectionList = () => {
+const StacSearchView = () => {
   const { settings } = useSettings();
   return (
     <>
@@ -75,11 +63,11 @@ const StacCollectionList = () => {
         }}
       >
         <Container maxWidth={settings.compact ? 'xl' : false}>
-          <StacCollectionPageHeader />
+          <StacSearchPageHeader />
         </Container>
       </Box>
     </>
   );
 };
 
-export default StacCollectionList;
+export default StacSearchView;
