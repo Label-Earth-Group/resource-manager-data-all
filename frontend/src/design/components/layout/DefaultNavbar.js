@@ -21,20 +21,18 @@ export const DefaultNavbar = ({ openDrawer, onOpenDrawerChange }) => {
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar sx={{ minHeight: 64, maxHeight: 64 }}>
-        {!openDrawer && (
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-            onClick={() => {
-              onOpenDrawerChange(true);
-            }}
-          >
-            <Menu />
-          </IconButton>
-        )}
+        <IconButton
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          sx={{ mr: 2 }}
+          onClick={() => {
+            onOpenDrawerChange(!openDrawer);
+          }}
+        >
+          <Menu />
+        </IconButton>
         <Box width="350px" display={{ xs: 'block', lg: 'block', xl: 'block' }}>
           <Logo />
         </Box>

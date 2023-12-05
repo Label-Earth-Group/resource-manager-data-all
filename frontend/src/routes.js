@@ -157,6 +157,10 @@ const AdministrationView = Loadable(
   lazy(() => import('./modules/Administration/views/AdministrationView'))
 );
 
+const StacCollectionList = Loadable(
+  lazy(() => import('./modules/EODAG/views/StacCollectionList'))
+);
+
 const routes = [
   {
     children: [
@@ -179,6 +183,14 @@ const routes = [
       </AuthGuard>
     ),
     children: [
+      {
+        children: [
+          {
+            path: 'eodag',
+            element: <StacCollectionList />
+          }
+        ]
+      },
       {
         children: [
           {

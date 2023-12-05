@@ -1,4 +1,10 @@
-import { ChevronLeft, ChevronRight, ShareOutlined } from '@mui/icons-material';
+import {
+  ChevronLeft,
+  ChevronRight,
+  MenuBook,
+  ShareOutlined,
+  Public
+} from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -15,7 +21,7 @@ import * as BsIcons from 'react-icons/bs';
 import { FiCodesandbox, FiPackage } from 'react-icons/fi';
 import { MdShowChart } from 'react-icons/md';
 import { SiJupyter } from 'react-icons/si';
-import { VscBook } from 'react-icons/vsc';
+// import { VscBook } from 'react-icons/vsc';
 import { useLocation } from 'react-router-dom';
 import { ModuleNames, isModuleEnabled } from 'utils';
 import { useSettings } from '../../hooks';
@@ -24,10 +30,17 @@ import { Scrollbar } from '../Scrollbar';
 
 export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
   const getSections = (isAdvancedMode) => {
+    const eodagSection = {
+      title: 'EODAG',
+      path: '/console/eodag',
+      icon: <Public size={15} />,
+      active: true
+    };
+
     const catalogSection = {
       title: 'Catalog',
       path: '/console/catalog',
-      icon: <VscBook size={15} />,
+      icon: <MenuBook size={15} />,
       active: isModuleEnabled(ModuleNames.CATALOG)
     };
 
@@ -104,6 +117,10 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
     if (isAdvancedMode) {
       sections = [
         {
+          title: 'STAC',
+          items: [eodagSection]
+        },
+        {
           title: 'Discover',
           items: [
             catalogSection,
@@ -171,12 +188,13 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        height: 'calc(100% - 48px)',
-        width: '250px'
+        height: '100%',
+        width: '250px',
+        overflowY: 'auto'
       }}
     >
       <Scrollbar options={{ suppressScrollX: true }}>
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ p: 1 }}>
           {sections &&
             sections.map((section) => (
               <NavSection
@@ -188,7 +206,7 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
         </Box>
       </Scrollbar>
       <Divider />
-      <Box sx={{ p: 2 }} style={{ position: 'relative' }}>
+      <Box sx={{ p: 1 }} style={{ position: 'relative' }}>
         <Box sx={{ pb: 1 }}>
           <Button
             color="primary"
