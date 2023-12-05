@@ -155,8 +155,7 @@
       "jsx-quotes": [
         "error",
         "prefer-double"
-      ],
-      "import/no-default-export": "warn"
+      ]
     }
   },
   "browserslist": {
