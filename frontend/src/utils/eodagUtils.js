@@ -1,7 +1,63 @@
 import URI from 'urijs';
-import removeMd from 'remove-markdown';
-import { stacPagination } from "./rels";
+//import removeMd from 'remove-markdown';
 
+
+// ================== STAC relation types ===================
+
+// STAC hierarchical
+export const stacHierarchy = [
+  'child',
+  'collection',
+  'item',
+  'parent',
+  'root',
+  'self'
+];
+
+// STAC API Pagination
+export const stacPagination = [
+  'first',
+  'last',
+  'next',
+  'prev',
+  'previous'
+];
+
+// Queryables
+export const ogcQueryables = [
+  'queryables', // Old way in STAC (deprecated)
+  'http://www.opengis.net/def/rel/ogc/1.0/queryables', // STAC and OGC APIs
+  'ogc-rel:queryables' // Alternative in OGC APIs
+];
+
+// Rels that STAC Browser can navigate to and display natively (i.e. Collections, Catalogs and Items)
+export const stacBrowserNavigatesTo = [
+  'canonical', // Links to other catalogs or items v
+  'related',
+  'derived_from',
+  'latest-version', // version extension v
+  'predecessor-version',
+  'successor-version',
+  'source', // label extension,
+  'alternate' // language extension
+].concat(stacHierarchy).concat(stacPagination);
+
+// Rels that are handled in a special way and should not be shown in the link list
+export const stacBrowserSpecialHandling = [
+  'conformance', // API related v
+  'data',
+  'items',
+  'search',
+  'icon', // Other v
+  'license',
+].concat(stacHierarchy).concat(stacPagination).concat(ogcQueryables);
+
+// OGC APIs
+export const ogcRelPrefix = 'http://www.opengis.net/def/rel/ogc/1.0/';
+
+
+
+// ============================== some defined content types of request ===================
 export const commonFileNames = ['catalog', 'collection', 'item'];
 
 export const geojsonMediaType = "application/geo+json";
@@ -183,18 +239,18 @@ export default class Utils {
     }
   }
 
-  static summarizeMd(text, maxLength = null) {
-    if (!Utils.hasText(text)) {
-      return '';
-    }
-    // Best-effort approach to remove some CommonMark (Markdown).
-    // Likely not perfect, but seems good enough for most cases.
-    text = removeMd(text).replaceAll(/[\r\n]+/g, ' ');
-    if (maxLength > 0 && text.length > maxLength) {
-      text = text.substr(0, maxLength) + '…';
-    }
-    return text;
-  }
+  // static summarizeMd(text, maxLength = null) {
+  //   if (!Utils.hasText(text)) {
+  //     return '';
+  //   }
+  //   // Best-effort approach to remove some CommonMark (Markdown).
+  //   // Likely not perfect, but seems good enough for most cases.
+  //   text = removeMd(text).replaceAll(/[\r\n]+/g, ' ');
+  //   if (maxLength > 0 && text.length > maxLength) {
+  //     text = text.substr(0, maxLength) + '…';
+  //   }
+  //   return text;
+  // }
 
   static scrollTo(el) {
     if (!el) {
@@ -422,7 +478,7 @@ export default class Utils {
 
     // Search with "and" or "or"
     let fn = and ? 'every' : 'some';
-    return searchterm[fn](term => target.includes(term));
+    return searchterm[fn]((term) => target.includes(term));
   }
 
   static createLink(href, rel) {
