@@ -144,6 +144,7 @@
       "no-unused-vars": "error",
       "no-const-assign": "error",
       "eqeqeq": "error",
+      "linebreak-style": "off",
       "no-console": [
         "error",
         {
