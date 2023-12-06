@@ -1,7 +1,6 @@
 import URI from 'urijs';
 //import removeMd from 'remove-markdown';
 
-
 // ================== STAC relation types ===================
 
 // STAC hierarchical
@@ -15,13 +14,7 @@ export const stacHierarchy = [
 ];
 
 // STAC API Pagination
-export const stacPagination = [
-  'first',
-  'last',
-  'next',
-  'prev',
-  'previous'
-];
+export const stacPagination = ['first', 'last', 'next', 'prev', 'previous'];
 
 // Queryables
 export const ogcQueryables = [
@@ -40,7 +33,9 @@ export const stacBrowserNavigatesTo = [
   'successor-version',
   'source', // label extension,
   'alternate' // language extension
-].concat(stacHierarchy).concat(stacPagination);
+]
+  .concat(stacHierarchy)
+  .concat(stacPagination);
 
 // Rels that are handled in a special way and should not be shown in the link list
 export const stacBrowserSpecialHandling = [
@@ -49,20 +44,21 @@ export const stacBrowserSpecialHandling = [
   'items',
   'search',
   'icon', // Other v
-  'license',
-].concat(stacHierarchy).concat(stacPagination).concat(ogcQueryables);
+  'license'
+]
+  .concat(stacHierarchy)
+  .concat(stacPagination)
+  .concat(ogcQueryables);
 
 // OGC APIs
 export const ogcRelPrefix = 'http://www.opengis.net/def/rel/ogc/1.0/';
 
-
-
 // ============================== some defined content types of request ===================
 export const commonFileNames = ['catalog', 'collection', 'item'];
 
-export const geojsonMediaType = "application/geo+json";
+export const geojsonMediaType = 'application/geo+json';
 
-export const schemaMediaType = "application/schema+json";
+export const schemaMediaType = 'application/schema+json';
 
 export const stacMediaTypes = [
   'application/json',
@@ -80,20 +76,17 @@ export const browserImageTypes = [
 ];
 
 export const cogMediaTypes = [
-  "image/tiff; application=geotiff; profile=cloud-optimized",
-  "image/vnd.stac.geotiff; cloud-optimized=true"
+  'image/tiff; application=geotiff; profile=cloud-optimized',
+  'image/vnd.stac.geotiff; cloud-optimized=true'
 ];
 
 export const geotiffMediaTypes = [
-  "application/geotiff",
-  "image/tiff; application=geotiff",
-  "image/vnd.stac.geotiff",
+  'application/geotiff',
+  'image/tiff; application=geotiff',
+  'image/vnd.stac.geotiff'
 ].concat(cogMediaTypes);
 
-export const browserProtocols = [
-  'http',
-  'https'
-];
+export const browserProtocols = ['http', 'https'];
 
 export const imageMediaTypes = browserImageTypes.concat(geotiffMediaTypes);
 export const mapMediaTypes = imageMediaTypes.concat([geojsonMediaType]);
@@ -106,38 +99,38 @@ export class BrowserError extends Error {
 
 /**
  * General utilities
- * 
+ *
  * @class
  */
 export default class Utils {
-
   /**
    * Checks whether a variable is a real object or not.
-   * 
+   *
    * This is a more strict version of `typeof x === 'object'` as this example would also succeeds for arrays and `null`.
    * This function only returns `true` for real objects and not for arrays, `null` or any other data types.
-   * 
+   *
    * @param {*} obj - A variable to check.
    * @returns {boolean} - `true` is the given variable is an object, `false` otherwise.
    */
   static isObject(obj) {
-    return (typeof obj === 'object' && obj === Object(obj) && !Array.isArray(obj));
+    return (
+      typeof obj === 'object' && obj === Object(obj) && !Array.isArray(obj)
+    );
   }
 
   /**
    * Computes the size of an array (number of array elements) or object (number of key-value-pairs).
-   * 
+   *
    * Returns 0 for all other data types.
-   * 
-   * @param {*} obj 
+   *
+   * @param {*} obj
    * @returns {integer}
    */
   static size(obj) {
     if (typeof obj === 'object' && obj !== null) {
       if (Array.isArray(obj)) {
         return obj.length;
-      }
-      else {
+      } else {
         return Object.keys(obj).length;
       }
     }
@@ -154,23 +147,21 @@ export default class Utils {
     }
     if (allowEmpty && !type) {
       return true;
-    }
-    else if (typeof type !== 'string') {
+    } else if (typeof type !== 'string') {
       return false;
-    }
-    else {
+    } else {
       return types.includes(type.toLowerCase());
     }
   }
 
   /**
    * Checks whether a variable is a string and contains at least one character.
-   * 
+   *
    * @param {*} string - A variable to check.
    * @returns {boolean} - `true` is the given variable is an string with length > 0, `false` otherwise.
    */
   static hasText(string) {
-    return (typeof string === 'string' && string.length > 0);
+    return typeof string === 'string' && string.length > 0;
   }
 
   static shortenTitle(fullStr, strLen, separator = '…') {
@@ -180,22 +171,33 @@ export default class Utils {
 
     let sepLen = separator.length;
     let charsToShow = strLen - sepLen;
-    let frontChars = Math.ceil(charsToShow/2);
-    let backChars = Math.floor(charsToShow/2);
-    return fullStr.substr(0, frontChars) + 
-           separator + 
-           fullStr.substr(fullStr.length - backChars);
+    let frontChars = Math.ceil(charsToShow / 2);
+    let backChars = Math.floor(charsToShow / 2);
+    return (
+      fullStr.substr(0, frontChars) +
+      separator +
+      fullStr.substr(fullStr.length - backChars)
+    );
   }
 
   static isGdalVfsUri(url) {
-    return typeof url === 'string' && url.startsWith('/vsi') && !url.startsWith('/vsicurl/');
+    return (
+      typeof url === 'string' &&
+      url.startsWith('/vsi') &&
+      !url.startsWith('/vsicurl/')
+    );
   }
 
   static toAbsolute(href, baseUrl, stringify = true) {
     return Utils.normalizeUri(href, baseUrl, false, stringify);
   }
 
-  static normalizeUri(href, baseUrl = null, noParams = false, stringify = true) {
+  static normalizeUri(
+    href,
+    baseUrl = null,
+    noParams = false,
+    stringify = true
+  ) {
     // Convert vsicurl URLs to normal URLs
     if (typeof href === 'string' && href.startsWith('/vsicurl/')) {
       href = href.replace(/^\/vsicurl\//, '');
@@ -203,27 +205,46 @@ export default class Utils {
     // Parse URL and make absolute, if required
     let uri = URI(href);
     // Don't convert GDAL VFS URIs: https://github.com/radiantearth/stac-browser/issues/116
-    if (baseUrl && uri.is("relative") && !Utils.isGdalVfsUri(href)) {
+    if (baseUrl && uri.is('relative') && !Utils.isGdalVfsUri(href)) {
       uri = uri.absoluteTo(baseUrl);
     }
     uri.normalize();
     if (noParams) {
-      uri.query("");
-      uri.fragment("");
+      uri.query('');
+      uri.fragment('');
     }
     return stringify ? uri.toString() : uri;
   }
 
   static getLinkWithRel(links, rel) {
-    return Array.isArray(links) ? links.find(link => Utils.isObject(link) && Utils.hasText(link.href) && link.rel === rel) : null;
+    return Array.isArray(links)
+      ? links.find(
+          (link) =>
+            Utils.isObject(link) && Utils.hasText(link.href) && link.rel === rel
+        )
+      : null;
   }
 
   static getLinksWithRels(links, rels) {
-    return Array.isArray(links) ? links.filter(link => Utils.isObject(link) && Utils.hasText(link.href) && rels.includes(link.rel)) : [];
+    return Array.isArray(links)
+      ? links.filter(
+          (link) =>
+            Utils.isObject(link) &&
+            Utils.hasText(link.href) &&
+            rels.includes(link.rel)
+        )
+      : [];
   }
 
   static getLinksWithOtherRels(links, rels) {
-    return Array.isArray(links) ? links.filter(link => Utils.isObject(link) && Utils.hasText(link.href) && !rels.includes(link.rel)) : [];
+    return Array.isArray(links)
+      ? links.filter(
+          (link) =>
+            Utils.isObject(link) &&
+            Utils.hasText(link.href) &&
+            !rels.includes(link.rel)
+        )
+      : [];
   }
 
   static equalUrl(a, b) {
@@ -260,8 +281,8 @@ export default class Utils {
     var isVisible = rect.top < window.innerHeight && rect.bottom >= 0;
     if (!isVisible) {
       el.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
+        behavior: 'smooth',
+        block: 'start'
       });
     }
   }
@@ -286,17 +307,17 @@ export default class Utils {
   }
 
   static formatDatetimeQuery(value) {
-    return value.map(dt => {
-      if (dt instanceof Date) {
-        return dt.toISOString();
-      }
-      else if (dt) {
-        return dt;
-      }
-      else {
-        return '..';
-      }
-    }).join('/');
+    return value
+      .map((dt) => {
+        if (dt instanceof Date) {
+          return dt.toISOString();
+        } else if (dt) {
+          return dt;
+        } else {
+          return '..';
+        }
+      })
+      .join('/');
   }
 
   static getPaginationLinks(data) {
@@ -312,17 +333,18 @@ export default class Utils {
   }
 
   static addFiltersToLink(link, filters = {}, itemsPerPage = null) {
-    let isEmpty = value => {
-      return (value === null
-      || (typeof value === 'number' && !Number.isFinite(value))
-      || (typeof value === 'string' && value.length === 0)
-      || (typeof value === 'object' && Utils.size(value) === 0));
+    let isEmpty = (value) => {
+      return (
+        value === null ||
+        (typeof value === 'number' && !Number.isFinite(value)) ||
+        (typeof value === 'string' && value.length === 0) ||
+        (typeof value === 'object' && Utils.size(value) === 0)
+      );
     };
 
     if (!Utils.isObject(filters)) {
       filters = {};
-    }
-    else {
+    } else {
       filters = Object.assign({}, filters);
     }
 
@@ -342,8 +364,7 @@ export default class Utils {
 
         if (key === 'datetime') {
           value = Utils.formatDatetimeQuery(value);
-        }
-        else if (key === 'filters') {
+        } else if (key === 'filters') {
           Object.assign(body, value.toJSON());
           continue;
         }
@@ -351,8 +372,8 @@ export default class Utils {
         body[key] = value;
       }
       return Object.assign({}, link, { body });
-    }
-    else { // GET
+    } else {
+      // GET
       // Construct new link with search params
       let url = URI(link.href);
 
@@ -365,14 +386,11 @@ export default class Utils {
 
         if (key === 'datetime') {
           value = Utils.formatDatetimeQuery(value);
-        }
-        else if (key === 'bbox') {
+        } else if (key === 'bbox') {
           value = value.join(',');
-        }
-        else if ((key === 'collections' || key === 'ids' || key === 'q')) {
+        } else if (key === 'collections' || key === 'ids' || key === 'q') {
           value = value.join(',');
-        }
-        else if (key === 'filters') {
+        } else if (key === 'filters') {
           let params = value.toText();
           url.setQuery(params);
           continue;
@@ -394,21 +412,16 @@ export default class Utils {
       let path = uri.path().replace(/^\//, '');
       if (auth === 'doi.org' && path.startsWith('10.')) {
         return `DOI ${path}`;
-      }
-      else {
+      } else {
         return `${file} (${auth})`;
       }
-    }
-    else if (file && !commonFileNames.includes(file)) {
+    } else if (file && !commonFileNames.includes(file)) {
       return file;
-    }
-    else if (auth) {
+    } else if (auth) {
       return auth;
-    }
-    else if (dir) {
+    } else if (dir) {
       return dir;
-    }
-    else {
+    } else {
       return href;
     }
   }
@@ -421,17 +434,15 @@ export default class Utils {
     let protocol = uri.protocol().toLowerCase();
     if (protocol && !browserProtocols.includes(protocol)) {
       return false;
-    }
-    else if (browserImageTypes.includes(img.type)) {
+    } else if (browserImageTypes.includes(img.type)) {
       return true;
-    }
-    else if (browserImageTypes.includes('image/' + uri.suffix().toLowerCase())) {
+    } else if (
+      browserImageTypes.includes('image/' + uri.suffix().toLowerCase())
+    ) {
       return true;
-    }
-    else if (img.type) {
+    } else if (img.type) {
       return false;
-    }
-    else {
+    } else {
       return true; // If no img.type is given, try to load it anyway: https://github.com/radiantearth/stac-browser/issues/147
     }
   }
@@ -455,8 +466,7 @@ export default class Utils {
     }
     if (Utils.isObject(target)) {
       target = Object.values(target);
-    }
-    else if (typeof target === 'string') {
+    } else if (typeof target === 'string') {
       target = [target];
     }
 
@@ -471,12 +481,12 @@ export default class Utils {
 
     // Prepare text to search in
     target = target
-      .filter(s => typeof s === 'string') // Remove non-strings
+      .filter((s) => typeof s === 'string') // Remove non-strings
       .join(' ') // Merge into a single string
       .replace(splitChars, ' ') // replace split chars with white spaces
       .toLowerCase(); // Lowercase
 
-    // Search with "and" or "or"
+    // Search with 'and' or 'or'
     let fn = and ? 'every' : 'some';
     return searchterm[fn]((term) => target.includes(term));
   }
@@ -490,7 +500,7 @@ export default class Utils {
       return false;
     }
     let regexp = new RegExp('^' + pattern.replaceAll('*', '[^/]+') + '$');
-    return Boolean(data['stac_extensions'].find(uri => regexp.test(uri)));
+    return Boolean(data['stac_extensions'].find((uri) => regexp.test(uri)));
   }
 
   /**
@@ -519,5 +529,4 @@ export default class Utils {
 
     return Utils.mergeDeep(target, ...sources);
   }
-
 }
