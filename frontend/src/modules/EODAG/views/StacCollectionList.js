@@ -8,20 +8,23 @@ import {
   Container,
   Autocomplete,
   TextField,
-  Checkbox
-} from '@mui/material';
-import {
-  ChevronRightIcon,
-  SearchIcon,
-  useSettings,
-  SearchInput,
+  Checkbox,
   CircularProgress
-} from 'design';
+} from '@mui/material';
+import { ChevronRightIcon, SearchIcon, useSettings, SearchInput } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import StacCollectionListItem from '../components/StacCollectionListItem';
-import { providers, platform, processingLevel, sensorType } from '../constants';
+import { providers } from '../constants';
+import {
+  EODAG_PLATFORM_INDEX,
+  EODAG_PROCESSING_LEVEL_INDEX,
+  EODAG_SENSOR_TYPE_INDEX,
+  getCollections,
+  getSummary
+} from '../services/eodagApiService';
+import { SET_ERROR, useDispatch } from 'globalErrors';
 
 function StacCollectionPageHeader() {
   return (
@@ -74,11 +77,35 @@ function StacCollectionPageHeader() {
 
 const StacCollectionList = () => {
   const { settings } = useSettings();
-  const [loading] = useState(false); // TODO
+  const [loading, setLoading] = useState(true);
+  const [collections, setCollections] = useState([]);
+  const [platforms, setPlatforms] = useState([]);
+  const [processingLevels, setProcessingLevels] = useState([]);
+  const [sensorTypes, setSensorTypes] = useState([]);
   const [inputValue, setInputValue] = useState('');
+  const dispatch = useDispatch();
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
+  useEffect(() => {
+    setLoading(true);
+    const fetchCollections = async () => {
+      const res = await getCollections();
+      setCollections(res);
+      setPlatforms(getSummary(res, EODAG_PLATFORM_INDEX));
+      setProcessingLevels(getSummary(res, EODAG_PROCESSING_LEVEL_INDEX));
+      setSensorTypes(getSummary(res, EODAG_SENSOR_TYPE_INDEX));
+    };
+    fetchCollections().catch((e) =>
+      dispatch({ type: SET_ERROR, error: e.message })
+    );
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return <CircularProgress />;
+  }
+
   return (
     <>
       <Helmet>
@@ -102,7 +129,7 @@ const StacCollectionList = () => {
             />
           </Box>
           <Box sx={{ mt: 3 }}>
-            <Grid container xs={12} spacing={2}>
+            <Grid container spacing={2}>
               <Grid item md={3} sm={6} xs={12}>
                 <Autocomplete
                   id="providerFilter"
@@ -125,7 +152,7 @@ const StacCollectionList = () => {
                 <Autocomplete
                   id="platformFilter"
                   fullWidth
-                  options={platform}
+                  options={platforms}
                   onChange={() => {}}
                   renderInput={(params) => (
                     <TextField {...params} label="Platform" />
@@ -136,7 +163,7 @@ const StacCollectionList = () => {
                 <Autocomplete
                   id="processingLevelFilter"
                   fullWidth
-                  options={processingLevel}
+                  options={processingLevels}
                   renderInput={(params) => (
                     <TextField {...params} label="Processing level" />
                   )}
@@ -144,9 +171,9 @@ const StacCollectionList = () => {
               </Grid>
               <Grid item md={3} sm={6} xs={12}>
                 <Autocomplete
-                  id="processingLevelFilter"
+                  id="sensorTypeFilter"
                   fullWidth
-                  options={sensorType}
+                  options={sensorTypes}
                   renderInput={(params) => (
                     <TextField {...params} label="Sensor type" />
                   )}
@@ -160,16 +187,15 @@ const StacCollectionList = () => {
               mt: 3
             }}
           >
-            {loading ? (
-              <CircularProgress />
-            ) : (
-              <Box>
-                <Grid container spacing={3}>
-                  <StacCollectionListItem collection={{ id: 'S1_MSI_L1C' }} />
-                  <StacCollectionListItem collection={{ id: 'S1_MSI_L2A' }} />
-                </Grid>
-              </Box>
-            )}
+            <Grid container spacing={3}>
+              {collections
+                .filter((c) =>
+                  c.id.toLowerCase().includes(inputValue.toLowerCase())
+                )
+                .map((c) => (
+                  <StacCollectionListItem key={c.id} collection={c} />
+                ))}
+            </Grid>
           </Box>
         </Container>
       </Box>
