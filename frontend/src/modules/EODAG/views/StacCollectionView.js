@@ -4,12 +4,15 @@ import {
   Breadcrumbs,
   Link,
   Box,
-  Container
+  Container,
+  CircularProgress
 } from '@mui/material';
 import { ChevronRightIcon, useSettings } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router';
+import { useGetCollectionsResponseQuery } from '../services/eodagApi.ts';
+import { SET_ERROR, useDispatch } from 'globalErrors';
 
 function StacCollectionViewPageHeader(params) {
   return (
@@ -52,6 +55,35 @@ function StacCollectionViewPageHeader(params) {
 const StacCollectionView = () => {
   const params = useParams();
   const { settings } = useSettings();
+  const dispatch = useDispatch();
+  const collectionID = params['collectionID'];
+  console.log(collectionID);
+
+  const {
+    data: collection,
+    error,
+    isLoading
+  } = useGetCollectionsResponseQuery(undefined, {
+    selectFromResult: ({ data }) => ({
+      data:
+        data &&
+        data.collections &&
+        data.collections.filter((collection) => {
+          return collection.id === collectionID;
+        })
+    })
+  });
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    console.error(error);
+    dispatch({ type: SET_ERROR, error: error.message });
+    return <p>"error"</p>;
+  }
+
   return (
     <>
       <Helmet>
@@ -71,7 +103,9 @@ const StacCollectionView = () => {
               flexGrow: 1,
               mt: 3
             }}
-          ></Box>
+          >
+            <p>{JSON.stringify(collection)}</p>
+          </Box>
         </Container>
       </Box>
     </>
