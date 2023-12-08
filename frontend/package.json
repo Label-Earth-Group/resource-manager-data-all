@@ -76,12 +76,17 @@
     "@babel/traverse": "7.23.2"
   },
   "devDependencies": {
+    "@types/node": "^20.10.4",
+    "@types/react": "^18.2.42",
+    "@typescript-eslint/eslint-plugin": "^6.13.2",
+    "@typescript-eslint/parser": "^6.13.2",
     "env-cmd": "^10.1.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "2.8.7",
+    "typescript": "^5.3.3",
     "watch": "^1.0.2"
   },
   "eslintConfig": {
@@ -124,6 +129,10 @@
               "./src/services"
             ],
             [
+              "types",
+              "./src/types"
+            ],
+            [
               "utils",
               "./src/utils"
             ],
@@ -135,6 +144,8 @@
           "extensions": [
             ".js",
             ".jsx",
+            ".ts",
+            ".tsx",
             ".json"
           ]
         }
