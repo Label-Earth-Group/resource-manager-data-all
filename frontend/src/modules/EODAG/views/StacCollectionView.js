@@ -14,7 +14,9 @@ import { useParams } from 'react-router';
 import { useGetCollectionsResponseQuery } from '../services/eodagApi.ts';
 import { SET_ERROR, useDispatch } from 'globalErrors';
 
-function StacCollectionViewPageHeader(params) {
+function StacCollectionViewPageHeader(prop) {
+  const { collection } = prop;
+  const title = collection.title;
   return (
     <Grid
       alignItems="center"
@@ -24,7 +26,7 @@ function StacCollectionViewPageHeader(params) {
     >
       <Grid item>
         <Typography color="textPrimary" variant="h5">
-          {params.collectionID}
+          {title}
         </Typography>
         <Breadcrumbs
           aria-label="breadcrumb"
@@ -44,7 +46,7 @@ function StacCollectionViewPageHeader(params) {
             EODAG
           </Link>
           <Link underline="hover" color="textPrimary" variant="subtitle2">
-            {params.collectionID}
+            {title}
           </Link>
         </Breadcrumbs>
       </Grid>
@@ -59,11 +61,7 @@ const StacCollectionView = () => {
   const collectionID = params['collectionID'];
   console.log(collectionID);
 
-  const {
-    data: collection,
-    error,
-    isLoading
-  } = useGetCollectionsResponseQuery(undefined, {
+  const { data, error, isLoading } = useGetCollectionsResponseQuery(undefined, {
     selectFromResult: ({ data }) => ({
       data:
         data &&
@@ -73,6 +71,8 @@ const StacCollectionView = () => {
         })
     })
   });
+
+  const collection = data[0];
 
   if (isLoading) {
     return <CircularProgress />;
@@ -96,7 +96,7 @@ const StacCollectionView = () => {
         }}
       >
         <Container maxWidth={settings.compact ? 'xl' : false}>
-          <StacCollectionViewPageHeader {...params} />
+          <StacCollectionViewPageHeader collection={collection} />
           {!error && (
             <Box
               sx={{
