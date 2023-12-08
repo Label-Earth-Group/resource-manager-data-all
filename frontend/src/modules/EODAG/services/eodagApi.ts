@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { CollectionsResponse, Collection } from 'types/stac';
+import type { CollectionsResponse, Collection, Item } from 'types/stac';
 
 const eodagApi_URL = process.env.REACT_APP_EODAG_API;
 
@@ -10,13 +10,50 @@ export const eodagApi = createApi({
   endpoints: (builder) => ({
     getCollectionsResponse: builder.query<CollectionsResponse, void>({
       query: () => `collections`
+    }),
+    getCollectionByCollectionID: builder.query<Collection, string>({
+      query: (collectionID) => `collections/${collectionID}`
+    }),
+    getCollectionQueryablesByCollectionID: builder.query<string[], string>({
+      query: (collectionID) => `collections/${collectionID}/queryables`
+    }),
+    getCollectionItemsByCollectionID: builder.query<
+      Item[],
+      {
+        collectionID: string;
+        page: number;
+        numResultsPerPage: number;
+      }
+    >({
+      query: ({ collectionID, page = 1, numResultsPerPage = 20 }) =>
+        `collections/${collectionID}/items?page=${page}&limit=${numResultsPerPage}`
+    }),
+    getItemByCollectionIDAndItemID: builder.query<
+      Item,
+      { collectionID: string; itemID: string }
+    >({
+      query: ({ collectionID, itemID }) =>
+        `collections/${collectionID}/items/${itemID}`
+    }),
+    getItemDownloadByCollectionIDAndItemID: builder.query<
+      Item,
+      { collectionID: string; itemID: string }
+    >({
+      query: ({ collectionID, itemID }) =>
+        `collections/${collectionID}/items/${itemID}/download`
     })
   })
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetCollectionsResponseQuery } = eodagApi;
+export const {
+  useGetCollectionsResponseQuery,
+  useGetCollectionQueryablesByCollectionIDQuery,
+  useGetCollectionItemsByCollectionIDQuery,
+  useGetItemByCollectionIDAndItemIDQuery,
+  useGetItemDownloadByCollectionIDAndItemIDQuery
+} = eodagApi;
 
 export const EODAG_SUMMARY_INDEX = {
   INSTRUMENT: 0,

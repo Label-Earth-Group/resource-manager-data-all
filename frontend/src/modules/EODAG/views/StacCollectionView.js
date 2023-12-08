@@ -70,6 +70,8 @@ const StacCollectionView = () => {
     })
   });
 
+  const { data: items, } = useGetCollectionItemsByCollectionIDQuery(collectionID);
+
   const collection = data ? data[0] : null;
 
   if (isLoading) {
@@ -80,8 +82,14 @@ const StacCollectionView = () => {
     console.error(error);
     dispatch({ type: SET_ERROR, error: error.message });
   }
+  
+  if (!collection) {
+    return null;
+  }
 
-  return collection ? (
+  
+
+  return (
     <>
       <Helmet>
         <title>{params.collectionID} - EODAG | data.all</title>
@@ -106,7 +114,7 @@ const StacCollectionView = () => {
         </Container>
       </Box>
     </>
-  ) : null;
+  )
 };
 
 export default StacCollectionView;
