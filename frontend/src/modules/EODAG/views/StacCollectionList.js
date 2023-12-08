@@ -8,7 +8,6 @@ import {
   Container,
   Autocomplete,
   TextField,
-  //Checkbox,
   CircularProgress
 } from '@mui/material';
 import { ChevronRightIcon, SearchIcon, useSettings, SearchInput } from 'design';
@@ -16,7 +15,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 import StacCollectionListItem from '../components/StacCollectionListItem';
-// import { providers } from '../constants';
 import {
   useGetCollectionsResponseQuery,
   EODAG_SUMMARY_INDEX,
@@ -111,7 +109,7 @@ const StacCollectionList = () => {
     // get the filter options from the queried collections
     const filterOptions = Object.entries(EODAG_SUMMARY_INDEX).map(
       ([filterName, pos]) => (
-        <Grid item md={3} sm={6} xs={12}>
+        <Grid item md={2} sm={4} xs={12}>
           <Autocomplete
             id={filterName}
             fullWidth
@@ -153,64 +151,11 @@ const StacCollectionList = () => {
                 value={nameFilter}
                 placeholder="Filter by name"
               />
-              <p>{filteredCollections.length}</p>
             </Box>
             <Box sx={{ mt: 3 }}>
-              <Grid container spacing={2}>
+              <Grid container spacing={3}>
                 {filterOptions}
               </Grid>
-
-              {/* <Grid container spacing={2}>
-                <Grid item md={3} sm={6} xs={12}>
-                  <Autocomplete
-                    id="providerFilter"
-                    fullWidth
-                    multiple
-                    disableCloseOnSelect
-                    options={providers}
-                    renderInput={(params) => (
-                      <TextField {...params} label="EODAG provider" />
-                    )}
-                    renderOption={(props, option, { selected }) => (
-                      <li {...props}>
-                        <Checkbox checked={selected} />
-                        {option.label}
-                      </li>
-                    )}
-                  ></Autocomplete>
-                </Grid>
-                <Grid item md={3} sm={6} xs={12}>
-                  <Autocomplete
-                    id="platformFilter"
-                    fullWidth
-                    options={platforms}
-                    onChange={() => {}}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Platform" />
-                    )}
-                  ></Autocomplete>
-                </Grid>
-                <Grid item md={3} sm={6} xs={12}>
-                  <Autocomplete
-                    id="processingLevelFilter"
-                    fullWidth
-                    options={processingLevels}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Processing level" />
-                    )}
-                  ></Autocomplete>
-                </Grid>
-                <Grid item md={3} sm={6} xs={12}>
-                  <Autocomplete
-                    id="sensorTypeFilter"
-                    fullWidth
-                    options={sensorTypes}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Sensor type" />
-                    )}
-                  ></Autocomplete>
-                </Grid>
-              </Grid> */}
             </Box>
             <Box
               sx={{
@@ -218,6 +163,11 @@ const StacCollectionList = () => {
                 mt: 3
               }}
             >
+              <Box sx={{ pb: 2 }}>
+                <Typography color="textPrimary">
+                  {filteredCollections.length} product(s) found.
+                </Typography>
+              </Box>
               <Grid container spacing={3}>
                 {filteredCollections.map((c) => (
                   <StacCollectionListItem key={c.id} collection={c} />

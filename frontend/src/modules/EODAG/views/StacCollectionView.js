@@ -81,7 +81,6 @@ const StacCollectionView = () => {
   if (error) {
     console.error(error);
     dispatch({ type: SET_ERROR, error: error.message });
-    return <p>"error"</p>;
   }
 
   return (
@@ -98,14 +97,16 @@ const StacCollectionView = () => {
       >
         <Container maxWidth={settings.compact ? 'xl' : false}>
           <StacCollectionViewPageHeader {...params} />
-          <Box
-            sx={{
-              flexGrow: 1,
-              mt: 3
-            }}
-          >
-            <p>{JSON.stringify(collection)}</p>
-          </Box>
+          {!error && (
+            <Box
+              sx={{
+                flexGrow: 1,
+                mt: 3
+              }}
+            >
+              <p>{JSON.stringify(collection)}</p>
+            </Box>
+          )}
         </Container>
       </Box>
     </>

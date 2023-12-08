@@ -162,12 +162,3 @@ class StacApi {
 }
 
 export default StacApi;
-
-const eodagApi = process.env.REACT_APP_EODAG_API;
-export const eodagClient = new StacApi(eodagApi);
-
-export const EODAG_INSTRUMENT_INDEX = 0;
-export const EODAG_CONSTELLATION_INDEX = 1;
-export const EODAG_PLATFORM_INDEX = 2;
-export const EODAG_PROCESSING_LEVEL_INDEX = 3;
-export const EODAG_SENSOR_TYPE_INDEX = 4;
