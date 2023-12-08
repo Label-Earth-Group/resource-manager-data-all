@@ -11,7 +11,10 @@ import { ChevronRightIcon, useSettings } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router';
-import { useGetCollectionsResponseQuery } from '../services/eodagApi.ts';
+import {
+  useGetCollectionsResponseQuery,
+  useGetCollectionItemsByCollectionIDQuery
+} from '../services/eodagApi.ts';
 import { SET_ERROR, useDispatch } from 'globalErrors';
 
 function StacCollectionViewPageHeader(props) {
@@ -53,6 +56,37 @@ function StacCollectionViewPageHeader(props) {
   );
 }
 
+const StacItemList = (props) => {
+  const { collectionID } = props;
+  const dispatch = useDispatch();
+  const {
+    data: items,
+    error,
+    isLoading
+  } = useGetCollectionItemsByCollectionIDQuery({ collectionID });
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    console.error(error);
+    dispatch({ type: SET_ERROR, error: error.message });
+  }
+
+  if (!items) {
+    return <></>;
+  }
+
+  return (
+    <>
+      {items.features.map((feature) => (
+        <li>{JSON.stringify(feature)}</li>
+      ))}
+    </>
+  );
+};
+
 const StacCollectionView = () => {
   const params = useParams();
   const { settings } = useSettings();
@@ -70,8 +104,6 @@ const StacCollectionView = () => {
     })
   });
 
-  const { data: items, } = useGetCollectionItemsByCollectionIDQuery(collectionID);
-
   const collection = data ? data[0] : null;
 
   if (isLoading) {
@@ -82,17 +114,15 @@ const StacCollectionView = () => {
     console.error(error);
     dispatch({ type: SET_ERROR, error: error.message });
   }
-  
-  if (!collection) {
-    return null;
-  }
 
-  
+  if (!collection) {
+    return <></>;
+  }
 
   return (
     <>
       <Helmet>
-        <title>{params.collectionID} - EODAG | data.all</title>
+        <title>{collectionID} - EODAG | data.all</title>
       </Helmet>
       <Box
         sx={{
@@ -110,11 +140,12 @@ const StacCollectionView = () => {
             }}
           >
             <p>{JSON.stringify(collection)}</p>
+            <StacItemList collectionID={collectionID}></StacItemList>
           </Box>
         </Container>
       </Box>
     </>
-  )
+  );
 };
 
 export default StacCollectionView;
