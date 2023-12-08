@@ -20,7 +20,9 @@ import StacCollectionListItem from '../components/StacCollectionListItem';
 import {
   useGetCollectionsResponseQuery,
   EODAG_SUMMARY_INDEX,
-  getSummaryFilters
+  getSummaryFilters,
+  filterCollectionsBySummary,
+  filterCollectionsByName
 } from '../services/eodagApi.ts';
 import { SET_ERROR, useDispatch } from 'globalErrors';
 
@@ -75,10 +77,17 @@ function StacCollectionPageHeader() {
 
 const StacCollectionList = () => {
   const { settings } = useSettings();
-  const [inputValue, setInputValue] = useState('');
+  const [nameFilter, setNameFilter] = useState('');
+  const nullFilters = Object.fromEntries(
+    Object.keys(EODAG_SUMMARY_INDEX).map((filter) => [filter, []])
+  );
+  const [filters, setFilters] = useState(nullFilters);
   const dispatch = useDispatch();
   const handleInputChange = (event) => {
-    setInputValue(event.target.value);
+    setNameFilter(event.target.value);
+  };
+  const handleFilterChange = (filterName) => (event, value) => {
+    setFilters({ ...filters, [filterName]: [value] });
   };
 
   const {
@@ -88,7 +97,6 @@ const StacCollectionList = () => {
   } = useGetCollectionsResponseQuery(undefined, {
     selectFromResult: ({ data }) => ({ data: data && data.collections })
   });
-  console.info(error, isLoading, collections);
 
   if (isLoading) {
     return <CircularProgress />;
@@ -100,16 +108,29 @@ const StacCollectionList = () => {
   }
 
   if (collections) {
-    const filters = Object.entries(EODAG_SUMMARY_INDEX).map(([filter, pos]) => (
-      <Grid item md={3} sm={6} xs={12}>
-        <Autocomplete
-          id={filter}
-          fullWidth
-          options={getSummaryFilters(collections, pos)}
-          renderInput={(params) => <TextField {...params} label={filter} />}
-        ></Autocomplete>
-      </Grid>
-    ));
+    // get the filter options from the queried collections
+    const filterOptions = Object.entries(EODAG_SUMMARY_INDEX).map(
+      ([filterName, pos]) => (
+        <Grid item md={3} sm={6} xs={12}>
+          <Autocomplete
+            id={filterName}
+            fullWidth
+            options={getSummaryFilters(collections, pos)}
+            renderInput={(params) => (
+              <TextField {...params} label={filterName} />
+            )}
+            onChange={handleFilterChange(filterName)}
+          ></Autocomplete>
+        </Grid>
+      )
+    );
+
+    // filter collection based on the state of filters
+    const filteredCollections = filterCollectionsBySummary(
+      filterCollectionsByName(collections, nameFilter),
+      filters
+    );
+    console.log(filteredCollections);
 
     return (
       <>
@@ -129,13 +150,14 @@ const StacCollectionList = () => {
               <SearchInput
                 onChange={handleInputChange}
                 onKeyUp={() => {}}
-                value={inputValue}
+                value={nameFilter}
                 placeholder="Filter by name"
               />
+              <p>{filteredCollections.length}</p>
             </Box>
             <Box sx={{ mt: 3 }}>
               <Grid container spacing={2}>
-                {filters}
+                {filterOptions}
               </Grid>
 
               {/* <Grid container spacing={2}>
@@ -197,13 +219,9 @@ const StacCollectionList = () => {
               }}
             >
               <Grid container spacing={3}>
-                {collections
-                  .filter((c) =>
-                    c.id.toLowerCase().includes(inputValue.toLowerCase())
-                  )
-                  .map((c) => (
-                    <StacCollectionListItem key={c.id} collection={c} />
-                  ))}
+                {filteredCollections.map((c) => (
+                  <StacCollectionListItem key={c.id} collection={c} />
+                ))}
               </Grid>
             </Box>
           </Container>

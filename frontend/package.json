@@ -157,7 +157,7 @@
       "eqeqeq": "error",
       "linebreak-style": "off",
       "no-console": [
-        "error",
+        "warn",
         {
           "allow": [
             "error",

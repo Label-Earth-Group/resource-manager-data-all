@@ -26,27 +26,74 @@ export const EODAG_SUMMARY_INDEX = {
   SENSOR_TYPE: 4
 };
 
+export type Filters = {
+  [k: string]: string[];
+};
+
 /**
  * Get summary as filters from EODAG collections,
  * directly from 'keyword' field, as each key has unique meaning.
  */
-export const getSummaryFilters = (collections: Collection[], summaryIndex) => {
+export const getSummaryFilters = (
+  collections: Collection[],
+  summaryPos: number
+) => {
   var summaryArray = [];
   collections.forEach((c) => {
-    let s = c.keywords[summaryIndex];
+    let s = c.keywords[summaryPos];
     if (s) {
-      if (s.includes(',')) {
-        s.split(',').forEach((subS) => {
+      String(s)
+        .split(',')
+        .forEach((subS) => {
           if (!summaryArray.includes(subS)) {
             summaryArray.push(subS);
           }
         });
-      } else {
-        if (!summaryArray.includes(s)) {
-          summaryArray.push(s);
-        }
-      }
     }
   });
   return summaryArray.sort();
+};
+
+/**
+ * filter collection by summaries
+ */
+export const filterCollectionsBySummary = (
+  collections: Collection[],
+  filters: Filters
+) => {
+  return collections.filter((collection) => {
+    let v = Object.entries(filters).map(([filterName, filterValues]) => {
+      if (filterValues.join('').length === 0) {
+        return true;
+      } else {
+        let s =
+          collection.keywords &&
+          collection.keywords[EODAG_SUMMARY_INDEX[filterName]];
+        if (s) {
+          let a = new Set(String(s).split(','));
+          return filterValues.some((item) => a.has(item));
+        } else {
+          return false;
+        }
+      }
+    });
+    return v.every((value) => value === true);
+  });
+};
+
+/**
+ * filter collection by name
+ */
+export const filterCollectionsByName = (
+  collections: Collection[],
+  name: String
+) => {
+  if (name && name !== '') {
+    const filtered = collections.filter((collection) => {
+      return collection.id.toLowerCase().includes(name.toLowerCase());
+    });
+    return filtered;
+  } else {
+    return collections;
+  }
 };
