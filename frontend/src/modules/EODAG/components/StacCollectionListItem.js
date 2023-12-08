@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Box,
-  Card,
-  Link,
-  Typography,
-  Tooltip,
-  Divider
-} from '@mui/material';
+import { Grid, Box, Card, Link, Typography, Divider } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
 const StacCollectionListItem = (props) => {
@@ -27,16 +19,16 @@ const StacCollectionListItem = (props) => {
             </Link>
           </Typography>
           <Typography color="textSecondary" variant="body2">
-            <Tooltip>{collection.title}</Tooltip>
+            <span>{collection.title}</span>
           </Typography>
         </Box>
         <Divider />
         <Box sx={{ px: 2, py: 1 }}>
           <Typography color="textSecondary" variant="body2">
-            <Tooltip>
+            <span>
               Time: {collection.extent.temporal.interval[0][0] || 'N/A'} ~{' '}
               {collection.extent.temporal.interval[0][1] || 'Present'}
-            </Tooltip>
+            </span>
           </Typography>
         </Box>
       </Card>

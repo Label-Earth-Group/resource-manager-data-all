@@ -57,11 +57,8 @@ export const getSummaryFilters = (
 /**
  * filter collection by summaries
  */
-export const filterCollectionsBySummary = (
-  collections: Collection[],
-  filters: Filters
-) => {
-  return collections.filter((collection) => {
+export const summaryFilterFunc = (filters: Filters) => {
+  return (collection) => {
     let v = Object.entries(filters).map(([filterName, filterValues]) => {
       if (filterValues.join('').length === 0) {
         return true;
@@ -78,22 +75,18 @@ export const filterCollectionsBySummary = (
       }
     });
     return v.every((value) => value === true);
-  });
+  };
 };
 
 /**
  * filter collection by name
  */
-export const filterCollectionsByName = (
-  collections: Collection[],
-  name: String
-) => {
-  if (name && name !== '') {
-    const filtered = collections.filter((collection) => {
+export const nameFilterFunc = (name: String) => {
+  return (collection) => {
+    if (name && name !== '') {
       return collection.id.toLowerCase().includes(name.toLowerCase());
-    });
-    return filtered;
-  } else {
-    return collections;
-  }
+    } else {
+      return true;
+    }
+  };
 };

@@ -14,9 +14,8 @@ import { useParams } from 'react-router';
 import { useGetCollectionsResponseQuery } from '../services/eodagApi.ts';
 import { SET_ERROR, useDispatch } from 'globalErrors';
 
-function StacCollectionViewPageHeader(prop) {
-  const { collection } = prop;
-  const title = collection.title;
+function StacCollectionViewPageHeader(props) {
+  const { collection } = props;
   return (
     <Grid
       alignItems="center"
@@ -26,7 +25,7 @@ function StacCollectionViewPageHeader(prop) {
     >
       <Grid item>
         <Typography color="textPrimary" variant="h5">
-          {title}
+          {collection.title}
         </Typography>
         <Breadcrumbs
           aria-label="breadcrumb"
@@ -46,7 +45,7 @@ function StacCollectionViewPageHeader(prop) {
             EODAG
           </Link>
           <Link underline="hover" color="textPrimary" variant="subtitle2">
-            {title}
+            {collection.id}
           </Link>
         </Breadcrumbs>
       </Grid>
@@ -59,7 +58,6 @@ const StacCollectionView = () => {
   const { settings } = useSettings();
   const dispatch = useDispatch();
   const collectionID = params['collectionID'];
-  console.log(collectionID);
 
   const { data, error, isLoading } = useGetCollectionsResponseQuery(undefined, {
     selectFromResult: ({ data }) => ({
@@ -72,7 +70,7 @@ const StacCollectionView = () => {
     })
   });
 
-  const collection = data[0];
+  const collection = data ? data[0] : null;
 
   if (isLoading) {
     return <CircularProgress />;
@@ -83,7 +81,7 @@ const StacCollectionView = () => {
     dispatch({ type: SET_ERROR, error: error.message });
   }
 
-  return (
+  return collection ? (
     <>
       <Helmet>
         <title>{params.collectionID} - EODAG | data.all</title>
@@ -97,20 +95,18 @@ const StacCollectionView = () => {
       >
         <Container maxWidth={settings.compact ? 'xl' : false}>
           <StacCollectionViewPageHeader collection={collection} />
-          {!error && (
-            <Box
-              sx={{
-                flexGrow: 1,
-                mt: 3
-              }}
-            >
-              <p>{JSON.stringify(collection)}</p>
-            </Box>
-          )}
+          <Box
+            sx={{
+              flexGrow: 1,
+              mt: 3
+            }}
+          >
+            <p>{JSON.stringify(collection)}</p>
+          </Box>
         </Container>
       </Box>
     </>
-  );
+  ) : null;
 };
 
 export default StacCollectionView;

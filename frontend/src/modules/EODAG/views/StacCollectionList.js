@@ -19,8 +19,8 @@ import {
   useGetCollectionsResponseQuery,
   EODAG_SUMMARY_INDEX,
   getSummaryFilters,
-  filterCollectionsBySummary,
-  filterCollectionsByName
+  summaryFilterFunc,
+  nameFilterFunc
 } from '../services/eodagApi.ts';
 import { SET_ERROR, useDispatch } from 'globalErrors';
 
@@ -79,13 +79,13 @@ const StacCollectionList = () => {
   const nullFilters = Object.fromEntries(
     Object.keys(EODAG_SUMMARY_INDEX).map((filter) => [filter, []])
   );
-  const [filters, setFilters] = useState(nullFilters);
+  const [summaryFilters, setSummaryFilters] = useState(nullFilters);
   const dispatch = useDispatch();
   const handleInputChange = (event) => {
     setNameFilter(event.target.value);
   };
   const handleFilterChange = (filterName) => (event, value) => {
-    setFilters({ ...filters, [filterName]: [value] });
+    setSummaryFilters({ ...summaryFilters, [filterName]: [value] });
   };
 
   const {
@@ -124,11 +124,9 @@ const StacCollectionList = () => {
     );
 
     // filter collection based on the state of filters
-    const filteredCollections = filterCollectionsBySummary(
-      filterCollectionsByName(collections, nameFilter),
-      filters
-    );
-    console.log(filteredCollections);
+    const filteredCollections = collections
+      .filter(summaryFilterFunc(summaryFilters))
+      .filter(nameFilterFunc(nameFilter));
 
     return (
       <>
