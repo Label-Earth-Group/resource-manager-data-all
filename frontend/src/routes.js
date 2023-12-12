@@ -3,6 +3,7 @@ import { AuthGuard, GuestGuard } from 'authentication';
 import { ReAuthModal } from 'reauthentication';
 import { DefaultLayout, LoadingScreen } from 'design';
 import { ModuleNames, isModuleEnabled } from 'utils';
+import { Navigate } from 'react-router';
 
 const Loadable = (Component) => (props) =>
   (
@@ -198,6 +199,10 @@ const routes = [
           {
             path: 'eodag/search',
             element: <StacSearchView />
+          },
+          {
+            path: 'eodag/collections',
+            element: <Navigate to="/console/eodag" />
           },
           {
             path: 'eodag/collections/:collectionID',
