@@ -11,7 +11,10 @@ import {
   Tabs,
   Divider,
   CardHeader,
-  CardContent
+  CardContent,
+  Table,
+  TableRow,
+  TableCell
 } from '@mui/material';
 import Markdown from 'react-markdown';
 import { Info, List } from '@mui/icons-material';
@@ -109,9 +112,15 @@ function StacCollectionOverview(props) {
     a: (props) => {
       const { children, node, href, title, ...rest } = props;
       return (
-        <a href={href} target="_blank" rel="noreferrer" title={title} {...rest}>
+        <Link
+          href={href}
+          target="_blank"
+          rel="noreferrer"
+          title={title}
+          {...rest}
+        >
           {children}
-        </a>
+        </Link>
       );
     }
   };
@@ -150,6 +159,33 @@ function StacCollectionOverview(props) {
               To: {collection.extent?.temporal?.interval[0][1] || 'Present'}
             </Typography>
           </CardContent>
+        </Card>
+        <Card sx={{ mb: 3 }}>
+          <Box>
+            <CardHeader title="Metadata"></CardHeader>
+            <Divider />
+          </Box>
+          <Table>
+            <TableRow>
+              <TableCell>CRS</TableCell>
+              <TableCell>
+                {collection.crs ? (
+                  <Link href={collection.crs} target="_blank" rel="noreferer">
+                    {collection.crs.replace(
+                      'http://www.opengis.net/def/crs/',
+                      ''
+                    )}
+                  </Link>
+                ) : (
+                  'N/A'
+                )}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>License</TableCell>
+              <TableCell>{collection.license || 'N/A'}</TableCell>
+            </TableRow>
+          </Table>
         </Card>
       </Grid>
     </Grid>

@@ -30,6 +30,12 @@ const StacCollectionListItem = (props) => {
               {collection.extent.temporal.interval[0][1] || 'Present'}
             </span>
           </Typography>
+          <Typography color="textSecondary" variant="body2">
+            <span>
+              Provider(s):{' '}
+              {collection.providers?.map((p) => p.name).join(', ') || 'None'}
+            </span>
+          </Typography>
         </Box>
       </Card>
     </Grid>
