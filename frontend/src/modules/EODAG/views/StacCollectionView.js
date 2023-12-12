@@ -7,15 +7,18 @@ import {
   Card,
   Container,
   CircularProgress,
+  List,
+  ListItem,
   Tab,
   Tabs,
+  Tooltip,
   Divider,
   CardHeader,
   CardContent
 } from '@mui/material';
 import Markdown from 'react-markdown';
-import { Info, List } from '@mui/icons-material';
-import { ChevronRightIcon, useSettings } from 'design';
+import { Info, List as ListIcon, OpenInNew } from '@mui/icons-material';
+import { Label, ChevronRightIcon, useSettings } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
@@ -103,7 +106,7 @@ function StacItemList(props) {
   );
 }
 
-function StacCollectionOverview(props) {
+function StacCollectionDescription(props) {
   const { collection } = props;
   const markdownComponent = {
     a: (props) => {
@@ -116,41 +119,120 @@ function StacCollectionOverview(props) {
     }
   };
   return (
+    <Card sx={{ mb: 3 }}>
+      <Box>
+        <CardHeader title="Description" />
+        <Divider />
+      </Box>
+      <CardContent>
+        <Typography>
+          <Markdown components={markdownComponent}>
+            {collection.description || 'No description for this collection.'}
+          </Markdown>
+        </Typography>
+        <Typography color="textPrimary" variant="body2">
+          {collection.keywords && (
+            <Box>
+              {collection.keywords.map((keyword) => {
+                return keyword ? <Label color="info">{keyword}</Label> : <></>;
+              })}
+            </Box>
+          )}
+        </Typography>
+      </CardContent>
+    </Card>
+  );
+}
+
+function StacCollectionTemporalExtent(props) {
+  const { collection } = props;
+  return (
+    <Card sx={{ mb: 3 }}>
+      <Box>
+        <CardHeader title="Temporal extent"></CardHeader>
+        <Divider />
+      </Box>
+      <CardContent>
+        <Typography>
+          From: {collection.extent?.temporal?.interval[0][0] || 'N/A'}
+        </Typography>
+        <Typography>
+          To: {collection.extent?.temporal?.interval[0][1] || 'Present'}
+        </Typography>
+      </CardContent>
+    </Card>
+  );
+}
+
+function StacCollectionProviders(props) {
+  const { collection } = props;
+  const { providers } = collection;
+  return (
+    <Card sx={{ mb: 3 }}>
+      <Box>
+        <CardHeader title="Providers"></CardHeader>
+        <Divider />
+      </Box>
+      <CardContent sx={{ pt: 0 }}>
+        <List>
+          {providers.map((provider) => {
+            return provider ? (
+              <ListItem
+                disableGutters
+                divider
+                sx={{
+                  justifyContent: 'space-between',
+                  padding: 2
+                }}
+              >
+                <Tooltip title={provider.description || provider.name}>
+                  <Typography color="text" variant="subtitle">
+                    <span>{provider.name}</span>
+                    {provider.url && (
+                      <Link
+                        href={provider.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <OpenInNew />
+                      </Link>
+                    )}
+                  </Typography>
+                </Tooltip>
+                {provider.roles &&
+                  provider.roles.map((role) => (
+                    <Label color="info">{role}</Label>
+                  ))}
+              </ListItem>
+            ) : (
+              <></>
+            );
+          })}
+        </List>
+      </CardContent>
+    </Card>
+  );
+}
+
+function StacCollectionOverview(props) {
+  const { collection } = props;
+  return (
     <Grid container spacing={2}>
       <Grid item md={8} xs={12}>
-        <Card sx={{ mb: 3 }}>
-          <Box>
-            <CardHeader title="Description" />
-            <Divider />
-          </Box>
-          <CardContent>
-            <Typography>
-              <Markdown components={markdownComponent}>
-                {collection.description ||
-                  'No description for this collection.'}
-              </Markdown>
-            </Typography>
-          </CardContent>
-        </Card>
+        <StacCollectionDescription
+          collection={collection}
+        ></StacCollectionDescription>
         <Card>
           <Box sx={{ p: 1 }}>{JSON.stringify(collection)}</Box>
         </Card>
       </Grid>
       <Grid item md={4} xs={12}>
-        <Card sx={{ mb: 3 }}>
-          <Box>
-            <CardHeader title="Temporal extent"></CardHeader>
-            <Divider />
-          </Box>
-          <CardContent>
-            <Typography>
-              From: {collection.extent?.temporal?.interval[0][0] || 'N/A'}
-            </Typography>
-            <Typography>
-              To: {collection.extent?.temporal?.interval[0][1] || 'Present'}
-            </Typography>
-          </CardContent>
-        </Card>
+        <StacCollectionTemporalExtent
+          collection={collection}
+        ></StacCollectionTemporalExtent>
+        <StacCollectionProviders
+          collection={collection}
+        ></StacCollectionProviders>
       </Grid>
     </Grid>
   );
@@ -161,15 +243,15 @@ const StacCollectionView = () => {
   const { settings } = useSettings();
   const dispatch = useDispatch();
   const collectionID = params['collectionID'];
-  const [currentTab, setCurrentTab] = useState('items');
+  const [currentTab, setCurrentTab] = useState('overview');
 
   const tabs = [
+    { label: 'Overview', value: 'overview', icon: <Info fontSize="small" /> },
     {
       label: 'Items',
       value: 'items',
-      icon: <List fontSize="small" />
-    },
-    { label: 'Overview', value: 'overview', icon: <Info fontSize="small" /> }
+      icon: <ListIcon fontSize="small" />
+    }
   ];
 
   const handleTabsChange = (event, value) => {
