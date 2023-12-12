@@ -105,6 +105,16 @@ function StacItemList(props) {
 
 function StacCollectionOverview(props) {
   const { collection } = props;
+  const markdownComponent = {
+    a: (props) => {
+      const { children, node, href, title, ...rest } = props;
+      return (
+        <a href={href} target="_blank" rel="noreferrer" title={title} {...rest}>
+          {children}
+        </a>
+      );
+    }
+  };
   return (
     <Grid container spacing={2}>
       <Grid item md={8} xs={12}>
@@ -115,7 +125,7 @@ function StacCollectionOverview(props) {
           </Box>
           <CardContent>
             <Typography>
-              <Markdown>
+              <Markdown components={markdownComponent}>
                 {collection.description ||
                   'No description for this collection.'}
               </Markdown>
