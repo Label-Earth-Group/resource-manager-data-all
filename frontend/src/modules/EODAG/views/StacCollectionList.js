@@ -88,17 +88,16 @@ const StacCollectionList = () => {
     setSummaryFilters({ ...summaryFilters, [filterName]: [value] });
   };
 
-  const {
-    data: collections,
-    error,
-    isLoading
-  } = useGetCollectionsResponseQuery(undefined, {
-    selectFromResult: ({ data, error, isLoading }) => ({
-      data: data && data.collections,
-      error,
-      isLoading
-    })
-  }); // NOTE: should also select error and isLoading
+  const { collections, error, isLoading } = useGetCollectionsResponseQuery(
+    undefined,
+    {
+      selectFromResult: ({ data, error, isLoading }) => ({
+        collections: data && data.collections,
+        error,
+        isLoading
+      })
+    }
+  ); // NOTE: should also select error and isLoading
 
   useEffect(() => {
     if (error) {
@@ -112,7 +111,7 @@ const StacCollectionList = () => {
   }
 
   if (error) {
-    console.log(isLoading, 'error catched', error);
+    console.error(isLoading, 'error catched', error);
     return <p>error</p>;
   }
 

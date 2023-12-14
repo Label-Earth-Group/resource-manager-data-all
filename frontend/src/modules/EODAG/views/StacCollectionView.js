@@ -131,21 +131,18 @@ const StacCollectionView = () => {
     setCurrentTab(value);
   };
 
-  const { data, error, isError, isLoading } = useGetCollectionsResponseQuery(
-    undefined,
-    {
-      selectFromResult: ({ data }) => ({
-        data:
+  const { collection, error, isError, isLoading } =
+    useGetCollectionsResponseQuery(undefined, {
+      selectFromResult: ({ data, error, isError, isLoading }) => ({
+        collection:
           data &&
           data.collections &&
-          data.collections.filter((collection) => {
-            return collection.id === collectionID;
-          })
+          data.collections.find((collection) => collection.id === collectionID),
+        error,
+        isError,
+        isLoading
       })
-    }
-  );
-
-  const collection = data ? data[0] : null;
+    });
 
   if (isLoading) {
     return <CircularProgress />;
