@@ -1,5 +1,9 @@
 import { Grid } from '@mui/material';
-import { StacObjectDescription, StacProviders } from './StacCommonComponent';
+import {
+  StacObjectDescription,
+  StacProviders,
+  StacItemMetaData
+} from './StacCommonComponent';
 
 function StacItemOverview(props) {
   const { item } = props;
@@ -12,6 +16,7 @@ function StacItemOverview(props) {
             <StacObjectDescription description={item.properties.description} />
           )}
           <StacProviders {...item.properties} />
+          <StacItemMetaData {...item.properties} />
         </Grid>
         <Grid item md={4} xs={12}></Grid>
       </Grid>

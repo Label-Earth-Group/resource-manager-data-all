@@ -108,7 +108,7 @@ const StacItemView = () => {
     return <></>;
   }
 
-  const { links, assets, properties, ...rest } = item;
+  const { assets } = item;
 
   return (
     <>
@@ -154,12 +154,6 @@ const StacItemView = () => {
             {currentTab === 'overview' && (
               <>
                 <StacItemOverview item={item} />
-                <Card sx={{ mb: 2, p: 2 }}>
-                  <Typography>{JSON.stringify(rest)}</Typography>
-                </Card>
-                <Card sx={{ mb: 2, p: 2 }}>
-                  <Typography>{JSON.stringify(properties)}</Typography>
-                </Card>
               </>
             )}
             {currentTab === 'assets' && (

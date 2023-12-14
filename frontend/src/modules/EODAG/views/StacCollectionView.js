@@ -91,7 +91,6 @@ function StacCollectionItemsList(props) {
     <Box>
       <Card sx={{ mb: 3 }}>{JSON.stringify(rest)}</Card>
       {features.map((feature) => {
-        const { assets, links, properties, ...rest } = feature;
         return (
           <Card key={feature.id} sx={{ mb: 3, p: 2 }}>
             <Link
@@ -100,10 +99,6 @@ function StacCollectionItemsList(props) {
             >
               {feature.id}
             </Link>
-            {JSON.stringify(rest)}
-            <Card variant="outlined" sx={{ mt: 2, p: 2 }}>
-              {JSON.stringify(properties)}
-            </Card>
           </Card>
         );
       })}
