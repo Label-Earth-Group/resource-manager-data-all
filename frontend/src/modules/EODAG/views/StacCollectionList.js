@@ -102,7 +102,7 @@ const StacCollectionList = () => {
 
   if (error) {
     console.error(error);
-    dispatch({ type: SET_ERROR, error: JSON.stringify(error.data) });
+    dispatch({ type: SET_ERROR, error: 'Error loading EODAG.' });
   }
 
   if (collections) {

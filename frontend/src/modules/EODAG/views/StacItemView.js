@@ -1,31 +1,28 @@
 import {
-  Grid,
-  Typography,
-  Breadcrumbs,
-  Link,
   Box,
   Card,
   Container,
-  CircularProgress,
+  Grid,
+  Divider,
+  Typography,
+  Breadcrumbs,
+  Link,
   Tab,
   Tabs,
-  Divider
+  CircularProgress,
+  CardHeader
 } from '@mui/material';
-import StacCollectionOverview from '../components/StacCollectionOverview.js';
-import { Info, List as ListIcon } from '@mui/icons-material';
 import { ChevronRightIcon, useSettings } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 import { useParams } from 'react-router';
-import {
-  useGetCollectionsResponseQuery,
-  useGetCollectionItemsByCollectionIDQuery
-} from '../services/eodagApi.ts';
+import { Info, List as ListIcon } from '@mui/icons-material';
+import { useGetItemByCollectionIDAndItemIDQuery } from '../services/eodagApi.ts';
 import { SET_ERROR, useDispatch } from 'globalErrors';
 
-function StacCollectionViewPageHeader(props) {
-  const { title, id } = props;
+function StacItemViewPageHeader(props) {
+  const { collectionID, itemID } = props;
   return (
     <Grid
       alignItems="center"
@@ -35,7 +32,7 @@ function StacCollectionViewPageHeader(props) {
     >
       <Grid item>
         <Typography color="textPrimary" variant="h5">
-          {title && title !== 'None' ? title : id}
+          {itemID}
         </Typography>
         <Breadcrumbs
           aria-label="breadcrumb"
@@ -54,8 +51,14 @@ function StacCollectionViewPageHeader(props) {
           >
             EODAG
           </Link>
-          <Link underline="hover" color="textPrimary" variant="subtitle2">
-            {id}
+          <Link
+            to={`/console/eodag/collections/${collectionID}`}
+            underline="hover"
+            component={RouterLink}
+            color="textPrimary"
+            variant="subtitle2"
+          >
+            {collectionID}
           </Link>
         </Breadcrumbs>
       </Grid>
@@ -63,66 +66,18 @@ function StacCollectionViewPageHeader(props) {
   );
 }
 
-function StacCollectionItemsList(props) {
-  const { collectionID } = props;
-  const dispatch = useDispatch();
-  const {
-    data: items,
-    error,
-    isLoading
-  } = useGetCollectionItemsByCollectionIDQuery({ collectionID });
-
-  if (isLoading) {
-    return <CircularProgress />;
-  }
-
-  if (error) {
-    console.error(error);
-    dispatch({ type: SET_ERROR, error: error.error });
-  }
-
-  if (!items) {
-    return null;
-  }
-
-  const { links, features, ...rest } = items;
-
-  return (
-    <Box>
-      <Card sx={{ mb: 3 }}>{JSON.stringify(rest)}</Card>
-      {features.map((feature) => {
-        const { assets, links, properties, ...rest } = feature;
-        return (
-          <Card key={feature.id} sx={{ mb: 3, p: 2 }}>
-            <Link
-              component={RouterLink}
-              to={`/console/eodag/collections/${collectionID}/item/${feature.id}`}
-            >
-              {feature.id}
-            </Link>
-            {JSON.stringify(rest)}
-            <Card variant="outlined" sx={{ mt: 2, p: 2 }}>
-              {JSON.stringify(properties)}
-            </Card>
-          </Card>
-        );
-      })}
-    </Box>
-  );
-}
-
-const StacCollectionView = () => {
+const StacItemView = () => {
   const params = useParams();
   const { settings } = useSettings();
   const dispatch = useDispatch();
-  const collectionID = params['collectionID'];
+  const { collectionID, itemID } = params;
   const [currentTab, setCurrentTab] = useState('overview');
 
   const tabs = [
     { label: 'Overview', value: 'overview', icon: <Info fontSize="small" /> },
     {
-      label: 'Items',
-      value: 'items',
+      label: 'Assets',
+      value: 'assets',
       icon: <ListIcon fontSize="small" />
     }
   ];
@@ -131,21 +86,12 @@ const StacCollectionView = () => {
     setCurrentTab(value);
   };
 
-  const { data, error, isError, isLoading } = useGetCollectionsResponseQuery(
-    undefined,
-    {
-      selectFromResult: ({ data }) => ({
-        data:
-          data &&
-          data.collections &&
-          data.collections.filter((collection) => {
-            return collection.id === collectionID;
-          })
-      })
-    }
-  );
-
-  const collection = data ? data[0] : null;
+  const {
+    data: item,
+    error,
+    isLoading,
+    isError
+  } = useGetItemByCollectionIDAndItemIDQuery({ collectionID, itemID });
 
   if (isLoading) {
     return <CircularProgress />;
@@ -153,18 +99,20 @@ const StacCollectionView = () => {
 
   if (isError) {
     console.error(error);
-    dispatch({ type: SET_ERROR, error: 'Error loading EODAG.' });
+    dispatch({ type: SET_ERROR, error: JSON.stringify(error.data) });
     return <></>;
   }
 
-  if (!collection) {
+  if (!item) {
     return <></>;
   }
+
+  const { links, assets, properties, ...rest } = item;
 
   return (
     <>
       <Helmet>
-        <title>{collectionID} - EODAG | data.all</title>
+        <title>{itemID} - EODAG | data.all</title>
       </Helmet>
       <Box
         sx={{
@@ -174,10 +122,7 @@ const StacCollectionView = () => {
         }}
       >
         <Container maxWidth={settings.compact ? 'xl' : false}>
-          <StacCollectionViewPageHeader
-            title={collection.title}
-            id={collection.id}
-          />
+          <StacItemViewPageHeader {...params} />
           <Box
             sx={{
               flexGrow: 1,
@@ -206,10 +151,28 @@ const StacCollectionView = () => {
           <Divider />
           <Box sx={{ mt: 3 }}>
             {currentTab === 'overview' && (
-              <StacCollectionOverview collection={collection} />
+              <>
+                <Card sx={{ mb: 2, p: 2 }}>
+                  <Typography>{JSON.stringify(rest)}</Typography>
+                </Card>
+                <Card sx={{ mb: 2, p: 2 }}>
+                  <Typography>{JSON.stringify(properties)}</Typography>
+                </Card>
+              </>
             )}
-            {currentTab === 'items' && (
-              <StacCollectionItemsList collectionID={collectionID} />
+            {currentTab === 'assets' && (
+              <>
+                {Object.keys(assets).map((k) => {
+                  const linkTitle =
+                    k === 'origin_assets' ? 'Origin assets' : assets[k].title;
+                  return (
+                    <Card id={k} sx={{ p: 2, mb: 2 }}>
+                      <CardHeader title={linkTitle} />
+                      <Typography>{JSON.stringify(assets[k])}</Typography>
+                    </Card>
+                  );
+                })}
+              </>
             )}
           </Box>
         </Container>
@@ -218,4 +181,4 @@ const StacCollectionView = () => {
   );
 };
 
-export default StacCollectionView;
+export default StacItemView;

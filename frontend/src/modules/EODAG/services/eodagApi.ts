@@ -1,5 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { CollectionsResponse, Collection, Item } from 'types/stac';
+import type {
+  CollectionsResponse,
+  Collection,
+  Item,
+  SearchResponse
+} from 'types/stac';
 
 const eodagApi_URL = process.env.REACT_APP_EODAG_API;
 
@@ -18,7 +23,7 @@ export const eodagApi = createApi({
       query: (collectionID) => `collections/${collectionID}/queryables`
     }),
     getCollectionItemsByCollectionID: builder.query<
-      Item[],
+      SearchResponse,
       {
         collectionID: string;
         page: number;
