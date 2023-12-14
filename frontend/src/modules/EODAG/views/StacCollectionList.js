@@ -13,7 +13,7 @@ import {
 import { ChevronRightIcon, SearchIcon, useSettings, SearchInput } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import StacCollectionListItem from '../components/StacCollectionListItem';
 import {
   useGetCollectionsResponseQuery,
@@ -93,16 +93,27 @@ const StacCollectionList = () => {
     error,
     isLoading
   } = useGetCollectionsResponseQuery(undefined, {
-    selectFromResult: ({ data }) => ({ data: data && data.collections })
-  });
+    selectFromResult: ({ data, error, isLoading }) => ({
+      data: data && data.collections,
+      error,
+      isLoading
+    })
+  }); // NOTE: should also select error and isLoading
+
+  useEffect(() => {
+    if (error) {
+      // Update state or dispatch action here
+      dispatch({ type: SET_ERROR, error: 'adfasfa' });
+    }
+  }, [error, dispatch]);
 
   if (isLoading) {
     return <CircularProgress />;
   }
 
   if (error) {
-    console.error(error);
-    dispatch({ type: SET_ERROR, error: 'Error loading EODAG.' });
+    console.log(isLoading, 'error catched', error);
+    return <p>error</p>;
   }
 
   if (collections) {
@@ -177,8 +188,6 @@ const StacCollectionList = () => {
       </>
     );
   }
-
-  return <CircularProgress />;
 };
 
 export default StacCollectionList;
