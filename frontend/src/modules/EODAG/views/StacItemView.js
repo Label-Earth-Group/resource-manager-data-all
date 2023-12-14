@@ -20,6 +20,7 @@ import { useParams } from 'react-router';
 import { Info, List as ListIcon } from '@mui/icons-material';
 import { useGetItemByCollectionIDAndItemIDQuery } from '../services/eodagApi.ts';
 import { SET_ERROR, useDispatch } from 'globalErrors';
+import StacItemOverview from '../components/StacItemOverview';
 
 function StacItemViewPageHeader(props) {
   const { collectionID, itemID } = props;
@@ -152,6 +153,7 @@ const StacItemView = () => {
           <Box sx={{ mt: 3 }}>
             {currentTab === 'overview' && (
               <>
+                <StacItemOverview item={item} />
                 <Card sx={{ mb: 2, p: 2 }}>
                   <Typography>{JSON.stringify(rest)}</Typography>
                 </Card>
