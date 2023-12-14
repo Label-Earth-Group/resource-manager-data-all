@@ -101,8 +101,8 @@ const StacCollectionList = () => {
   }
 
   if (error) {
-    dispatch({ type: SET_ERROR, error: error.message });
-    return <p>"error"</p>;
+    console.error(error);
+    dispatch({ type: SET_ERROR, error: JSON.stringify(error.data) });
   }
 
   if (collections) {

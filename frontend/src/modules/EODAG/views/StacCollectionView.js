@@ -7,21 +7,13 @@ import {
   Card,
   Container,
   CircularProgress,
-  List,
-  ListItem,
   Tab,
   Tabs,
-  Tooltip,
-  Divider,
-  CardHeader,
-  CardContent,
-  Table,
-  TableRow,
-  TableCell
+  Divider
 } from '@mui/material';
-import Markdown from 'react-markdown';
-import { Info, List as ListIcon, OpenInNew } from '@mui/icons-material';
-import { Label, ChevronRightIcon, useSettings } from 'design';
+import StacCollectionOverview from '../components/StacCollectionOverview.js';
+import { Info, List as ListIcon } from '@mui/icons-material';
+import { ChevronRightIcon, useSettings } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
@@ -33,7 +25,7 @@ import {
 import { SET_ERROR, useDispatch } from 'globalErrors';
 
 function StacCollectionViewPageHeader(props) {
-  const { collection } = props;
+  const { title, id } = props;
   return (
     <Grid
       alignItems="center"
@@ -43,9 +35,7 @@ function StacCollectionViewPageHeader(props) {
     >
       <Grid item>
         <Typography color="textPrimary" variant="h5">
-          {collection.title && collection.title !== 'None'
-            ? collection.title
-            : collection.id}
+          {title && title !== 'None' ? title : id}
         </Typography>
         <Breadcrumbs
           aria-label="breadcrumb"
@@ -65,7 +55,7 @@ function StacCollectionViewPageHeader(props) {
             EODAG
           </Link>
           <Link underline="hover" color="textPrimary" variant="subtitle2">
-            {collection.id}
+            {id}
           </Link>
         </Breadcrumbs>
       </Grid>
@@ -73,7 +63,7 @@ function StacCollectionViewPageHeader(props) {
   );
 }
 
-function StacItemList(props) {
+function StacCollectionItemsList(props) {
   const { collectionID } = props;
   const dispatch = useDispatch();
   const {
@@ -88,7 +78,7 @@ function StacItemList(props) {
 
   if (error) {
     console.error(error);
-    dispatch({ type: SET_ERROR, error: error.message });
+    dispatch({ type: SET_ERROR, error: error.error });
   }
 
   if (!items) {
@@ -106,144 +96,6 @@ function StacItemList(props) {
         </Card>
       ))}
     </Box>
-  );
-}
-
-function StacCollectionDescription(props) {
-  const { collection } = props;
-  const markdownComponent = {
-    a: (props) => {
-      const { children, node, href, title, ...rest } = props;
-      return (
-        <Link
-          href={href}
-          target="_blank"
-          rel="noreferrer"
-          title={title}
-          {...rest}
-        >
-          {children}
-        </Link>
-      );
-    }
-  };
-  return (
-    <Card sx={{ mb: 3 }}>
-      <Box>
-        <CardHeader title="Description" />
-        <Divider />
-      </Box>
-      <CardContent>
-        <Typography>
-          <Markdown components={markdownComponent}>
-            {collection.description || 'No description for this collection.'}
-          </Markdown>
-        </Typography>
-        <Typography color="textPrimary" variant="body2">
-          {collection.keywords && (
-            <Box>
-              {collection.keywords.map((keyword) => {
-                return keyword ? <Label color="info">{keyword}</Label> : <></>;
-              })}
-            </Box>
-          )}
-        </Typography>
-      </CardContent>
-    </Card>
-  );
-}
-
-function StacCollectionTemporalExtent(props) {
-  const { collection } = props;
-  return (
-    <Card sx={{ mb: 3 }}>
-      <Box>
-        <CardHeader title="Temporal extent"></CardHeader>
-        <Divider />
-      </Box>
-      <CardContent>
-        <Typography>
-          From: {collection.extent?.temporal?.interval[0][0] || 'N/A'}
-        </Typography>
-        <Typography>
-          To: {collection.extent?.temporal?.interval[0][1] || 'Present'}
-        </Typography>
-      </CardContent>
-    </Card>
-  );
-}
-
-function StacCollectionProviders(props) {
-  const { collection } = props;
-  const { providers } = collection;
-  return (
-    <Card sx={{ mb: 3 }}>
-      <Box>
-        <CardHeader title="Providers"></CardHeader>
-        <Divider />
-      </Box>
-      <CardContent sx={{ pt: 0 }}>
-        <List>
-          {providers.map((provider) => {
-            return provider ? (
-              <ListItem
-                disableGutters
-                divider
-                sx={{
-                  justifyContent: 'space-between',
-                  padding: 2
-                }}
-              >
-                <Tooltip title={provider.description || provider.name}>
-                  <Typography color="text" variant="subtitle">
-                    <span>{provider.name}</span>
-                    {provider.url && (
-                      <Link
-                        href={provider.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <OpenInNew />
-                      </Link>
-                    )}
-                  </Typography>
-                </Tooltip>
-                {provider.roles &&
-                  provider.roles.map((role) => (
-                    <Label color="info">{role}</Label>
-                  ))}
-              </ListItem>
-            ) : (
-              <></>
-            );
-          })}
-        </List>
-      </CardContent>
-    </Card>
-  );
-}
-
-function StacCollectionOverview(props) {
-  const { collection } = props;
-  return (
-    <Grid container spacing={2}>
-      <Grid item md={8} xs={12}>
-        <StacCollectionDescription
-          collection={collection}
-        ></StacCollectionDescription>
-        <Card>
-          <Box sx={{ p: 1 }}>{JSON.stringify(collection)}</Box>
-        </Card>
-      </Grid>
-      <Grid item md={4} xs={12}>
-        <StacCollectionTemporalExtent
-          collection={collection}
-        ></StacCollectionTemporalExtent>
-        <StacCollectionProviders
-          collection={collection}
-        ></StacCollectionProviders>
-      </Grid>
-    </Grid>
   );
 }
 
@@ -286,7 +138,7 @@ const StacCollectionView = () => {
 
   if (error) {
     console.error(error);
-    dispatch({ type: SET_ERROR, error: error.message });
+    dispatch({ type: SET_ERROR, error: JSON.stringify(error.data) });
   }
 
   if (!collection) {
@@ -306,7 +158,10 @@ const StacCollectionView = () => {
         }}
       >
         <Container maxWidth={settings.compact ? 'xl' : false}>
-          <StacCollectionViewPageHeader collection={collection} />
+          <StacCollectionViewPageHeader
+            title={collection.title}
+            id={collection.id}
+          />
           <Box
             sx={{
               flexGrow: 1,
@@ -338,7 +193,7 @@ const StacCollectionView = () => {
               <StacCollectionOverview collection={collection} />
             )}
             {currentTab === 'items' && (
-              <StacItemList collectionID={collectionID} />
+              <StacCollectionItemsList collectionID={collectionID} />
             )}
           </Box>
         </Container>
