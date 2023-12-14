@@ -2,6 +2,7 @@ import { Link, Box, Card, CircularProgress } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { useGetCollectionItemsByCollectionIDQuery } from '../services/eodagApi.ts';
 import { SET_ERROR, useDispatch } from 'globalErrors';
+import { useEffect } from 'react';
 
 export function StacItemsBrowse(props) {
   const { collectionID } = props;
@@ -12,17 +13,21 @@ export function StacItemsBrowse(props) {
     isLoading
   } = useGetCollectionItemsByCollectionIDQuery({ collectionID });
 
+  useEffect(() => {
+    if (error) {
+      // Update state or dispatch action here
+      console.error(error);
+      dispatch({ type: SET_ERROR, error: error.error });
+      return <p>ERROR</p>;
+    }
+  }, [error, dispatch]);
+
   if (isLoading) {
     return <CircularProgress />;
   }
 
-  if (error) {
-    console.error(error);
-    dispatch({ type: SET_ERROR, error: error.error });
-  }
-
   if (!items) {
-    return null;
+    return <></>;
   }
 
   const { links, features, ...rest } = items;

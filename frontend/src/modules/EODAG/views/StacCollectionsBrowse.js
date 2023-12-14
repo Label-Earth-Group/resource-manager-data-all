@@ -13,7 +13,7 @@ import {
 import { ChevronRightIcon, SearchIcon, useSettings, SearchInput } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { StacCollectionListItem } from '../components/StacCollectionListItem.js';
 import {
   useGetCollectionsResponseQuery,
@@ -22,7 +22,8 @@ import {
   summaryFilterFunc,
   nameFilterFunc
 } from '../services/eodagApi.ts';
-import { SET_ERROR, useDispatch } from 'globalErrors';
+import { useDispatch } from 'globalErrors';
+import { useHandleError } from '../utils.js';
 
 function StacCollectionPageHeader() {
   return (
@@ -100,93 +101,87 @@ const StacCollectionsBrowse = () => {
     }
   ); // NOTE: should also select error and isLoading
 
-  useEffect(() => {
-    if (error) {
-      // Update state or dispatch action here
-      console.error(error);
-      dispatch({ type: SET_ERROR, error: error.error });
-      return <p>ERROR</p>;
-    }
-  }, [error, dispatch]);
+  useHandleError(error, dispatch);
+  if (error) {
+    return <>Error</>;
+  }
 
   if (isLoading) {
     return <CircularProgress />;
   }
 
-  if (collections) {
-    // get the filter options from the queried collections
-    const filterOptions = Object.entries(EODAG_SUMMARY_INDEX).map(
-      ([filterName, pos]) => (
-        <Grid item md={2} sm={4} xs={12}>
-          <Autocomplete
-            id={filterName}
-            fullWidth
-            options={getSummaryFilters(collections, pos)}
-            renderInput={(params) => (
-              <TextField {...params} label={filterName} />
-            )}
-            onChange={handleFilterChange(filterName)}
-          ></Autocomplete>
-        </Grid>
-      )
-    );
-
-    // filter collection based on the state of filters
-    const filteredCollections = collections
-      .filter(summaryFilterFunc(summaryFilters))
-      .filter(nameFilterFunc(nameFilter));
-
-    return (
-      <>
-        <Helmet>
-          <title>EODAG | data.all</title>
-        </Helmet>
-        <Box
-          sx={{
-            backgroundColor: 'background.default',
-            minHeight: '100%',
-            py: 5
-          }}
-        >
-          <Container maxWidth={settings.compact ? 'xl' : false}>
-            <StacCollectionPageHeader />
-            <Box sx={{ mt: 3 }}>
-              <SearchInput
-                onChange={handleInputChange}
-                onKeyUp={() => {}}
-                value={nameFilter}
-                placeholder="Filter by name"
-              />
-            </Box>
-            <Box sx={{ mt: 3 }}>
-              <Grid container spacing={3}>
-                {filterOptions}
-              </Grid>
-            </Box>
-            <Box
-              sx={{
-                flexGrow: 1,
-                mt: 3
-              }}
-            >
-              <Box sx={{ pb: 2 }}>
-                <Typography color="textPrimary">
-                  {filteredCollections.length} product(s) found.
-                </Typography>
-              </Box>
-              <Grid container spacing={3}>
-                {filteredCollections.map((c) => (
-                  <StacCollectionListItem key={c.id} collection={c} />
-                ))}
-              </Grid>
-            </Box>
-          </Container>
-        </Box>
-      </>
-    );
+  if (!collections) {
+    return <></>;
   }
 
-  return <></>;
+  // get the filter options from the queried collections
+  const filterOptions = Object.entries(EODAG_SUMMARY_INDEX).map(
+    ([filterName, pos]) => (
+      <Grid item md={2} sm={4} xs={12}>
+        <Autocomplete
+          id={filterName}
+          fullWidth
+          options={getSummaryFilters(collections, pos)}
+          renderInput={(params) => <TextField {...params} label={filterName} />}
+          onChange={handleFilterChange(filterName)}
+        ></Autocomplete>
+      </Grid>
+    )
+  );
+
+  // filter collection based on the state of filters
+  const filteredCollections = collections
+    .filter(summaryFilterFunc(summaryFilters))
+    .filter(nameFilterFunc(nameFilter));
+
+  return (
+    <>
+      <Helmet>
+        <title>EODAG | data.all</title>
+      </Helmet>
+      <Box
+        sx={{
+          backgroundColor: 'background.default',
+          minHeight: '100%',
+          py: 5
+        }}
+      >
+        <Container maxWidth={settings.compact ? 'xl' : false}>
+          <StacCollectionPageHeader />
+          <Box sx={{ mt: 3 }}>
+            <SearchInput
+              onChange={handleInputChange}
+              onKeyUp={() => {}}
+              value={nameFilter}
+              placeholder="Filter by name"
+            />
+          </Box>
+          <Box sx={{ mt: 3 }}>
+            <Grid container spacing={3}>
+              {filterOptions}
+            </Grid>
+          </Box>
+          <Box
+            sx={{
+              flexGrow: 1,
+              mt: 3
+            }}
+          >
+            <Box sx={{ pb: 2 }}>
+              <Typography color="textPrimary">
+                {filteredCollections.length} product(s) found.
+              </Typography>
+            </Box>
+            <Grid container spacing={3}>
+              {filteredCollections.map((c) => (
+                <StacCollectionListItem key={c.id} collection={c} />
+              ))}
+            </Grid>
+          </Box>
+        </Container>
+      </Box>
+    </>
+  );
 };
 
 export default StacCollectionsBrowse;

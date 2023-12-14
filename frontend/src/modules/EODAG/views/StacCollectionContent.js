@@ -16,10 +16,11 @@ import { Info, List as ListIcon } from '@mui/icons-material';
 import { ChevronRightIcon, useSettings } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router';
 import { useGetCollectionsResponseQuery } from '../services/eodagApi.ts';
-import { SET_ERROR, useDispatch } from 'globalErrors';
+import { useDispatch } from 'globalErrors';
+import { useHandleError } from '../utils.js';
 
 function StacCollectionViewPageHeader(props) {
   const { title, id } = props;
@@ -94,14 +95,10 @@ const StacCollectionContent = () => {
     }
   );
 
-  useEffect(() => {
-    if (error) {
-      // Update state or dispatch action here
-      console.error(error);
-      dispatch({ type: SET_ERROR, error: 'Error loading EODAG.' });
-      return <p>ERROR</p>;
-    }
-  }, [error, dispatch]);
+  useHandleError(error, dispatch);
+  if (error) {
+    return <>Error</>;
+  }
 
   if (isLoading) {
     return <CircularProgress />;

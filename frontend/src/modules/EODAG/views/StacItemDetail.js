@@ -12,15 +12,16 @@ import {
   CircularProgress,
   CardHeader
 } from '@mui/material';
+import { StacItemOverview } from '../components/StacItemOverview.js';
+import { Info, List as ListIcon } from '@mui/icons-material';
 import { ChevronRightIcon, useSettings } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router';
-import { Info, List as ListIcon } from '@mui/icons-material';
 import { useGetItemByCollectionIDAndItemIDQuery } from '../services/eodagApi.ts';
-import { SET_ERROR, useDispatch } from 'globalErrors';
-import { StacItemOverview } from '../components/StacItemOverview.js';
+import { useDispatch } from 'globalErrors';
+import { useHandleError } from '../utils.js';
 
 function StacItemViewPageHeader(props) {
   const { collectionID, itemID } = props;
@@ -93,14 +94,10 @@ const StacItemDetail = () => {
     isLoading
   } = useGetItemByCollectionIDAndItemIDQuery({ collectionID, itemID });
 
-  useEffect(() => {
-    if (error) {
-      // Update state or dispatch action here
-      console.error(error);
-      dispatch({ type: SET_ERROR, error: error.error });
-      return <>ERROR</>;
-    }
-  }, [error, dispatch]);
+  useHandleError(error, dispatch);
+  if (error) {
+    return <>Error</>;
+  }
 
   if (isLoading) {
     return <CircularProgress />;
