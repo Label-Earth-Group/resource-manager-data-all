@@ -9,7 +9,7 @@ const initState = {
 export const errorReducer = function (state = initState, action) {
   const { error } = action;
 
-  if (error) {
+  if (action.type === SET_ERROR && error) {
     return {
       error,
       isOpen: true
