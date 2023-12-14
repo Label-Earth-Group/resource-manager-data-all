@@ -15,7 +15,7 @@ import {
 import { ChevronRightIcon, useSettings } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { Info, List as ListIcon } from '@mui/icons-material';
 import { useGetItemByCollectionIDAndItemIDQuery } from '../services/eodagApi.ts';
@@ -90,18 +90,20 @@ const StacItemDetail = () => {
   const {
     data: item,
     error,
-    isLoading,
-    isError
+    isLoading
   } = useGetItemByCollectionIDAndItemIDQuery({ collectionID, itemID });
+
+  useEffect(() => {
+    if (error) {
+      // Update state or dispatch action here
+      console.error(error);
+      dispatch({ type: SET_ERROR, error: error.error });
+      return <>ERROR</>;
+    }
+  }, [error, dispatch]);
 
   if (isLoading) {
     return <CircularProgress />;
-  }
-
-  if (isError) {
-    console.error(error);
-    dispatch({ type: SET_ERROR, error: JSON.stringify(error.data) });
-    return <></>;
   }
 
   if (!item) {

@@ -103,17 +103,14 @@ const StacCollectionsBrowse = () => {
   useEffect(() => {
     if (error) {
       // Update state or dispatch action here
-      dispatch({ type: SET_ERROR, error: 'adfasfa' });
+      console.error(error);
+      dispatch({ type: SET_ERROR, error: error.error });
+      return <p>ERROR</p>;
     }
   }, [error, dispatch]);
 
   if (isLoading) {
     return <CircularProgress />;
-  }
-
-  if (error) {
-    console.error(isLoading, 'error catched', error);
-    return <p>error</p>;
   }
 
   if (collections) {
@@ -188,6 +185,8 @@ const StacCollectionsBrowse = () => {
       </>
     );
   }
+
+  return <></>;
 };
 
 export default StacCollectionsBrowse;

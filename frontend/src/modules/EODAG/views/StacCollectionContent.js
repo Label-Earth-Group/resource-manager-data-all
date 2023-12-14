@@ -16,7 +16,7 @@ import { Info, List as ListIcon } from '@mui/icons-material';
 import { ChevronRightIcon, useSettings } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { useGetCollectionsResponseQuery } from '../services/eodagApi.ts';
 import { SET_ERROR, useDispatch } from 'globalErrors';
@@ -80,27 +80,31 @@ const StacCollectionContent = () => {
     setCurrentTab(value);
   };
 
-  const { collection, error, isError, isLoading } =
-    useGetCollectionsResponseQuery(undefined, {
-      selectFromResult: ({ data, error, isError, isLoading }) => ({
+  const { collection, error, isLoading } = useGetCollectionsResponseQuery(
+    undefined,
+    {
+      selectFromResult: ({ data, error, isLoading }) => ({
         collection:
           data &&
           data.collections &&
           data.collections.find((collection) => collection.id === collectionID),
         error,
-        isError,
         isLoading
       })
-    });
+    }
+  );
+
+  useEffect(() => {
+    if (error) {
+      // Update state or dispatch action here
+      console.error(error);
+      dispatch({ type: SET_ERROR, error: 'Error loading EODAG.' });
+      return <p>ERROR</p>;
+    }
+  }, [error, dispatch]);
 
   if (isLoading) {
     return <CircularProgress />;
-  }
-
-  if (isError) {
-    console.error(error);
-    dispatch({ type: SET_ERROR, error: 'Error loading EODAG.' });
-    return <></>;
   }
 
   if (!collection) {
