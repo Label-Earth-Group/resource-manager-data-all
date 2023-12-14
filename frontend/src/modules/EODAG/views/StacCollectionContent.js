@@ -4,24 +4,21 @@ import {
   Breadcrumbs,
   Link,
   Box,
-  Card,
   Container,
   CircularProgress,
   Tab,
   Tabs,
   Divider
 } from '@mui/material';
-import StacCollectionOverview from '../components/StacCollectionOverview.js';
+import { StacCollectionOverview } from '../components/StacCollectionOverview.js';
+import { StacItemsBrowse } from '../components/StacItemsBrowse.js';
 import { Info, List as ListIcon } from '@mui/icons-material';
 import { ChevronRightIcon, useSettings } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 import { useParams } from 'react-router';
-import {
-  useGetCollectionsResponseQuery,
-  useGetCollectionItemsByCollectionIDQuery
-} from '../services/eodagApi.ts';
+import { useGetCollectionsResponseQuery } from '../services/eodagApi.ts';
 import { SET_ERROR, useDispatch } from 'globalErrors';
 
 function StacCollectionViewPageHeader(props) {
@@ -63,50 +60,7 @@ function StacCollectionViewPageHeader(props) {
   );
 }
 
-function StacCollectionItemsList(props) {
-  const { collectionID } = props;
-  const dispatch = useDispatch();
-  const {
-    data: items,
-    error,
-    isLoading
-  } = useGetCollectionItemsByCollectionIDQuery({ collectionID });
-
-  if (isLoading) {
-    return <CircularProgress />;
-  }
-
-  if (error) {
-    console.error(error);
-    dispatch({ type: SET_ERROR, error: error.error });
-  }
-
-  if (!items) {
-    return null;
-  }
-
-  const { links, features, ...rest } = items;
-
-  return (
-    <Box>
-      <Card sx={{ mb: 3 }}>{JSON.stringify(rest)}</Card>
-      {features.map((feature) => {
-        return (
-          <Card key={feature.id} sx={{ mb: 3, p: 2 }}>
-            <Link
-              component={RouterLink}
-              to={`/console/eodag/collections/${collectionID}/item/${feature.id}`}
-            >
-              {feature.id}
-            </Link>
-          </Card>
-        );
-      })}
-    </Box>
-  );
-}
-
-const StacCollectionView = () => {
+const StacCollectionContent = () => {
   const params = useParams();
   const { settings } = useSettings();
   const dispatch = useDispatch();
@@ -201,7 +155,7 @@ const StacCollectionView = () => {
               <StacCollectionOverview collection={collection} />
             )}
             {currentTab === 'items' && (
-              <StacCollectionItemsList collectionID={collectionID} />
+              <StacItemsBrowse collectionID={collectionID} />
             )}
           </Box>
         </Container>
@@ -210,4 +164,4 @@ const StacCollectionView = () => {
   );
 };
 
-export default StacCollectionView;
+export default StacCollectionContent;

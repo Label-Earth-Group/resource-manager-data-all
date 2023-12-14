@@ -48,7 +48,7 @@ function StacSearchPageHeader() {
   );
 }
 
-const StacSearchView = () => {
+const StacSearch = () => {
   const { settings } = useSettings();
   return (
     <>
@@ -70,4 +70,4 @@ const StacSearchView = () => {
   );
 };
 
-export default StacSearchView;
+export default StacSearch;

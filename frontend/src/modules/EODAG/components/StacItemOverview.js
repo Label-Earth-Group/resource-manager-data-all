@@ -5,7 +5,7 @@ import {
   StacItemMetaData
 } from './StacCommonComponent';
 
-function StacItemOverview(props) {
+export function StacItemOverview(props) {
   const { item } = props;
 
   return (
@@ -23,5 +23,3 @@ function StacItemOverview(props) {
     )
   );
 }
-
-export default StacItemOverview;

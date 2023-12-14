@@ -20,7 +20,7 @@ import { useParams } from 'react-router';
 import { Info, List as ListIcon } from '@mui/icons-material';
 import { useGetItemByCollectionIDAndItemIDQuery } from '../services/eodagApi.ts';
 import { SET_ERROR, useDispatch } from 'globalErrors';
-import StacItemOverview from '../components/StacItemOverview';
+import { StacItemOverview } from '../components/StacItemOverview.js';
 
 function StacItemViewPageHeader(props) {
   const { collectionID, itemID } = props;
@@ -67,7 +67,7 @@ function StacItemViewPageHeader(props) {
   );
 }
 
-const StacItemView = () => {
+const StacItemDetail = () => {
   const params = useParams();
   const { settings } = useSettings();
   const dispatch = useDispatch();
@@ -177,4 +177,4 @@ const StacItemView = () => {
   );
 };
 
-export default StacItemView;
+export default StacItemDetail;

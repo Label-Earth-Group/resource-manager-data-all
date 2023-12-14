@@ -14,7 +14,7 @@ import { ChevronRightIcon, SearchIcon, useSettings, SearchInput } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useState, useEffect } from 'react';
-import StacCollectionListItem from '../components/StacCollectionListItem';
+import { StacCollectionListItem } from '../components/StacCollectionListItem.js';
 import {
   useGetCollectionsResponseQuery,
   EODAG_SUMMARY_INDEX,
@@ -73,7 +73,7 @@ function StacCollectionPageHeader() {
   );
 }
 
-const StacCollectionList = () => {
+const StacCollectionsBrowse = () => {
   const { settings } = useSettings();
   const [nameFilter, setNameFilter] = useState('');
   const nullFilters = Object.fromEntries(
@@ -81,6 +81,7 @@ const StacCollectionList = () => {
   );
   const [summaryFilters, setSummaryFilters] = useState(nullFilters);
   const dispatch = useDispatch();
+
   const handleInputChange = (event) => {
     setNameFilter(event.target.value);
   };
@@ -189,4 +190,4 @@ const StacCollectionList = () => {
   }
 };
 
-export default StacCollectionList;
+export default StacCollectionsBrowse;

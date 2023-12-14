@@ -1,7 +1,7 @@
 import { Grid, Box, Card, Link, Typography, Divider } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
-const StacCollectionListItem = (props) => {
+export const StacCollectionListItem = (props) => {
   const { collection } = props;
   return (
     <Grid item key={collection.id} md={3} sm={4} xs={12}>
@@ -41,5 +41,3 @@ const StacCollectionListItem = (props) => {
     </Grid>
   );
 };
-
-export default StacCollectionListItem;

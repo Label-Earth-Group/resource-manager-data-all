@@ -158,17 +158,17 @@ const AdministrationView = Loadable(
   lazy(() => import('./modules/Administration/views/AdministrationView'))
 );
 
-const StacCollectionList = Loadable(
-  lazy(() => import('./modules/EODAG/views/StacCollectionList'))
+const StacCollectionsBrowse = Loadable(
+  lazy(() => import('./modules/EODAG/views/StacCollectionsBrowse'))
 );
-const StacCollectionView = Loadable(
-  lazy(() => import('./modules/EODAG/views/StacCollectionView'))
+const StacCollectionContent = Loadable(
+  lazy(() => import('./modules/EODAG/views/StacCollectionContent'))
 );
-const StacSearchView = Loadable(
-  lazy(() => import('./modules/EODAG/views/StacSearchView'))
+const StacSearch = Loadable(
+  lazy(() => import('./modules/EODAG/views/StacSearch'))
 );
-const StacItemView = Loadable(
-  lazy(() => import('./modules/EODAG/views/StacItemView'))
+const StacItemDetail = Loadable(
+  lazy(() => import('./modules/EODAG/views/StacItemDetail'))
 );
 
 const routes = [
@@ -197,11 +197,11 @@ const routes = [
         children: [
           {
             path: 'eodag',
-            element: <StacCollectionList />
+            element: <StacCollectionsBrowse />
           },
           {
             path: 'eodag/search',
-            element: <StacSearchView />
+            element: <StacSearch />
           },
           {
             path: 'eodag/collections',
@@ -209,11 +209,11 @@ const routes = [
           },
           {
             path: 'eodag/collections/:collectionID',
-            element: <StacCollectionView />
+            element: <StacCollectionContent />
           },
           {
             path: 'eodag/collections/:collectionID/item/:itemID',
-            element: <StacItemView />
+            element: <StacItemDetail />
           }
         ]
       },
