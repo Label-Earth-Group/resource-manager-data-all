@@ -189,7 +189,8 @@ const routes = [
     element: (
       <AuthGuard>
         <DefaultLayout />
-        <ReAuthModal />
+        {(process.env.REACT_APP_COGNITO_USER_POOL_ID ||
+          process.env.REACT_APP_CUSTOM_AUTH) && <ReAuthModal />}
       </AuthGuard>
     ),
     children: [
@@ -449,7 +450,7 @@ const routes = [
     children: [
       {
         path: '',
-        element: <EnvironmentList />
+        element: <></>
       },
       {
         path: '*',
