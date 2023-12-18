@@ -284,27 +284,31 @@ export function StacItemMetaData(props) {
         <Table>
           {metadata.map((row) => (
             <TableRow>
-              <TableCell>{row.label}</TableCell>
+              <TableCell sx={{ maxWidth: 120, minWidth: 90 }}>
+                {row.label}
+              </TableCell>
               <TableCell>{row.value}</TableCell>
             </TableRow>
           ))}
           {Object.entries(metadataExtension).map(([extension, table]) => (
             <>
               <TableRow>
-                <CardHeader title={extension}></CardHeader>
-                <Divider></Divider>
-                <TableCell></TableCell>
+                <TableCell colSpan={2}>
+                  <Typography variant="h6">
+                    STAC extension: {extension}
+                  </Typography>
+                </TableCell>
               </TableRow>
               {table.map((row) => (
                 <TableRow>
-                  <TableCell>
-                    <Typography color="textSecondary" variant="subtitle2">
-                      {row.label}
-                    </Typography>
+                  <TableCell sx={{ maxWidth: 120, minWidth: 90 }}>
+                    {row.label}
                   </TableCell>
                   <TableCell>
                     <Typography color="textPrimary" variant="body2">
-                      {row.value}
+                      {typeof row.value === 'string'
+                        ? row.value
+                        : JSON.stringify(row.value)}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -312,6 +316,7 @@ export function StacItemMetaData(props) {
             </>
           ))}
         </Table>
+
         {/* {Object.entries(metadataExtension).map(([extension, table]) => (
           <>
             <CardHeader title={extension}></CardHeader>
