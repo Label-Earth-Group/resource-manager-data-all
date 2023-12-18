@@ -1,7 +1,9 @@
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import StyledEngineProvider from '@mui/material/StyledEngineProvider';
+import 'leaflet/dist/leaflet.css';
 import 'nprogress/nprogress.css';
+import './map.css';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { HelmetProvider } from 'react-helmet-async';
