@@ -5,6 +5,7 @@ import { Logo } from 'design';
 import { useAuth } from '../hooks';
 
 const platformIcons = {
+  local: '/static/icons/amplify.svg',
   Amplify: '/static/icons/amplify.svg'
 };
 
