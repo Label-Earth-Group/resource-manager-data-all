@@ -1,11 +1,29 @@
-import { Link, Box, Card, CircularProgress } from '@mui/material';
+import {
+  Link,
+  Box,
+  Card,
+  CircularProgress,
+  Table,
+  TableRow,
+  TableCell,
+  Button,
+  Typography,
+  Skeleton
+} from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import { useGetCollectionItemsByCollectionIDQuery } from '../services/eodagApi.ts';
-import { SET_ERROR, useDispatch } from 'globalErrors';
-import { useEffect } from 'react';
+import {
+  getThumbnailFromItem,
+  useGetCollectionItemsByCollectionIDQuery
+} from '../services/eodagApi.ts';
+import { useDispatch } from 'globalErrors';
+import { useHandleError } from '../utils.js';
+import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
+import { ImageSkeleton } from 'design/components/ImageSkeleton.js';
+import { useState } from 'react';
 
 export function StacItemsBrowse(props) {
   const { collectionID } = props;
+  const [currentPage] = useState(1);
   const dispatch = useDispatch();
   const {
     data: items,
@@ -13,14 +31,7 @@ export function StacItemsBrowse(props) {
     isLoading
   } = useGetCollectionItemsByCollectionIDQuery({ collectionID });
 
-  useEffect(() => {
-    if (error) {
-      // Update state or dispatch action here
-      console.error(error);
-      dispatch({ type: SET_ERROR, error: error.error });
-      return <p>ERROR</p>;
-    }
-  }, [error, dispatch]);
+  useHandleError(error, dispatch);
 
   if (isLoading) {
     return <CircularProgress />;
@@ -30,23 +41,60 @@ export function StacItemsBrowse(props) {
     return <></>;
   }
 
-  const { links, features, ...rest } = items;
+  const { features } = items;
 
   return (
     <Box>
-      <Card sx={{ mb: 3 }}>{JSON.stringify(rest)}</Card>
-      {features.map((feature) => {
-        return (
-          <Card key={feature.id} sx={{ mb: 3, p: 2 }}>
-            <Link
-              component={RouterLink}
-              to={`/console/eodag/collections/${collectionID}/item/${feature.id}`}
-            >
-              {feature.id}
-            </Link>
-          </Card>
-        );
-      })}
+      <Box sx={{ mb: 3 }}>
+        <Typography color="textSecondary">
+          <Button
+            variant="contained"
+            sx={{ mr: 1 }}
+            startIcon={<ArrowBackIos />}
+            disabled={currentPage <= 1}
+          >
+            Prev
+          </Button>
+          Page: {currentPage}
+          <Button
+            variant="contained"
+            sx={{ mx: 1 }}
+            endIcon={<ArrowForwardIos />}
+          >
+            Next
+          </Button>
+          {items.numberMatched || 0} item(s) found.
+        </Typography>
+      </Box>
+      <Card>
+        <Table>
+          {features.map((feature) => {
+            return (
+              <TableRow key={feature.id}>
+                <TableCell>
+                  {getThumbnailFromItem(feature) ? (
+                    <ImageSkeleton
+                      src={getThumbnailFromItem(feature)}
+                      width={96}
+                      alt="Thumbnail"
+                    />
+                  ) : (
+                    <Skeleton width={96} height={96} animation={false} />
+                  )}
+                </TableCell>
+                <TableCell>
+                  <Link
+                    component={RouterLink}
+                    to={`/console/eodag/collections/${collectionID}/item/${feature.id}`}
+                  >
+                    {feature.id}
+                  </Link>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </Table>
+      </Card>
     </Box>
   );
 }

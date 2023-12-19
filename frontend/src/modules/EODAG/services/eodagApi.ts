@@ -3,17 +3,10 @@ import type {
   CollectionsResponse,
   Collection,
   Item,
-  SearchResponse,
-  ItemAsset
+  SearchResponse
 } from 'types/stac';
 
 const eodagApi_URL = process.env.REACT_APP_EODAG_API;
-
-export type EODAGAsset = ItemAsset | Map<'origin_assets', ItemAsset>;
-
-export type EODAGItem = Omit<Item, 'assets'> & {
-  assets: EODAGAsset[];
-};
 
 // Define a service using a base URL and expected endpoints
 export const eodagApi = createApi({
@@ -142,4 +135,21 @@ export const nameFilterFunc = (name: String) => {
       return true;
     }
   };
+};
+
+export const getThumbnailFromItem = (item) => {
+  for (var k of Object.keys(item.assets)) {
+    var asset = item.assets[k];
+    if (k === 'thumbnail' || k === 'preview') {
+      if (asset.href) return asset.href;
+    } else if (k === 'origin_assets') {
+      for (var k_original of Object.keys(item.assets.origin_assets)) {
+        var o_asset = item.assets.origin_assets[k_original];
+        if (k_original === 'thumbnail' || k_original === 'preview') {
+          if (o_asset.href) return o_asset.href;
+        }
+      }
+    }
+  }
+  return null;
 };

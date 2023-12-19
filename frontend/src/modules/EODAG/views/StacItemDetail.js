@@ -9,8 +9,10 @@ import {
   Link,
   Tab,
   Tabs,
-  CircularProgress,
-  CardHeader
+  Table,
+  TableRow,
+  TableCell,
+  CircularProgress
 } from '@mui/material';
 import { StacItemOverview } from '../components/StacItemOverview.js';
 import { Info, List as ListIcon } from '@mui/icons-material';
@@ -109,6 +111,8 @@ const StacItemDetail = () => {
 
   const { assets } = item;
 
+  const { origin_assets, ...stac_assets } = assets;
+
   return (
     <>
       <Helmet>
@@ -157,16 +161,42 @@ const StacItemDetail = () => {
             )}
             {currentTab === 'assets' && (
               <>
-                {Object.keys(assets).map((k) => {
-                  const linkTitle =
-                    k === 'origin_assets' ? 'Origin assets' : assets[k].title;
-                  return (
-                    <Card id={k} sx={{ p: 2, mb: 2 }}>
-                      <CardHeader title={linkTitle} />
-                      <Typography>{JSON.stringify(assets[k])}</Typography>
-                    </Card>
-                  );
-                })}
+                <Card sx={{ mb: 3 }}>
+                  <Table>
+                    {Object.keys(stac_assets).map((k) => (
+                      <TableRow>
+                        <TableCell>{stac_assets[k].title || 'N/A'}</TableCell>
+                        <TableCell>{stac_assets[k].href || 'N/A'}</TableCell>
+                        <TableCell>{stac_assets[k].type || 'N/A'}</TableCell>
+                      </TableRow>
+                    ))}
+                  </Table>
+                </Card>
+                {origin_assets && (
+                  <Card>
+                    <Box sx={{ m: 2 }}>
+                      <Typography variant="h6">
+                        Assets from original provider
+                      </Typography>
+                    </Box>
+                    <Divider />
+                    <Table>
+                      {Object.keys(origin_assets).map((k) => (
+                        <TableRow>
+                          <TableCell>
+                            {origin_assets[k].title || 'N/A'}
+                          </TableCell>
+                          <TableCell>
+                            {origin_assets[k].href || 'N/A'}
+                          </TableCell>
+                          <TableCell>
+                            {origin_assets[k].type || 'N/A'}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </Table>
+                  </Card>
+                )}
               </>
             )}
           </Box>
