@@ -19,6 +19,8 @@ import { useDispatch } from 'globalErrors';
 import { useHandleError } from '../utils.js';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { ImageSkeleton } from 'design/components/ImageSkeleton.js';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useState } from 'react';
 
 export function StacItemsBrowse(props) {
@@ -63,7 +65,16 @@ export function StacItemsBrowse(props) {
           >
             Next
           </Button>
-          {items.numberMatched || 0} item(s) found.
+        </Typography>
+        <Typography>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker label="Start date" />
+            <DatePicker label="End date" />
+          </LocalizationProvider>
+        </Typography>
+        <Typography color="textSecondary">
+          {items.numberMatched || 0} item(s) found. Provided by:{' '}
+          {features[0].properties.providers[0].name}
         </Typography>
       </Box>
       <Card>

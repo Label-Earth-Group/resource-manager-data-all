@@ -172,7 +172,7 @@ const StacItemDetail = () => {
                     ))}
                   </Table>
                 </Card>
-                {origin_assets && (
+                {origin_assets && Object.keys(origin_assets).length > 0 && (
                   <Card>
                     <Box sx={{ m: 2 }}>
                       <Typography variant="h6">

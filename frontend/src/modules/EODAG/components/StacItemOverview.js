@@ -1,4 +1,4 @@
-import { Card, CardMedia, Grid, Typography } from '@mui/material';
+import { Card, CardMedia, Grid } from '@mui/material';
 import {
   StacObjectDescription,
   StacProviders,
@@ -41,10 +41,10 @@ export function StacItemOverview(props) {
         {getThumbnailFromItem(item) && (
           <Card sx={{ mb: 3 }}>
             <CardMedia
+              component="img"
               sx={{ height: 384 }}
               image={getThumbnailFromItem(item)}
             />
-            <Typography>{getThumbnailFromItem(item)}</Typography>
           </Card>
         )}
         <StacItemMetaData {...item.properties} />
