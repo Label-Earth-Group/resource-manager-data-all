@@ -42,6 +42,8 @@ export function StacItemsBrowse(props) {
   } = useGetCollectionItemsByCollectionIDQuery({ collectionID });
   useHandleError(error, dispatch);
 
+  console.info(queryables);
+
   if (errorQueryable || error) {
     return <>Error</>;
   }
