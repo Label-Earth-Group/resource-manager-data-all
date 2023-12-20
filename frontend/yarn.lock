@@ -3044,6 +3044,13 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
+"@babel/runtime@^7.23.2", "@babel/runtime@^7.23.5":
+  version "7.23.6"
+  resolved "https://registry.npmmirror.com/@babel/runtime/-/runtime-7.23.6.tgz#c05e610dc228855dc92ef1b53d07389ed8ab521d"
+  integrity sha512-zHd0eUrf5GZoOWVCXp6koAKQTfZV07eit6bGPmJgnZdnSAvvZee6zniW2XMF7Cmc4ISOOnPy3QaSiIJGJkVEDQ==
+  dependencies:
+    regenerator-runtime "^0.14.0"
+
 "@babel/template@^7.22.15", "@babel/template@^7.22.5", "@babel/template@^7.3.3":
   version "7.22.15"
   resolved "https://registry.npmjs.org/@babel/template/-/template-7.22.15.tgz"
@@ -3202,39 +3209,6 @@
   version "2.2.0"
   resolved "https://registry.npmjs.org/@csstools/selector-specificity/-/selector-specificity-2.2.0.tgz"
   integrity sha512-+OJ9konv95ClSTOJCmMZqpd5+YGsB2S+x6w3E1oaM8UuR5j8nTNHYSz8c9BEPGDOCMQYIEEGlVPj/VY64iTbGw==
-
-"@date-io/core@^2.15.0", "@date-io/core@^2.16.0":
-  version "2.16.0"
-  resolved "https://registry.npmjs.org/@date-io/core/-/core-2.16.0.tgz"
-  integrity sha512-DYmSzkr+jToahwWrsiRA2/pzMEtz9Bq1euJwoOuYwuwIYXnZFtHajY2E6a1VNVDc9jP8YUXK1BvnZH9mmT19Zg==
-
-"@date-io/date-fns@^2.15.0":
-  version "2.16.0"
-  resolved "https://registry.npmjs.org/@date-io/date-fns/-/date-fns-2.16.0.tgz"
-  integrity sha512-bfm5FJjucqlrnQcXDVU5RD+nlGmL3iWgkHTq3uAZWVIuBu6dDmGa3m8a6zo2VQQpu8ambq9H22UyUpn7590joA==
-  dependencies:
-    "@date-io/core" "^2.16.0"
-
-"@date-io/dayjs@^2.15.0":
-  version "2.16.0"
-  resolved "https://registry.npmjs.org/@date-io/dayjs/-/dayjs-2.16.0.tgz"
-  integrity sha512-y5qKyX2j/HG3zMvIxTobYZRGnd1FUW2olZLS0vTj7bEkBQkjd2RO7/FEwDY03Z1geVGlXKnzIATEVBVaGzV4Iw==
-  dependencies:
-    "@date-io/core" "^2.16.0"
-
-"@date-io/luxon@^2.15.0":
-  version "2.16.1"
-  resolved "https://registry.npmjs.org/@date-io/luxon/-/luxon-2.16.1.tgz"
-  integrity sha512-aeYp5K9PSHV28946pC+9UKUi/xMMYoaGelrpDibZSgHu2VWHXrr7zWLEr+pMPThSs5vt8Ei365PO+84pCm37WQ==
-  dependencies:
-    "@date-io/core" "^2.16.0"
-
-"@date-io/moment@^2.15.0":
-  version "2.16.1"
-  resolved "https://registry.npmjs.org/@date-io/moment/-/moment-2.16.1.tgz"
-  integrity sha512-JkxldQxUqZBfZtsaCcCMkm/dmytdyq5pS1RxshCQ4fHhsvP5A7gSqPD22QbVXMcJydi3d3v1Y8BQdUKEuGACZQ==
-  dependencies:
-    "@date-io/core" "^2.16.0"
 
 "@emotion/babel-plugin@^11.11.0":
   version "11.11.0"
@@ -3481,6 +3455,33 @@
   version "8.49.0"
   resolved "https://registry.npmjs.org/@eslint/js/-/js-8.49.0.tgz"
   integrity sha512-1S8uAY/MTJqVx0SC4epBq+N2yhuwtNwLbJYNZyhL2pO1ZVKn5HFXav5T41Ryzy9K9V7ZId2JB2oy/W4aCd9/2w==
+
+"@floating-ui/core@^1.4.2":
+  version "1.5.2"
+  resolved "https://registry.npmmirror.com/@floating-ui/core/-/core-1.5.2.tgz#53a0f7a98c550e63134d504f26804f6b83dbc071"
+  integrity sha512-Ii3MrfY/GAIN3OhXNzpCKaLxHQfJF9qvwq/kEJYdqDxeIHa01K8sldugal6TmeeXl+WMvhv9cnVzUTaFFJF09A==
+  dependencies:
+    "@floating-ui/utils" "^0.1.3"
+
+"@floating-ui/dom@^1.5.1":
+  version "1.5.3"
+  resolved "https://registry.npmmirror.com/@floating-ui/dom/-/dom-1.5.3.tgz#54e50efcb432c06c23cd33de2b575102005436fa"
+  integrity sha512-ClAbQnEqJAKCJOEbbLo5IUlZHkNszqhuxS4fHAVxRPXPya6Ysf2G8KypnYcOTpx6I8xcgF9bbHb6g/2KpbV8qA==
+  dependencies:
+    "@floating-ui/core" "^1.4.2"
+    "@floating-ui/utils" "^0.1.3"
+
+"@floating-ui/react-dom@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.npmmirror.com/@floating-ui/react-dom/-/react-dom-2.0.4.tgz#b076fafbdfeb881e1d86ae748b7ff95150e9f3ec"
+  integrity sha512-CF8k2rgKeh/49UrnIBs4BdxPUV6vize/Db1d/YbCLyp9GiVZ0BEwf5AiDSxJRCr6yOkGqTFHtmrULxkEfYZ7dQ==
+  dependencies:
+    "@floating-ui/dom" "^1.5.1"
+
+"@floating-ui/utils@^0.1.3":
+  version "0.1.6"
+  resolved "https://registry.npmmirror.com/@floating-ui/utils/-/utils-0.1.6.tgz#22958c042e10b67463997bd6ea7115fe28cbcaf9"
+  integrity sha512-OfX7E2oUDYxtBvsuS4e/jSn4Q9Qb6DzgeYtsAdkPZ47znpoNsMgZw0+tVijiv3uGNR6dgNlty6r9rzIzHjtd/A==
 
 "@graphql-typed-document-node/core@^3.1.1":
   version "3.2.0"
@@ -3836,6 +3837,19 @@
     prop-types "^15.8.1"
     react-is "^18.2.0"
 
+"@mui/base@^5.0.0-beta.22":
+  version "5.0.0-beta.27"
+  resolved "https://registry.npmmirror.com/@mui/base/-/base-5.0.0-beta.27.tgz#21a9c7d954a5f88f6706dfee630154c651ee73af"
+  integrity sha512-duL37qxihT1N0pW/gyXVezP7SttLkF+cLAs/y6g6ubEFmVadjbnZ45SeF12/vAiKzqwf5M0uFH1cczIPXFZygA==
+  dependencies:
+    "@babel/runtime" "^7.23.5"
+    "@floating-ui/react-dom" "^2.0.4"
+    "@mui/types" "^7.2.11"
+    "@mui/utils" "^5.15.0"
+    "@popperjs/core" "^2.11.8"
+    clsx "^2.0.0"
+    prop-types "^15.8.1"
+
 "@mui/core-downloads-tracker@^5.13.7":
   version "5.13.7"
   resolved "https://registry.npmjs.org/@mui/core-downloads-tracker/-/core-downloads-tracker-5.13.7.tgz"
@@ -3936,6 +3950,11 @@
     csstype "^3.1.2"
     prop-types "^15.8.1"
 
+"@mui/types@^7.2.11":
+  version "7.2.11"
+  resolved "https://registry.npmmirror.com/@mui/types/-/types-7.2.11.tgz#36b99a88f8010dc716128e568dc05681a69dc7ae"
+  integrity sha512-KWe/QTEsFFlFSH+qRYf3zoFEj3z67s+qAuSnMMg+gFwbxG7P96Hm6g300inQL1Wy///gSRb8juX7Wafvp93m3w==
+
 "@mui/types@^7.2.4":
   version "7.2.4"
   resolved "https://registry.npmjs.org/@mui/types/-/types-7.2.4.tgz"
@@ -3952,6 +3971,16 @@
     prop-types "^15.8.1"
     react-is "^18.2.0"
 
+"@mui/utils@^5.14.16", "@mui/utils@^5.15.0":
+  version "5.15.0"
+  resolved "https://registry.npmmirror.com/@mui/utils/-/utils-5.15.0.tgz#87b4db92dd2ddf3e2676377427f50662124013b4"
+  integrity sha512-XSmTKStpKYamewxyJ256+srwEnsT3/6eNo6G7+WC1tj2Iq9GfUJ/6yUoB7YXjOD2jTZ3XobToZm4pVz1LBt6GA==
+  dependencies:
+    "@babel/runtime" "^7.23.5"
+    "@types/prop-types" "^15.7.11"
+    prop-types "^15.8.1"
+    react-is "^18.2.0"
+
 "@mui/x-data-grid@^5.7.0":
   version "5.17.26"
   resolved "https://registry.npmjs.org/@mui/x-data-grid/-/x-data-grid-5.17.26.tgz"
@@ -3963,23 +3992,18 @@
     prop-types "^15.8.1"
     reselect "^4.1.6"
 
-"@mui/x-date-pickers@^5.0.0":
-  version "5.0.20"
-  resolved "https://registry.npmjs.org/@mui/x-date-pickers/-/x-date-pickers-5.0.20.tgz"
-  integrity sha512-ERukSeHIoNLbI1C2XRhF9wRhqfsr+Q4B1SAw2ZlU7CWgcG8UBOxgqRKDEOVAIoSWL+DWT6GRuQjOKvj6UXZceA==
+"@mui/x-date-pickers@^6.18.5":
+  version "6.18.5"
+  resolved "https://registry.npmmirror.com/@mui/x-date-pickers/-/x-date-pickers-6.18.5.tgz#a2a70ce2926f0acb8ee414b546ba1f7daf399c21"
+  integrity sha512-3jImYIWP2Xgi608yzm/Sz1v0MTjQQYdZSQOEIi3dWBfSAU9B06KXDpqlXfRSpTV+rtsnfYIIyiWlz6Ltk7sUWw==
   dependencies:
-    "@babel/runtime" "^7.18.9"
-    "@date-io/core" "^2.15.0"
-    "@date-io/date-fns" "^2.15.0"
-    "@date-io/dayjs" "^2.15.0"
-    "@date-io/luxon" "^2.15.0"
-    "@date-io/moment" "^2.15.0"
-    "@mui/utils" "^5.10.3"
-    "@types/react-transition-group" "^4.4.5"
-    clsx "^1.2.1"
-    prop-types "^15.7.2"
+    "@babel/runtime" "^7.23.2"
+    "@mui/base" "^5.0.0-beta.22"
+    "@mui/utils" "^5.14.16"
+    "@types/react-transition-group" "^4.4.8"
+    clsx "^2.0.0"
+    prop-types "^15.8.1"
     react-transition-group "^4.4.5"
-    rifm "^0.12.1"
 
 "@multiformats/base-x@^4.0.1":
   version "4.0.1"
@@ -4588,6 +4612,11 @@
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.5.tgz"
   integrity sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==
 
+"@types/prop-types@^15.7.11":
+  version "15.7.11"
+  resolved "https://registry.npmmirror.com/@types/prop-types/-/prop-types-15.7.11.tgz#2596fb352ee96a1379c657734d4b913a613ad563"
+  integrity sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==
+
 "@types/q@^1.5.1":
   version "1.5.5"
   resolved "https://registry.npmjs.org/@types/q/-/q-1.5.5.tgz"
@@ -4627,10 +4656,17 @@
     hoist-non-react-statics "^3.3.0"
     redux "^4.0.0"
 
-"@types/react-transition-group@^4.4.5", "@types/react-transition-group@^4.4.6":
+"@types/react-transition-group@^4.4.6":
   version "4.4.6"
   resolved "https://registry.npmjs.org/@types/react-transition-group/-/react-transition-group-4.4.6.tgz"
   integrity sha512-VnCdSxfcm08KjsJVQcfBmhEQAPnLB8G08hAxn39azX1qYBQ/5RVQuoHuKIcfKOdncuaUvEpFKFzEvbtIMsfVew==
+  dependencies:
+    "@types/react" "*"
+
+"@types/react-transition-group@^4.4.8":
+  version "4.4.10"
+  resolved "https://registry.npmmirror.com/@types/react-transition-group/-/react-transition-group-4.4.10.tgz#6ee71127bdab1f18f11ad8fb3322c6da27c327ac"
+  integrity sha512-hT/+s0VQs2ojCX823m60m5f0sL5idt9SO6Tj6Dg+rdphGPIeJbJ6CxvBYkgkGKrYeDjvIpKTR38UzmtHJOGW3Q==
   dependencies:
     "@types/react" "*"
 
@@ -12061,11 +12097,6 @@ reusify@^1.0.4:
   version "1.0.4"
   resolved "https://registry.npmjs.org/reusify/-/reusify-1.0.4.tgz"
   integrity sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==
-
-rifm@^0.12.1:
-  version "0.12.1"
-  resolved "https://registry.npmjs.org/rifm/-/rifm-0.12.1.tgz"
-  integrity sha512-OGA1Bitg/dSJtI/c4dh90svzaUPt228kzFsUkJbtA2c964IqEAwWXeL9ZJi86xWv3j5SMqRvGULl7bA6cK0Bvg==
 
 rimraf@^3.0.0, rimraf@^3.0.2:
   version "3.0.2"
