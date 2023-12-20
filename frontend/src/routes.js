@@ -170,6 +170,7 @@ const StacSearch = Loadable(
 const StacItemDetail = Loadable(
   lazy(() => import('./modules/EODAG/views/StacItemDetail'))
 );
+const SamView = Loadable(lazy(() => import('./modules/Sam/views/SamView.tsx')));
 
 const routes = [
   {
@@ -215,6 +216,14 @@ const routes = [
           {
             path: 'eodag/collections/:collectionID/item/:itemID',
             element: <StacItemDetail />
+          }
+        ]
+      },
+      {
+        children: [
+          {
+            path: 'sam',
+            element: <SamView />
           }
         ]
       },
