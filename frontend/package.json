@@ -32,6 +32,7 @@
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
+    "@turf/simplify": "^6.5.0",
     "@types/underscore": "^1.11.15",
     "amazon-quicksight-embedding-sdk": "^1.18.1",
     "apexcharts": "^3.33.2",
@@ -39,6 +40,7 @@
     "aws-amplify": "^5.3.8",
     "axios": "^1.6.0",
     "classnames": "^2.3.1",
+    "d3-contour": "^4.0.2",
     "date-fns": "^2.28.0",
     "dayjs": "^1.11.0",
     "formik": "^2.2.9",
@@ -86,6 +88,7 @@
     "@babel/traverse": "7.23.2"
   },
   "devDependencies": {
+    "@types/geojson": "^7946.0.13",
     "@types/node": "^20.10.4",
     "@types/react": "^18.2.42",
     "@typescript-eslint/eslint-plugin": "^6.13.2",

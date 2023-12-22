@@ -5,7 +5,24 @@
 // LICENSE file in the root directory of this source tree.
 
 import { Tensor } from 'onnxruntime-web';
-import { modeDataProps } from './Interfaces';
+
+export interface modelInputProps {
+  x: number;
+  y: number;
+  clickType: number;
+}
+
+export interface modeDataProps {
+  clicks?: Array<modelInputProps>;
+  tensor: Tensor;
+  modelScale: modelScaleProps;
+}
+
+export interface modelScaleProps {
+  samScale: number;
+  height: number;
+  width: number;
+}
 
 const modelData = ({ clicks, tensor, modelScale }: modeDataProps) => {
   const imageEmbedding = tensor;

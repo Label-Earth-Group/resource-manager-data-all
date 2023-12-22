@@ -57,10 +57,12 @@ const Tool = ({ handleMouseMove }: ToolProps) => {
           src={maskImg.src}
           sx={{
             position: 'absolute',
-            opacity: 0.4,
+            opacity: 0.5,
             pointerEvents: 'none',
             width: shouldFitToWidth ? '100%' : 'auto',
-            height: shouldFitToWidth ? 'auto' : '100%'
+            height: shouldFitToWidth ? 'auto' : '100%',
+            borderRadius: '10px', // 圆角效果，可根据需要调整
+            boxShadow: '0 0 10px 5px rgba(0, 114, 189, 0.8)' // 边缘发光效果
           }}
         />
       )}

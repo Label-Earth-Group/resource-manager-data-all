@@ -11,7 +11,7 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import { handleImageScale } from '../helpers/scaleHelper.tsx';
 import { modelScaleProps } from '../helpers/Interfaces';
-import { onnxMaskToImage } from '../helpers/maskUtils.tsx';
+import { onnxMaskToImage, exportImageClip, exportVector } from '../helpers/maskUtils.tsx';
 import { modelData } from '../helpers/onnxModelAPI.tsx';
 import Stage from './Stage.tsx';
 import { SamContext } from '../context/context.tsx';
@@ -115,11 +115,14 @@ const App = () => {
         // Run the SAM ONNX model with the feeds returned from modelData()
         const results = await model.run(feeds);
         const output = results[model.outputNames[0]];
+        const polygon = exportVector(output, 1);
+        const image = exportImageClip(output);
         // The predicted mask returned from the ONNX model is an array which is
         // rendered as an HTML image using onnxMaskToImage() from maskUtils.tsx.
-        setMaskImg(
-          onnxMaskToImage(output.data, output.dims[2], output.dims[3])
-        );
+        const newData = {
+          features: polygon.features,
+          imageUrl: image.src,
+        };
       }
     } catch (e) {
       console.log(e);

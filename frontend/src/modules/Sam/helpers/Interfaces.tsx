@@ -5,6 +5,9 @@
 // LICENSE file in the root directory of this source tree.
 
 import { Tensor } from 'onnxruntime-web';
+// import {tileLayer} from 'leaflet';
+import L from 'leaflet';
+import { SAMGeo } from './samgeo';
 
 export interface modelScaleProps {
   samScale: number;
@@ -26,4 +29,20 @@ export interface modeDataProps {
 
 export interface ToolProps {
   handleMouseMove: (e: any) => void;
+}
+
+export interface SatelliteData {
+  features: any;
+  imageUrl: string;
+}
+
+export interface ISamState {
+  samModel: SAMGeo;
+  map: L.Map;
+  mapClick: any;
+  loading: boolean;
+  polygonLayer: L.GeoJSON;
+  eventType: string;
+  collapsed: boolean;
+  satelliteData: SatelliteData[];
 }
