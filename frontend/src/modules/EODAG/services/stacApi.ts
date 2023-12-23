@@ -60,7 +60,7 @@ class StacApi {
   }
 
   payloadToQuery({ sortby, ...payload }: SearchPayload): string {
-    const queryObj = {};
+    const queryObj: GenericObject = {};
     for (const [key, value] of Object.entries(payload)) {
       if (!value) continue;
 

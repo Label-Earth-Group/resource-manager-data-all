@@ -11,7 +11,7 @@ import {
   Divider
 } from '@mui/material';
 import { StacCollectionOverview } from '../components/StacCollectionOverview.js';
-import { StacItemsBrowse } from '../components/StacItemsBrowse.js';
+import { StacItemsBrowse } from '../components/StacItemsBrowse.tsx';
 import { Info, List as ListIcon } from '@mui/icons-material';
 import { ChevronRightIcon, useSettings } from 'design';
 import { Link as RouterLink } from 'react-router-dom';

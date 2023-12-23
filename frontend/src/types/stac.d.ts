@@ -1,8 +1,10 @@
 import type { Geometry } from 'geojson';
 import type { GenericObject } from './common';
 
-export type Bbox = [number, number, number, number];
-export type IdList = string[];
+export type Bbox =
+  | [number, number, number, number]
+  | [number, number, number, number, number, number];
+export type ItemIdList = string[];
 export type CollectionIdList = string[];
 export type DateRange = {
   from?: string;
@@ -14,10 +16,15 @@ export type Sortby = {
 };
 
 export type SearchPayload = {
-  ids?: IdList;
   bbox?: Bbox;
-  collections?: CollectionIdList;
+  intersects?: Geometry;
   dateRange?: DateRange;
+  datetime?: string;
+  collections?: CollectionIdList;
+  ids?: ItemIdList;
+  [key: string]: any; //additional queryables
+  limit?: number;
+  page?: number;
   sortby?: Sortby[];
 };
 
@@ -29,6 +36,8 @@ export type SearchResponse = {
   type: 'FeatureCollection';
   features: Item[];
   links: Link[];
+  numberMatched: number;
+  numberReturned: number;
 };
 
 export type Link = {
@@ -50,6 +59,15 @@ export type ItemAsset = {
   description?: string;
   type?: string;
   roles?: string[];
+  _dc_qs?: string;
+};
+
+export type EODAGItemAsset = {
+  [key: string]: ItemAsset;
+  downloadLink: ItemAsset;
+  thumbnail: ItemAsset;
+  preview: ItemAsset;
+  origin_assets: ItemAsset | EODAGItemAsset;
 };
 
 export type Item = {
@@ -59,7 +77,7 @@ export type Item = {
   type: 'Feature';
   properties: GenericObject;
   links: Link[];
-  assets: ItemAsset[];
+  assets: EODAGItemAsset;
 };
 
 type Role = 'licensor' | 'producer' | 'processor' | 'host';

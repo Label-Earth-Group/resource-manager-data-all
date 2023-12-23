@@ -6,6 +6,7 @@ export * from './ErrorNotification';
 export * from './FileDropzone';
 export * from './GlobalStyles';
 export * from './IconAvatar';
+export * from './ImageSkeleton';
 export * from './Label';
 export * from './LoadingScreen';
 export * from './Logo';

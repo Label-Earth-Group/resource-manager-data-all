@@ -5,7 +5,7 @@ import {
   StacItemMetaData
 } from './StacCommonComponent';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
-import { getThumbnailFromItem } from '../services/eodagApi.ts';
+import { getThumbnailHrefFromItem } from '../services/eodagApi.ts';
 
 export function StacItemOverview(props) {
   const { item } = props;
@@ -38,12 +38,12 @@ export function StacItemOverview(props) {
         <StacProviders {...item.properties} />
       </Grid>
       <Grid item md={4} sm={12}>
-        {getThumbnailFromItem(item) && (
+        {getThumbnailHrefFromItem(item) && (
           <Card sx={{ mb: 3 }}>
             <CardMedia
               component="img"
               sx={{ height: 384 }}
-              image={getThumbnailFromItem(item)}
+              image={getThumbnailHrefFromItem(item)}
             />
           </Card>
         )}

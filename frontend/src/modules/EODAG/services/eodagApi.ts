@@ -3,8 +3,13 @@ import type {
   CollectionsResponse,
   Collection,
   Item,
-  SearchResponse
+  SearchResponse,
+  Bbox,
+  DateRange,
+  SearchPayload,
+  EODAGItemAsset
 } from 'types/stac';
+import type { GenericObject } from 'types/common';
 
 const eodagApi_URL = process.env.REACT_APP_EODAG_API;
 
@@ -19,9 +24,11 @@ export const eodagApi = createApi({
     getCollectionByCollectionID: builder.query<Collection, string>({
       query: (collectionID) => `collections/${collectionID}`
     }),
-    getCollectionQueryablesByCollectionID: builder.query<string[], string>({
-      query: (collectionID) => `collections/${collectionID}/queryables`
-    }),
+    getCollectionQueryablesByCollectionID: builder.query<GenericObject, string>(
+      {
+        query: (collectionID) => `collections/${collectionID}/queryables`
+      }
+    ),
     getCollectionItemsByCollectionID: builder.query<
       SearchResponse,
       {
@@ -46,6 +53,13 @@ export const eodagApi = createApi({
     >({
       query: ({ collectionID, itemID }) =>
         `collections/${collectionID}/items/${itemID}/download`
+    }),
+    searchItems: builder.query<SearchResponse, SearchPayload>({
+      query: (searchFilters) => ({
+        url: 'search',
+        method: 'POST',
+        body: searchFilters
+      })
     })
   })
 });
@@ -57,10 +71,12 @@ export const {
   useGetCollectionQueryablesByCollectionIDQuery,
   useGetCollectionItemsByCollectionIDQuery,
   useGetItemByCollectionIDAndItemIDQuery,
-  useGetItemDownloadByCollectionIDAndItemIDQuery
+  useGetItemDownloadByCollectionIDAndItemIDQuery,
+  useSearchItemsQuery,
+  useLazySearchItemsQuery
 } = eodagApi;
 
-export const EODAG_SUMMARY_INDEX = {
+export const EODAG_SUMMARY_INDEX: GenericObject = {
   INSTRUMENT: 0,
   CONSTELLATION: 1,
   PLATFORM: 2,
@@ -80,9 +96,9 @@ export const getSummaryFilters = (
   collections: Collection[],
   summaryPos: number
 ) => {
-  var summaryArray = [];
+  var summaryArray: string[] = [];
   collections.forEach((c) => {
-    let s = c.keywords[summaryPos];
+    let s = c.keywords && c.keywords[summaryPos];
     if (s) {
       String(s)
         .split(',')
@@ -100,7 +116,7 @@ export const getSummaryFilters = (
  * filter collection by summaries
  */
 export const summaryFilterFunc = (filters: Filters) => {
-  return (collection) => {
+  return (collection: Collection) => {
     let v = Object.entries(filters).map(([filterName, filterValues]) => {
       if (filterValues.join('').length === 0) {
         return true;
@@ -124,7 +140,7 @@ export const summaryFilterFunc = (filters: Filters) => {
  * filter collection by name
  */
 export const nameFilterFunc = (name: String) => {
-  return (collection) => {
+  return (collection: Collection) => {
     if (name && name !== '') {
       var result = true;
       for (const chunk of name.toLowerCase().split(' ')) {
@@ -137,19 +153,81 @@ export const nameFilterFunc = (name: String) => {
   };
 };
 
-export const getThumbnailFromItem = (item) => {
-  for (var k of Object.keys(item.assets)) {
-    var asset = item.assets[k];
+export const getThumbnailHrefFromItem = (item: Item) => {
+  for (let k of Object.keys(item.assets)) {
+    let asset = item.assets[k];
     if (k === 'thumbnail' || k === 'preview') {
       if (asset.href) return asset.href;
-    } else if (k === 'origin_assets') {
-      for (var k_original of Object.keys(item.assets.origin_assets)) {
-        var o_asset = item.assets.origin_assets[k_original];
-        if (k_original === 'thumbnail' || k_original === 'preview') {
-          if (o_asset.href) return o_asset.href;
-        }
+    }
+  }
+  if (item.assets.origin_assets) {
+    let asset = item.assets.origin_assets as EODAGItemAsset;
+    for (var k_original of Object.keys(asset)) {
+      var o_asset = asset[k_original];
+      if (k_original === 'thumbnail' || k_original === 'preview') {
+        if (o_asset.href) return o_asset.href;
       }
     }
   }
+
   return null;
 };
+
+export function fixBboxCoordinateOrder(bbox?: Bbox): Bbox | undefined {
+  if (!bbox) {
+    return undefined;
+  }
+
+  const [lonMin, latMin, lonMax, latMax] = bbox;
+  const sortedBbox: Bbox = [lonMin, latMin, lonMax, latMax];
+
+  if (lonMin > lonMax) {
+    sortedBbox[0] = lonMax;
+    sortedBbox[2] = lonMin;
+  }
+
+  if (latMin > latMax) {
+    sortedBbox[1] = latMax;
+    sortedBbox[3] = latMin;
+  }
+
+  return sortedBbox;
+}
+
+export function makeArrayPayload(arr?: any[]) {
+  /* eslint-disable-line @typescript-eslint/no-explicit-any */
+  return arr?.length ? arr : undefined;
+}
+
+export function makeDatetimePayload(dateRange?: DateRange): string | undefined {
+  if (!dateRange) {
+    return undefined;
+  }
+  const { from, to } = dateRange;
+  if (from || to) {
+    return `${from || '..'}/${to || '..'}`;
+  } else {
+    return undefined;
+  }
+}
+
+export function formatPayload(searchFilters: SearchPayload): SearchPayload {
+  const { ids, bbox, dateRange, collections, ...restPayload } = searchFilters;
+  const requestPayload = {
+    ...restPayload,
+    ids: makeArrayPayload(ids),
+    collections: makeArrayPayload(collections),
+    bbox: fixBboxCoordinateOrder(bbox),
+    datetime: makeDatetimePayload(dateRange)
+  };
+  // sort these search fields to facilitate better cache and remove undefined fields
+  const requestPayloadSorted: SearchPayload = {};
+  Object.keys(requestPayload)
+    .sort()
+    .forEach((key) => {
+      const typedKey = key as keyof typeof requestPayload;
+      requestPayload[typedKey] &&
+        (requestPayloadSorted[typedKey] = requestPayload[typedKey]);
+    });
+  return requestPayloadSorted;
+}

@@ -1,7 +1,8 @@
 import { Skeleton } from '@mui/material';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
-export function ImageSkeleton(props) {
+export const ImageSkeleton = (props) => {
   const [isDone, setDone] = useState(false);
   return (
     <>
@@ -14,4 +15,10 @@ export function ImageSkeleton(props) {
       />
     </>
   );
-}
+};
+
+ImageSkeleton.propTypes = {
+  width: PropTypes.number.isRequired,
+  alt: PropTypes.string,
+  src: PropTypes.string
+};
