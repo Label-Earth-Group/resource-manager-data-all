@@ -8,8 +8,9 @@ import type {
   DateRange,
   SearchPayload,
   EODAGItemAsset
-} from 'types/stac';
-import type { GenericObject } from 'types/common';
+} from '../../../types/stac';
+import type { GenericObject } from '../../../types/common';
+import { STAC } from 'stac-js';
 
 const eodagApi_URL = process.env.REACT_APP_EODAG_API;
 
@@ -213,7 +214,7 @@ export function makeDatetimePayload(dateRange?: DateRange): string | undefined {
 
 export function formatPayload(searchFilters: SearchPayload): SearchPayload {
   const { ids, bbox, dateRange, collections, ...restPayload } = searchFilters;
-  const requestPayload = {
+  const requestPayload: Partial<SearchPayload> = {
     ...restPayload,
     ids: makeArrayPayload(ids),
     collections: makeArrayPayload(collections),
@@ -221,13 +222,15 @@ export function formatPayload(searchFilters: SearchPayload): SearchPayload {
     datetime: makeDatetimePayload(dateRange)
   };
   // sort these search fields to facilitate better cache and remove undefined fields
-  const requestPayloadSorted: SearchPayload = {};
+  const requestPayloadSorted: Partial<SearchPayload> = {};
   Object.keys(requestPayload)
+    .filter(
+      (key) => requestPayload[key as keyof typeof requestPayload] !== undefined
+    )
     .sort()
     .forEach((key) => {
-      const typedKey = key as keyof typeof requestPayload;
-      requestPayload[typedKey] &&
-        (requestPayloadSorted[typedKey] = requestPayload[typedKey]);
+      requestPayloadSorted[key as keyof typeof requestPayload] =
+        requestPayload[key as keyof typeof requestPayload];
     });
   return requestPayloadSorted;
 }

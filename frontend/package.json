@@ -41,6 +41,7 @@
     "classnames": "^2.3.1",
     "date-fns": "^2.28.0",
     "dayjs": "^1.11.0",
+    "dompurify": "^3.0.6",
     "formik": "^2.2.9",
     "graphql-tag": "^2.12.6",
     "json5": "^2.2.2",
@@ -66,10 +67,9 @@
     "react-router": "6.0.0",
     "react-router-dom": "6.0.0",
     "react-scripts": "^5.0.1",
-    "dompurify": "^3.0.6",
     "simplebar": "^5.3.6",
     "simplebar-react": "^2.3.6",
-    "stac-js": "^0.0.8",
+    "stac-layer": "^1.0.0-beta.1",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
   },
@@ -83,6 +83,7 @@
     "@babel/traverse": "7.23.2"
   },
   "devDependencies": {
+    "@types/geojson": "^7946.0.13",
     "@types/node": "^20.10.4",
     "@types/react": "^18.2.42",
     "@typescript-eslint/eslint-plugin": "^6.13.2",

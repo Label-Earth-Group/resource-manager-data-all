@@ -63,7 +63,7 @@ export type ItemAsset = {
 };
 
 export type EODAGItemAsset = {
-  [key: string]: ItemAsset;
+  [key: string]: ItemAsset | EODAGItemAsset;
   downloadLink: ItemAsset;
   thumbnail: ItemAsset;
   preview: ItemAsset;

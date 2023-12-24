@@ -15,7 +15,7 @@
     "isolatedModules": true, // Transpile each file as a separate module
     "noEmit": true, // Do not emit outputs (handled by CRA)
     "jsx": "react-jsx", // Support JSX in .tsx files: "react", "react-jsx", "react-jsxdev"
-    "baseUrl": "src",
+    "baseUrl": "./src",
     "paths": {
       "authentication/*": ["src/authentication/*"],
       "design/*": ["src/design/*"],
@@ -23,7 +23,11 @@
       "modules/*": ["src/modules/*"],
       "services/*": ["src/services/*"],
       "utils/*": ["src/utils/*"],
+      "types/*": ["src/types/*"],
       "Shared/*": ["src/modules/Shared/*"]
     }
-  }
+  },
+  "include": [
+    "src",
+  ],
 }

@@ -25,7 +25,7 @@ import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { ImageSkeleton } from '../../../design/components/ImageSkeleton.js';
 import { DateRangePicker } from './DateTimeRangePicker.js';
 import React, { useEffect, useState } from 'react';
-import type { Item, SearchPayload } from 'types/stac.js';
+import type { Item, SearchPayload } from '../../../types/stac';
 
 export function StacItemsBrowse(props: { collectionID: string }) {
   const PAGESIZE = 20;
