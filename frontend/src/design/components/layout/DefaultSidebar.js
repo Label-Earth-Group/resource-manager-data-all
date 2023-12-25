@@ -2,8 +2,14 @@ import {
   ChevronLeft,
   ChevronRight,
   MenuBook,
-  ShareOutlined,
-  Public
+  Share,
+  Public,
+  Search,
+  CorporateFare,
+  Cloud,
+  Dataset,
+  InsertComment,
+  Insights
 } from '@mui/icons-material';
 import {
   Box,
@@ -16,12 +22,10 @@ import {
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { AiOutlineExperiment } from 'react-icons/ai';
-import * as BiIcons from 'react-icons/bi';
 import * as BsIcons from 'react-icons/bs';
-import { FiCodesandbox, FiPackage } from 'react-icons/fi';
+import { FiCodesandbox } from 'react-icons/fi';
 import { MdShowChart } from 'react-icons/md';
 import { SiJupyter } from 'react-icons/si';
-// import { VscBook } from 'react-icons/vsc';
 import { useLocation } from 'react-router-dom';
 import { ModuleNames, isModuleEnabled } from 'utils';
 import { useSettings } from '../../hooks';
@@ -37,30 +41,31 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
       active: true
     };
 
-    const SamSection = {
-      title: 'Sam',
-      path: '/console/sam',
-      icon: <BsIcons.BsCloud size={15} />
+    const eodagSearchSection = {
+      title: 'Search',
+      path: '/console/eodag/search',
+      icon: <Search size={15} />,
+      active: true
     };
 
     const catalogSection = {
       title: 'Catalog',
       path: '/console/catalog',
       icon: <MenuBook size={15} />,
-      active: isModuleEnabled(ModuleNames.CATALOG)
+      active: false
     };
 
     const datasetsSection = {
       title: 'Datasets',
       path: '/console/datasets',
-      icon: <FiPackage size={15} />,
+      icon: <Dataset size={15} />,
       active: isModuleEnabled(ModuleNames.DATASETS)
     };
 
     const sharesSection = {
       title: 'Shares',
       path: '/console/shares',
-      icon: <ShareOutlined size={15} />,
+      icon: <Share size={15} />,
       active: isModuleEnabled(ModuleNames.SHARES)
     };
 
@@ -68,32 +73,32 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
       title: 'Glossaries',
       path: '/console/glossaries',
       icon: <BsIcons.BsTag size={15} />,
-      active: isModuleEnabled(ModuleNames.GLOSSARIES)
+      active: false
     };
 
     const worksheetsSection = {
       title: 'Worksheets',
       path: '/console/worksheets',
       icon: <AiOutlineExperiment size={15} />,
-      active: isModuleEnabled(ModuleNames.WORKSHEETS)
+      active: false
     };
 
     const mlStudioSection = {
       title: 'ML Studio',
       path: '/console/mlstudio',
       icon: <FiCodesandbox size={15} />,
-      active: isModuleEnabled(ModuleNames.MLSTUDIO)
+      active: false
     };
 
     const dashboardsSection = {
       title: 'Dashboards',
       path: '/console/dashboards',
       icon: <MdShowChart size={15} />,
-      active: isModuleEnabled(ModuleNames.DASHBOARDS)
+      active: false
     };
 
     const notebooksSection = {
-      title: 'Notebooks',
+      title: 'GeoJournal',
       path: '/console/notebooks',
       icon: <SiJupyter size={15} />,
       active: isModuleEnabled(ModuleNames.NOTEBOOKS)
@@ -103,19 +108,33 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
       title: 'Pipelines',
       path: '/console/pipelines',
       icon: <BsIcons.BsGear size={15} />,
-      active: isModuleEnabled(ModuleNames.DATAPIPELINES)
+      active: false
+    };
+
+    const toolboxSection = {
+      title: 'Toolbox',
+      path: '#',
+      icon: <Insights size={15} />,
+      active: true
+    };
+
+    const samSection = {
+      title: 'Labelling',
+      path: '/console/sam',
+      icon: <InsertComment size={15} />,
+      active: true
     };
 
     const organizationsSection = {
       title: 'Organizations',
       path: '/console/organizations',
-      icon: <BiIcons.BiBuildings size={15} />
+      icon: <CorporateFare size={15} />
     };
 
     const environmentsSection = {
       title: 'Environments',
       path: '/console/environments',
-      icon: <BsIcons.BsCloud size={15} />
+      icon: <Cloud size={15} />
     };
 
     let sections = [];
@@ -127,12 +146,10 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
           items: [eodagSection]
         },
         {
-          title: 'Sam',
-          items: [SamSection]
-        },
-        {
           title: 'Discover',
           items: [
+            eodagSection,
+            eodagSearchSection,
             catalogSection,
             datasetsSection,
             sharesSection,
@@ -140,13 +157,15 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
           ]
         },
         {
-          title: 'Play',
+          title: 'Analysis',
           items: [
             worksheetsSection,
             notebooksSection,
             mlStudioSection,
             pipelinesSection,
-            dashboardsSection
+            dashboardsSection,
+            toolboxSection,
+            samSection
           ]
         },
         {
@@ -157,12 +176,25 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
     } else {
       sections = [
         {
-          title: 'Discover',
-          items: [catalogSection, datasetsSection, sharesSection]
+          title: 'Images',
+          items: [
+            eodagSection,
+            eodagSearchSection,
+            catalogSection,
+            datasetsSection
+          ]
         },
         {
-          title: 'Play',
-          items: [worksheetsSection, mlStudioSection, dashboardsSection]
+          title: 'Analysis',
+          items: [
+            worksheetsSection,
+            notebooksSection,
+            mlStudioSection,
+            pipelinesSection,
+            dashboardsSection,
+            toolboxSection,
+            samSection
+          ]
         }
       ];
     }

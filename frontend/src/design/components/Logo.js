@@ -19,12 +19,12 @@ export const Logo = () => (
       <Grid item>
         <Link
           to="/"
-          color="textPrimary"
+          color="white"
           underline="none"
           variant="h5"
           component={RouterLink}
         >
-          data.all
+          LabelEarth
         </Link>
       </Grid>
     </Grid>

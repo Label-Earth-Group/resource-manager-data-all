@@ -25,7 +25,7 @@ const reduceChildRoutes = ({ acc, pathname, item, depth }) => {
     ? !!matchPath(
         {
           path: item.path,
-          end: false
+          end: true
         },
         pathname
       )
@@ -36,7 +36,7 @@ const reduceChildRoutes = ({ acc, pathname, item, depth }) => {
       ? !!matchPath(
           {
             path: item.path,
-            end: false
+            end: true
           },
           pathname
         )

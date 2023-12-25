@@ -3,14 +3,13 @@ import {
   Typography,
   Breadcrumbs,
   Link,
-  Button,
   Box,
   Container,
   Autocomplete,
   TextField,
   CircularProgress
 } from '@mui/material';
-import { ChevronRightIcon, SearchIcon, useSettings, SearchInput } from 'design';
+import { ChevronRightIcon, useSettings, SearchInput } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
@@ -55,20 +54,6 @@ function StacCollectionPageHeader() {
             EODAG
           </Link>
         </Breadcrumbs>
-      </Grid>
-      <Grid item>
-        <Box sx={{ m: -1 }}>
-          <Button
-            color="primary"
-            component={RouterLink}
-            startIcon={<SearchIcon fontSize="small" />}
-            sx={{ m: 1 }}
-            to="/console/eodag/search"
-            variant="contained"
-          >
-            Advanced STAC search
-          </Button>
-        </Box>
       </Grid>
     </Grid>
   );

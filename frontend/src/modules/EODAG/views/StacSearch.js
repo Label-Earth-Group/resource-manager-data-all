@@ -28,7 +28,7 @@ function StacSearchPageHeader() {
           sx={{ mt: 1 }}
         >
           <Link underline="hover" color="textPrimary" variant="subtitle2">
-            External
+            Images
           </Link>
           <Link
             underline="hover"

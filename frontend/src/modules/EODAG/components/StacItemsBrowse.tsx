@@ -1,6 +1,7 @@
 import {
   Link,
   Box,
+  Grid,
   Card,
   CircularProgress,
   Table,
@@ -8,12 +9,10 @@ import {
   TableCell,
   Button,
   Typography,
-  Skeleton,
   LinearProgress
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import {
-  getThumbnailHrefFromItem,
   //useGetCollectionItemsByCollectionIDQuery,
   useGetCollectionQueryablesByCollectionIDQuery,
   useLazySearchItemsQuery,
@@ -22,10 +21,10 @@ import {
 import { useDispatch } from 'globalErrors';
 import { useHandleError } from '../utils.js';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
-import { ImageSkeleton } from '../../../design/components/ImageSkeleton.js';
 import { DateRangePicker } from './DateTimeRangePicker.js';
 import React, { useEffect, useState } from 'react';
 import type { Item, SearchPayload } from '../../../types/stac';
+import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 
 export function StacItemsBrowse(props: { collectionID: string }) {
   const PAGESIZE = 20;
@@ -97,7 +96,7 @@ export function StacItemsBrowse(props: { collectionID: string }) {
   console.info(items);
 
   const pagination = (
-    <Typography color="textSecondary">
+    <>
       <Button
         variant="contained"
         sx={{ mr: 1 }}
@@ -121,43 +120,68 @@ export function StacItemsBrowse(props: { collectionID: string }) {
       >
         Next
       </Button>
-    </Typography>
+    </>
   );
+
+  const redOptions = { color: 'red' };
 
   return (
     <Box>
-      <Box sx={{ mb: 3 }}>
-        <Box sx={{ mb: 2 }}>
-          <DateRangePicker
-            startDate={startDate}
-            setStartDate={setStartDate}
-            endDate={endDate}
-            setEndDate={setEndDate}
-          />
-          <Button
-            variant="contained"
-            disabled={isLoading || isFetching}
-            onClick={handleSearchItems}
-            size="large"
-          >
-            Search Items
-          </Button>
-        </Box>
-        {pagination}
-
+      <Box sx={{ mb: 2 }}>
+        <Grid container alignItems="flex-end" sx={{ mb: 2 }}>
+          <Grid item>
+            <DateRangePicker
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+            />
+          </Grid>
+          <Grid item>
+            <Button
+              variant="contained"
+              disabled={isLoading || isFetching}
+              onClick={handleSearchItems}
+              size="large"
+            >
+              Search Items
+            </Button>
+          </Grid>
+        </Grid>
         <Typography color="textSecondary">
+          {pagination}{' '}
           {Number(searchResponse.numberMatched) > 0
             ? `${searchResponse.numberMatched} item(s) found. Provided by: ${items[0]?.properties?.providers[0]?.name}`
             : 'No items found'}
         </Typography>
       </Box>
-      <Card>
+      <Box>
         {isFetching && <LinearProgress />}
-        <StacItemDisplayList
-          features={items}
-          collectionID={collectionID}
-        ></StacItemDisplayList>
-      </Card>
+        <Grid container spacing={2}>
+          <Grid item md={5} sm={12}>
+            <Card>
+              <StacItemDisplayList
+                features={items}
+                collectionID={collectionID}
+              ></StacItemDisplayList>
+            </Card>
+          </Grid>
+          <Grid item md={7} sm={12}>
+            <MapContainer
+              scrollWheelZoom={true}
+              id="map"
+              center={[50.0, 0.0]}
+              zoom={1}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <GeoJSON data={searchResponse} style={redOptions}></GeoJSON>
+            </MapContainer>
+          </Grid>
+        </Grid>
+      </Box>
     </Box>
   );
 }
@@ -177,17 +201,6 @@ function StacItemDisplayList(props: {
       {features.map((feature) => {
         return (
           <TableRow key={feature.id}>
-            <TableCell>
-              {getThumbnailHrefFromItem(feature) ? (
-                <ImageSkeleton
-                  src={getThumbnailHrefFromItem(feature)}
-                  width={96}
-                  alt="Thumbnail"
-                />
-              ) : (
-                <Skeleton width={96} height={96} animation={false} />
-              )}
-            </TableCell>
             <TableCell>
               <Link
                 component={RouterLink}
