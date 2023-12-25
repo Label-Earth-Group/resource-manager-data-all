@@ -4,8 +4,9 @@ import {
   StacProviders,
   StacItemMetaData
 } from './StacCommonComponent';
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import { MapContainer, GeoJSON } from 'react-leaflet';
 import { getThumbnailHrefFromItem } from '../services/eodagApi.ts';
+import TianDiTuTileLayer from './TianDiTuTileLayer.js';
 
 export function StacItemOverview(props) {
   const { item } = props;
@@ -25,10 +26,11 @@ export function StacItemOverview(props) {
             scrollWheelZoom={true}
             id="map"
           >
-            <TileLayer
+            <TianDiTuTileLayer />
+            {/* <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+            /> */}
             <GeoJSON data={geojson} style={redOptions}></GeoJSON>
           </MapContainer>
         </Card>

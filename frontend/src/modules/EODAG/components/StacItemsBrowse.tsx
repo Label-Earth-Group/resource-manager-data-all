@@ -24,7 +24,8 @@ import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { DateRangePicker } from './DateTimeRangePicker.js';
 import React, { useEffect, useState } from 'react';
 import type { Item, SearchPayload } from '../../../types/stac';
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import { MapContainer, GeoJSON } from 'react-leaflet';
+import TianDiTuTileLayer from './TianDiTuTileLayer.js';
 
 export function StacItemsBrowse(props: { collectionID: string }) {
   const PAGESIZE = 20;
@@ -173,10 +174,7 @@ export function StacItemsBrowse(props: { collectionID: string }) {
               center={[50.0, 0.0]}
               zoom={1}
             >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
+              <TianDiTuTileLayer />
               <GeoJSON data={searchResponse} style={redOptions}></GeoJSON>
             </MapContainer>
           </Grid>

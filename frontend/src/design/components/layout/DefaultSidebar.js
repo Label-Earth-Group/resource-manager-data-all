@@ -142,11 +142,7 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
     if (isAdvancedMode) {
       sections = [
         {
-          title: 'STAC',
-          items: [eodagSection]
-        },
-        {
-          title: 'Discover',
+          title: 'Images',
           items: [
             eodagSection,
             eodagSearchSection,
