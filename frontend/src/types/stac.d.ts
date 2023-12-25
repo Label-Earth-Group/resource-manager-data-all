@@ -58,16 +58,17 @@ export type ItemAsset = {
   title?: string;
   description?: string;
   type?: string;
+  role?: string;
   roles?: string[];
   _dc_qs?: string;
 };
 
 export type EODAGItemAsset = {
-  [key: string]: ItemAsset | EODAGItemAsset;
+  [key: string]: ItemAsset;
   downloadLink: ItemAsset;
   thumbnail: ItemAsset;
   preview: ItemAsset;
-  origin_assets: ItemAsset | EODAGItemAsset;
+  origin_assets: EODAGItemAsset;
 };
 
 export type Item = {

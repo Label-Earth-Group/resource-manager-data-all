@@ -10,7 +10,7 @@ import type {
   EODAGItemAsset
 } from '../../../types/stac';
 import type { GenericObject } from '../../../types/common';
-import { STAC } from 'stac-js';
+// import { STAC } from 'stac-js';
 
 const eodagApi_URL = process.env.REACT_APP_EODAG_API;
 

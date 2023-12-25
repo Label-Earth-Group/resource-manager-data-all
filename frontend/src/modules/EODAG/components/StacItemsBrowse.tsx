@@ -57,7 +57,7 @@ export function StacItemsBrowse(props: { collectionID: string }) {
 
   // The search is always triggered when pagination changes
   useEffect(() => {
-    console.log('search', formatPayload(searchPayload));
+    console.info('search', formatPayload(searchPayload));
     searchItems(formatPayload(searchPayload), true);
   }, [currentPage, PAGESIZE]);
 
@@ -94,7 +94,7 @@ export function StacItemsBrowse(props: { collectionID: string }) {
 
   // last, deal with response result
   const { features: items } = searchResponse;
-  console.log(items);
+  console.info(items);
 
   const pagination = (
     <Typography color="textSecondary">
@@ -127,19 +127,22 @@ export function StacItemsBrowse(props: { collectionID: string }) {
   return (
     <Box>
       <Box sx={{ mb: 3 }}>
-        <DateRangePicker
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
-        />
-        <Button
-          variant="contained"
-          disabled={isLoading || isFetching}
-          onClick={handleSearchItems}
-        >
-          Search Items
-        </Button>
+        <Box sx={{ mb: 2 }}>
+          <DateRangePicker
+            startDate={startDate}
+            setStartDate={setStartDate}
+            endDate={endDate}
+            setEndDate={setEndDate}
+          />
+          <Button
+            variant="contained"
+            disabled={isLoading || isFetching}
+            onClick={handleSearchItems}
+            size="large"
+          >
+            Search Items
+          </Button>
+        </Box>
         {pagination}
 
         <Typography color="textSecondary">
