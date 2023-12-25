@@ -5,7 +5,6 @@ const SamView = () => {
   return (
     <div>
       <MapImage />
-      <h1>Layout</h1>
     </div>
   );
 };

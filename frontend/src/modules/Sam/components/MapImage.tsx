@@ -7,7 +7,6 @@ import 'leaflet.chinatmsproviders';
 import { ISamState } from '../helpers/Interfaces';
 import { SAMGeo } from '../helpers/samgeo.tsx';
 import { EMBEDDING_URL } from '../helpers/contant.tsx';
-import * as GeoJSON from 'geojson';
 
 const Model_URL = '/assets/sam_onnx_quantized_example.onnx';
 
@@ -285,7 +284,7 @@ const MapImage = () => {
   return (
     <>
       <button onClick={generateEmbedding}>生成embedding</button>
-      <div ref={mapRef} style={{ height: '450px' }} />
+      <div ref={mapRef} style={{ height: '900px' }} />
     </>
   );
 };
