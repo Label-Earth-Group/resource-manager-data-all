@@ -16,6 +16,7 @@ import { store } from './globalErrors';
 import { reportWebVitals } from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
 import { SnackbarProvider } from 'notistack';
+import SamContextProvider from './modules/Sam/context/context.tsx';
 
 ReactDOM.render(
   <StrictMode>
@@ -27,7 +28,9 @@ ReactDOM.render(
               <BrowserRouter>
                 <SnackbarProvider dense maxSnack={3} hideIconVariant>
                   <AuthProvider>
-                    <App />
+                    <SamContextProvider>
+                      <App />
+                    </SamContextProvider>
                   </AuthProvider>
                 </SnackbarProvider>
               </BrowserRouter>

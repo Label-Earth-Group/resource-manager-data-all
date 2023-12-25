@@ -37,6 +37,12 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
       active: true
     };
 
+    const SamSection = {
+      title: 'Sam',
+      path: '/console/sam',
+      icon: <BsIcons.BsCloud size={15} />
+    };
+
     const catalogSection = {
       title: 'Catalog',
       path: '/console/catalog',
@@ -119,6 +125,10 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
         {
           title: 'STAC',
           items: [eodagSection]
+        },
+        {
+          title: 'Sam',
+          items: [SamSection]
         },
         {
           title: 'Discover',
