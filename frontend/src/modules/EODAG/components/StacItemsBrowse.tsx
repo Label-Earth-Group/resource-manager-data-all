@@ -22,10 +22,11 @@ import { useDispatch } from 'globalErrors';
 import { useHandleError } from '../utils.js';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { DateRangePicker } from './DateTimeRangePicker.js';
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import type { Item, SearchPayload } from '../../../types/stac';
 import { MapContainer, GeoJSON } from 'react-leaflet';
 import TianDiTuTileLayer from './TianDiTuTileLayer.js';
+import { GeoJSON as LeaflefGeoJSON } from 'leaflet';
 
 export function StacItemsBrowse(props: { collectionID: string }) {
   const PAGESIZE = 20;
@@ -34,6 +35,7 @@ export function StacItemsBrowse(props: { collectionID: string }) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const geojsonRef = useRef<LeaflefGeoJSON | null>();
 
   const { data: queryables, error: errorQueryable } =
     useGetCollectionQueryablesByCollectionIDQuery(collectionID);
@@ -60,6 +62,12 @@ export function StacItemsBrowse(props: { collectionID: string }) {
     console.info('search', formatPayload(searchPayload));
     searchItems(formatPayload(searchPayload), true);
   }, [currentPage, PAGESIZE]);
+
+  useEffect(() => {
+    if (geojsonRef.current) {
+      geojsonRef.current.clearLayers().addData(searchResponse);
+    }
+  }, [geojsonRef, searchResponse]);
 
   // const {
   //   data: items,
@@ -175,7 +183,11 @@ export function StacItemsBrowse(props: { collectionID: string }) {
               zoom={1}
             >
               <TianDiTuTileLayer />
-              <GeoJSON data={searchResponse} style={redOptions}></GeoJSON>
+              <GeoJSON
+                ref={geojsonRef}
+                data={searchResponse}
+                style={redOptions}
+              ></GeoJSON>
             </MapContainer>
           </Grid>
         </Grid>
