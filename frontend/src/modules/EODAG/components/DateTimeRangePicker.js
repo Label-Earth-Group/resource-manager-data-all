@@ -17,7 +17,7 @@ export function DateRangePicker({
       <DateTimePicker
         label="Start Date"
         openTo="day"
-        views={['year', 'month', 'day', 'hours']}
+        views={['year', 'month', 'day']}
         value={startDate}
         maxDate={endDate}
         onChange={(newValue) => setStartDate(newValue)}
@@ -40,7 +40,7 @@ export function DateRangePicker({
       <DateTimePicker
         label="End Date"
         openTo="day"
-        views={['year', 'month', 'day', 'hours']}
+        views={['year', 'month', 'day']}
         value={endDate}
         minDate={startDate}
         onChange={(newValue) => setEndDate(newValue)}

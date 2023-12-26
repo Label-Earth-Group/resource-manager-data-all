@@ -9,6 +9,9 @@ import {
 import { ChevronRightIcon, useSettings } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { SearchQuery } from '../components/SearchQuery';
+import { LeafletMapComponent } from '../components/MapComponent';
+//import { GeoJSON as LeaflefGeoJSON } from 'leaflet';
 
 function StacSearchPageHeader() {
   return (
@@ -50,6 +53,7 @@ function StacSearchPageHeader() {
 
 const StacSearch = () => {
   const { settings } = useSettings();
+
   return (
     <>
       <Helmet>
@@ -64,6 +68,15 @@ const StacSearch = () => {
       >
         <Container maxWidth={settings.compact ? 'xl' : false}>
           <StacSearchPageHeader />
+
+          <Grid container spacing={0}>
+            <Grid item md={3} xs={12}>
+              <SearchQuery></SearchQuery>
+            </Grid>
+            <Grid item md={9} xs={12}>
+              <LeafletMapComponent></LeafletMapComponent>
+            </Grid>
+          </Grid>
         </Container>
       </Box>
     </>
