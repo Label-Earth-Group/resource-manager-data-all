@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import { Label } from 'design';
 import Markdown from 'react-markdown';
+import { Link as RouterLink } from 'react-router-dom';
 
 export function StacObjectDescription(props) {
   const { description, keywords } = props;
@@ -345,5 +346,32 @@ export function StacItemMetaData(props) {
         ))} */}
       </CardContent>
     </Card>
+  );
+}
+
+export function StacItemDisplayList(props) {
+  const { features } = props;
+
+  if (!features || features?.length === 0) {
+    return <></>;
+  }
+
+  return (
+    <Table>
+      {features.map((feature) => {
+        return (
+          <TableRow key={feature.id}>
+            <TableCell>
+              <Link
+                component={RouterLink}
+                to={`/console/eodag/collections/${feature.collection}/item/${feature.id}`}
+              >
+                {feature.id}
+              </Link>
+            </TableCell>
+          </TableRow>
+        );
+      })}
+    </Table>
   );
 }

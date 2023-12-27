@@ -14,6 +14,9 @@ import {
   CircularProgress,
   Tooltip
 } from '@mui/material';
+import { useGetCollectionsResponseQuery } from '../services/eodagApi.ts';
+import { useDispatch } from 'globalErrors';
+import { useHandleError } from '../utils.js';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -98,8 +101,19 @@ export function MultipleSelect() {
 }
 
 export const MultiSelectInput = (props) => {
-  const { collections, isLoading } = props;
-  const [selectedCollections, setSelectedCollections] = React.useState([]);
+  const { selectedCollections, setSelectedCollections } = props;
+  const dispatch = useDispatch();
+  const { collections, error, isLoading } = useGetCollectionsResponseQuery(
+    undefined,
+    {
+      selectFromResult: ({ data, error, isLoading }) => ({
+        collections: data && data.collections,
+        error,
+        isLoading
+      })
+    }
+  ); // NOTE: should also select error and isLoading
+  useHandleError(error, dispatch);
 
   const handleSelect = (event, newValue) => {
     setSelectedCollections(newValue);

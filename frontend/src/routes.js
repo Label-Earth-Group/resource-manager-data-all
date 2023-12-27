@@ -165,7 +165,7 @@ const StacCollectionContent = Loadable(
   lazy(() => import('./modules/EODAG/views/StacCollectionContent'))
 );
 const StacSearch = Loadable(
-  lazy(() => import('./modules/EODAG/views/StacSearch'))
+  lazy(() => import('./modules/EODAG/views/StacSearch.tsx'))
 );
 const StacItemDetail = Loadable(
   lazy(() => import('./modules/EODAG/views/StacItemDetail'))

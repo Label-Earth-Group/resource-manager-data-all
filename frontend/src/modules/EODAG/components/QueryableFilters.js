@@ -41,28 +41,25 @@ export const QuaryableFilters = () => {
   };
 
   const operators = ['eq', 'ne', 'lt', 'le', 'gt', 'ge'];
-  const valueTypes = ['str', 'int', 'float'];
+  //const valueTypes = ['str', 'int', 'float'];
 
   return (
     <Box>
-      {filters.map((filter) => (
-        <Box key={filter.id} display="flex" alignItems="center" mb={2}>
-          <TextField
-            label="Field"
-            variant="outlined"
-            size="small"
-            style={{ marginRight: 8 }}
-            value={filter.field}
-            onChange={(e) =>
-              handleFilterChange(filter.id, 'field', e.target.value)
-            }
-          />
-          <FormControl
-            variant="outlined"
-            size="small"
-            style={{ marginRight: 8 }}
-          >
+      <FormControl variant="outlined" size="small" style={{ marginRight: 8 }}>
+        {filters.map((filter) => (
+          <Box key={filter.id} display="flex" alignItems="center" mb={2}>
+            <TextField
+              label="Field"
+              variant="outlined"
+              size="small"
+              style={{ marginRight: 8 }}
+              value={filter.field}
+              onChange={(e) =>
+                handleFilterChange(filter.id, 'field', e.target.value)
+              }
+            />
             <Select
+              key="operators"
               value={filter.operator}
               onChange={(e) =>
                 handleFilterChange(filter.id, 'operator', e.target.value)
@@ -74,23 +71,18 @@ export const QuaryableFilters = () => {
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
-          <TextField
-            label="Value"
-            variant="outlined"
-            size="small"
-            style={{ marginRight: 8 }}
-            value={filter.value}
-            onChange={(e) =>
-              handleFilterChange(filter.id, 'value', e.target.value)
-            }
-          />
-          <FormControl
-            variant="outlined"
-            size="small"
-            style={{ marginRight: 8 }}
-          >
-            <Select
+            <TextField
+              label="Value"
+              variant="outlined"
+              size="small"
+              style={{ marginRight: 8 }}
+              value={filter.value}
+              onChange={(e) =>
+                handleFilterChange(filter.id, 'value', e.target.value)
+              }
+            />
+            {/* <Select
+              key="valueTypes"
               value={filter.valueType}
               onChange={(e) =>
                 handleFilterChange(filter.id, 'valueType', e.target.value)
@@ -101,14 +93,14 @@ export const QuaryableFilters = () => {
                   {valueType}
                 </MenuItem>
               ))}
-            </Select>
-          </FormControl>
-          <IconButton onClick={() => deleteFilter(filter.id)} size="small">
-            <Delete />
-          </IconButton>
-        </Box>
-      ))}
-      <Button onClick={addFilter}>Add Filter</Button>
+            </Select> */}
+            <IconButton onClick={() => deleteFilter(filter.id)} size="small">
+              <Delete />
+            </IconButton>
+          </Box>
+        ))}
+        <Button onClick={addFilter}>Add Filter</Button>
+      </FormControl>
     </Box>
   );
 };

@@ -1,17 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Link,
   Box,
   Grid,
   Card,
   CircularProgress,
-  Table,
-  TableRow,
-  TableCell,
   Button,
   Typography,
   LinearProgress
 } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
 import {
   //useGetCollectionItemsByCollectionIDQuery,
   useGetCollectionQueryablesByCollectionIDQuery,
@@ -23,10 +19,11 @@ import { useHandleError } from '../utils.js';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { DateRangePicker } from './DateTimeRangePicker.js';
 import React, { useRef, useEffect, useState } from 'react';
-import type { Item, SearchPayload } from '../../../types/stac';
+import type { SearchPayload } from '../../../types/stac';
 import { MapContainer, GeoJSON } from 'react-leaflet';
 import TianDiTuTileLayer from './TianDiTuTileLayer.js';
 import { GeoJSON as LeaflefGeoJSON } from 'leaflet';
+import { StacItemDisplayList } from './StacCommonComponent.js';
 
 export function StacItemsBrowse(props: { collectionID: string }) {
   const PAGESIZE = 20;
@@ -193,35 +190,5 @@ export function StacItemsBrowse(props: { collectionID: string }) {
         </Grid>
       </Box>
     </Box>
-  );
-}
-
-function StacItemDisplayList(props: {
-  features: Item[];
-  collectionID: string;
-}) {
-  const { features, collectionID } = props;
-
-  if (features?.length === 0) {
-    return <></>;
-  }
-
-  return (
-    <Table>
-      {features.map((feature) => {
-        return (
-          <TableRow key={feature.id}>
-            <TableCell>
-              <Link
-                component={RouterLink}
-                to={`/console/eodag/collections/${collectionID}/item/${feature.id}`}
-              >
-                {feature.id}
-              </Link>
-            </TableCell>
-          </TableRow>
-        );
-      })}
-    </Table>
   );
 }

@@ -1,44 +1,67 @@
-import { Box, Button, FormControl } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  Typography,
+  Table,
+  TableRow
+} from '@mui/material';
 import { DateRangePicker } from './DateTimeRangePicker.js';
 import {
   //   MultipleSelect,
   MultiSelectInput
 } from '../components/MultipleSelect.tsx';
 import { QuaryableFilters } from './QueryableFilters.js';
-import { useGetCollectionsResponseQuery } from '../services/eodagApi.ts';
-import { useDispatch } from 'globalErrors';
-import { useHandleError } from '../utils.js';
 
 export const SearchQuery = (props) => {
-  const dispatch = useDispatch();
-  const { collections, error, isLoading } = useGetCollectionsResponseQuery(
-    undefined,
-    {
-      selectFromResult: ({ data, error, isLoading }) => ({
-        collections: data && data.collections,
-        error,
-        isLoading
-      })
-    }
-  ); // NOTE: should also select error and isLoading
-  useHandleError(error, dispatch);
+  const {
+    setStartDate,
+    setEndDate,
+    selectedCollections,
+    setSelectedCollections,
+    triggerSearch
+  } = props;
 
   return (
     <FormControl>
-      <Box>
-        <Button variant="contained" color="primary">
-          Search
-        </Button>
-        <Button variant="contained" color="secondary">
-          Reset
-        </Button>
-      </Box>
-      <DateRangePicker></DateRangePicker>
-      <MultiSelectInput
-        collections={collections || []}
-        isLoading={isLoading}
-      ></MultiSelectInput>
-      <QuaryableFilters></QuaryableFilters>
+      <Table>
+        <TableRow>
+          <Box>
+            <Button variant="contained" color="primary" onClick={triggerSearch}>
+              Search
+            </Button>
+            <Button variant="contained" color="secondary">
+              Reset
+            </Button>
+          </Box>
+        </TableRow>
+        <TableRow>
+          <Typography>Date Range</Typography>
+        </TableRow>
+        <TableRow>
+          <DateRangePicker
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+          ></DateRangePicker>
+          <FormHelperText>Disabled</FormHelperText>
+        </TableRow>
+        <TableRow>
+          <Typography>Select Collections</Typography>
+        </TableRow>
+        <TableRow>
+          <MultiSelectInput
+            selectedCollections={selectedCollections}
+            setSelectedCollections={setSelectedCollections}
+          ></MultiSelectInput>
+        </TableRow>
+        <TableRow>
+          <Typography>Property Filters</Typography>
+        </TableRow>
+        <TableRow>
+          <QuaryableFilters></QuaryableFilters>
+        </TableRow>
+      </Table>
     </FormControl>
   );
 };
