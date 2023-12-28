@@ -44,44 +44,44 @@ export const QuaryableFilters = () => {
   //const valueTypes = ['str', 'int', 'float'];
 
   return (
-    <Box>
-      <FormControl variant="outlined" size="small" style={{ marginRight: 8 }}>
-        {filters.map((filter) => (
-          <Box key={filter.id} display="flex" alignItems="center" mb={2}>
-            <TextField
-              label="Field"
-              variant="outlined"
-              size="small"
-              style={{ marginRight: 8 }}
-              value={filter.field}
-              onChange={(e) =>
-                handleFilterChange(filter.id, 'field', e.target.value)
-              }
-            />
-            <Select
-              key="operators"
-              value={filter.operator}
-              onChange={(e) =>
-                handleFilterChange(filter.id, 'operator', e.target.value)
-              }
-            >
-              {operators.map((op) => (
-                <MenuItem key={op} value={op}>
-                  {op}
-                </MenuItem>
-              ))}
-            </Select>
-            <TextField
-              label="Value"
-              variant="outlined"
-              size="small"
-              style={{ marginRight: 8 }}
-              value={filter.value}
-              onChange={(e) =>
-                handleFilterChange(filter.id, 'value', e.target.value)
-              }
-            />
-            {/* <Select
+    <FormControl variant="outlined" size="small" sx={{ width: '100%' }}>
+      {filters.map((filter) => (
+        <Box key={filter.id} display="flex" alignItems="center" mb={2}>
+          <TextField
+            label="Field"
+            variant="outlined"
+            size="small"
+            sx={{ mr: 1 }}
+            value={filter.field}
+            onChange={(e) =>
+              handleFilterChange(filter.id, 'field', e.target.value)
+            }
+          />
+          <Select
+            key="operators"
+            value={filter.operator}
+            sx={{ mr: 1 }}
+            onChange={(e) =>
+              handleFilterChange(filter.id, 'operator', e.target.value)
+            }
+          >
+            {operators.map((op) => (
+              <MenuItem key={op} value={op}>
+                {op}
+              </MenuItem>
+            ))}
+          </Select>
+          <TextField
+            label="Value"
+            variant="outlined"
+            size="small"
+            sx={{ mr: 1 }}
+            value={filter.value}
+            onChange={(e) =>
+              handleFilterChange(filter.id, 'value', e.target.value)
+            }
+          />
+          {/* <Select
               key="valueTypes"
               value={filter.valueType}
               onChange={(e) =>
@@ -94,13 +94,14 @@ export const QuaryableFilters = () => {
                 </MenuItem>
               ))}
             </Select> */}
-            <IconButton onClick={() => deleteFilter(filter.id)} size="small">
-              <Delete />
-            </IconButton>
-          </Box>
-        ))}
-        <Button onClick={addFilter}>Add Filter</Button>
-      </FormControl>
-    </Box>
+          <IconButton onClick={() => deleteFilter(filter.id)} size="small">
+            <Delete />
+          </IconButton>
+        </Box>
+      ))}
+      <Button variant="outlined" onClick={addFilter}>
+        Add Filter
+      </Button>
+    </FormControl>
   );
 };

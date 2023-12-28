@@ -182,8 +182,8 @@ const StacSearch = () => {
         }}
       >
         <Container maxWidth={settings.compact ? 'xl' : false}>
-          <Grid container spacing={0}>
-            <Grid item md={3} xs={12}>
+          <Grid container spacing={2}>
+            <Grid item md={4} xs={12}>
               <Tabs
                 indicatorColor="primary"
                 onChange={(event, value) => {
@@ -211,7 +211,7 @@ const StacSearch = () => {
               </Tabs>
               {isFetching && <LinearProgress />}
               {currentTab === 'Search' && (
-                <Card>
+                <Card sx={{ p: 2 }}>
                   <SearchQuery
                     setStartDate={setStartDate}
                     setEndDate={setEndDate}
@@ -224,18 +224,20 @@ const StacSearch = () => {
               )}
               {currentTab === 'Result' && (
                 <Card>
-                  {pagination}
+                  <Box sx={{ px: 2, pt: 2 }}>{pagination}</Box>
                   <StacItemDisplayList
                     features={searchResponse?.features}
                   ></StacItemDisplayList>
                 </Card>
               )}
             </Grid>
-            <Grid item md={9} xs={12}>
-              <LeafletMapComponent
-                setDrawnItems={setDrawnItems}
-                stacDataForDisplay={searchResponse}
-              ></LeafletMapComponent>
+            <Grid item md={8} xs={12}>
+              <Box sx={{ height: 720 }}>
+                <LeafletMapComponent
+                  setDrawnItems={setDrawnItems}
+                  stacDataForDisplay={searchResponse}
+                ></LeafletMapComponent>
+              </Box>
             </Grid>
           </Grid>
         </Container>

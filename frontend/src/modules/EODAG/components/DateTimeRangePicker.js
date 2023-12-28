@@ -15,13 +15,13 @@ export function DateRangePicker({
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <DateTimePicker
+        sx={{ mr: 2, mb: 2 }}
         label="Start Date"
         openTo="day"
         views={['year', 'month', 'day']}
         value={startDate}
         maxDate={endDate}
         onChange={(newValue) => setStartDate(newValue)}
-        sx={{ mr: 2 }}
         slotProps={{
           inputAdornment: {
             position: 'start'
@@ -44,7 +44,7 @@ export function DateRangePicker({
         value={endDate}
         minDate={startDate}
         onChange={(newValue) => setEndDate(newValue)}
-        sx={{ mr: 2 }}
+        sx={{ mr: 2, mb: 2 }}
         slotProps={{
           inputAdornment: {
             position: 'start'

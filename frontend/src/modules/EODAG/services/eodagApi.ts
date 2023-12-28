@@ -218,6 +218,9 @@ export function makeDatetimePayload(dateRange?: DateRange): string | undefined {
  */
 export function makeGeometryPayload(target: any): Geometry | undefined {
   // I didn’t found a method from leaflet that returns a Multipolygon so we build it if there are more than one polygon
+  if (!target) {
+    return undefined;
+  }
   const layers: any[] = [];
   let geometry;
   target.map((l: any) => layers.push(l.toGeoJSON?.()));
