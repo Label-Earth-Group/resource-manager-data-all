@@ -46,10 +46,9 @@ export const LeafletMapComponent = ({ setDrawnItems, stacDataForDisplay }) => {
   return (
     <MapContainer
       scrollWheelZoom={true}
-      id="map"
       center={[50.0, 0.0]}
       zoom={1}
-      style={{ height: '400px' }}
+      style={{ height: '100%' }}
     >
       <TianDiTuTileLayer />
       {stacDataForDisplay && (
