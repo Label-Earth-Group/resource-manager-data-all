@@ -33,13 +33,15 @@ const DefaultMain = styled(Box)({
 
 const DefaultLayoutContainer = styled(Box)({
   display: 'flex',
-  flexDirection: 'column'
+  flexDirection: 'column',
+  height: '100%'
 });
 
 const DefaultLayoutContent = styled(Box)({
   flex: '1 1 auto',
   overflow: 'auto',
-  WebkitOverflowScrolling: 'touch'
+  WebkitOverflowScrolling: 'touch',
+  height: '100%'
 });
 
 const DefaultLayoutWrapper = styled(Box)({
@@ -47,7 +49,8 @@ const DefaultLayoutWrapper = styled(Box)({
   flex: '1 1 auto',
   overflow: 'scroll',
   paddingTop: '64px',
-  flexDirection: 'column'
+  flexDirection: 'column',
+  height: '100%'
 });
 
 const useStyles = makeStyles((theme) => ({
