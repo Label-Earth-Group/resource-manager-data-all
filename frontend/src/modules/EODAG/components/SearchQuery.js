@@ -5,11 +5,14 @@ import { QuaryableFilters } from './QueryableFilters.js';
 
 export const SearchQuery = (props) => {
   const {
+    startDate,
+    endDate,
     setStartDate,
     setEndDate,
     selectedCollections,
     setSelectedCollections,
-    triggerSearch
+    triggerSearch,
+    triggerReset
   } = props;
 
   return (
@@ -23,7 +26,7 @@ export const SearchQuery = (props) => {
         >
           Search
         </Button>
-        <Button variant="contained" color="secondary">
+        <Button variant="contained" color="secondary" onClick={triggerReset}>
           Reset
         </Button>
       </Box>
@@ -31,6 +34,8 @@ export const SearchQuery = (props) => {
         <Typography variant="h6">Date Range</Typography>
       </Box>
       <DateRangePicker
+        startDate={startDate}
+        endDate={endDate}
         setStartDate={setStartDate}
         setEndDate={setEndDate}
       ></DateRangePicker>

@@ -124,6 +124,14 @@ const StacSearch = () => {
     setCurrentTab('Result');
   };
 
+  const handleReset = () => {
+    setSelectedCollections([]);
+    setDrawnItems([]);
+    setStartDate(null);
+    setEndDate(null);
+    setCurrentPage(1);
+  };
+
   // // Pay attention to the order of handling different situations
   // // 1. first, deal with isLoading
   // if (isLoading) {
@@ -216,9 +224,12 @@ const StacSearch = () => {
               {currentTab === 'Search' && (
                 <Card sx={{ p: 2 }}>
                   <SearchQuery
+                    startDate={startDate}
+                    endDate={endDate}
                     setStartDate={setStartDate}
                     setEndDate={setEndDate}
                     triggerSearch={handleSearchItems}
+                    triggerReset={handleReset}
                     selectedCollections={selectedCollections}
                     setSelectedCollections={setSelectedCollections}
                     setCurrentPage={setCurrentPage}
