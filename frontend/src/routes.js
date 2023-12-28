@@ -172,6 +172,10 @@ const StacItemDetail = Loadable(
 );
 const SamView = Loadable(lazy(() => import('./modules/Sam/views/SamView.tsx')));
 
+const ToolBoxView = Loadable(
+  lazy(() => import('./modules/GeoToolBox/views/leafmap.js'))
+);
+
 const routes = [
   {
     children: [
@@ -224,6 +228,14 @@ const routes = [
           {
             path: 'sam',
             element: <SamView />
+          }
+        ]
+      },
+      {
+        children: [
+          {
+            path: 'geotoolbox',
+            element: <ToolBoxView />
           }
         ]
       },

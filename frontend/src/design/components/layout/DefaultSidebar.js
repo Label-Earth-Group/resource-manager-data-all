@@ -113,7 +113,7 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
 
     const toolboxSection = {
       title: 'Toolbox',
-      path: '#',
+      path: '/console/geotoolbox',
       icon: <Insights size={15} />,
       active: true
     };
