@@ -10,6 +10,7 @@ import type {
   EODAGItemAsset
 } from '../../../types/stac';
 import type { GenericObject } from '../../../types/common';
+import type { Geometry } from 'geojson';
 // import { STAC } from 'stac-js';
 
 const eodagApi_URL = process.env.REACT_APP_EODAG_API;
@@ -212,13 +213,38 @@ export function makeDatetimePayload(dateRange?: DateRange): string | undefined {
   }
 }
 
+/**
+ * Get Geometry as Polygon or MultiPolygon
+ */
+export function makeGeometryPayload(target: any): Geometry | undefined {
+  // I didn’t found a method from leaflet that returns a Multipolygon so we build it if there are more than one polygon
+  const layers: any[] = [];
+  let geometry;
+  target.map((l: any) => layers.push(l.toGeoJSON?.()));
+  const geo = layers
+    .filter((e) => e?.type === 'Feature')
+    .map((e) => e.geometry)
+    .filter((e) => e.type === 'Polygon');
+  if (geo.length > 1) {
+    geometry = {
+      type: 'MultiPolygon',
+      coordinates: geo.map((e) => e.coordinates)
+    };
+  } else {
+    geometry = geo?.[0];
+  }
+  return geometry;
+}
+
 export function formatPayload(searchFilters: SearchPayload): SearchPayload {
-  const { ids, bbox, dateRange, collections, ...restPayload } = searchFilters;
+  const { ids, bbox, dateRange, collections, geometry, ...restPayload } =
+    searchFilters;
   const requestPayload: Partial<SearchPayload> = {
     ...restPayload,
     ids: makeArrayPayload(ids),
     collections: makeArrayPayload(collections),
     bbox: fixBboxCoordinateOrder(bbox),
+    intersects: makeGeometryPayload(geometry),
     datetime: makeDatetimePayload(dateRange)
   };
   // sort these search fields to facilitate better cache and remove undefined fields

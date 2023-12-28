@@ -84,7 +84,7 @@ const StacSearch = () => {
   const [selectedCollections, setSelectedCollections] = useState<
     Collection[] | null
   >([]);
-  const [drawnItems, setDrawnItems] = useState(null);
+  const [drawnItems, setDrawnItems] = useState([]);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -92,7 +92,7 @@ const StacSearch = () => {
     page: currentPage,
     limit: PAGESIZE,
     collections: selectedCollections.map((c) => c.id),
-    intersects: drawnItems?.toGeoJSON().geometry,
+    geometry: drawnItems,
     dateRange:
       !startDate && !endDate
         ? undefined
@@ -121,6 +121,7 @@ const StacSearch = () => {
   const handleSearchItems = () => {
     setCurrentPage(1); //every time the search triggers, set the page to start from 1
     searchItems(formatPayload(searchPayload), true);
+    setCurrentTab('Result');
   };
 
   // // Pay attention to the order of handling different situations

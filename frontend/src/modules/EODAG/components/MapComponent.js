@@ -11,13 +11,13 @@ export const LeafletMapComponent = ({ setDrawnItems, stacDataForDisplay }) => {
 
   const onCreated = (e) => {
     const { layer } = e;
-    const shape = layer;
+    const newShape = layer;
 
     // // Clear existing drawn items before adding the new one
     // const layers = featureGroupRef.current;
     // layers.clearLayers();
 
-    setDrawnItems(shape);
+    setDrawnItems((items) => [...items, newShape]);
   };
 
   const onEdited = (e) => {

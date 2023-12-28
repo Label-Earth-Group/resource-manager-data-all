@@ -17,9 +17,10 @@ export type Sortby = {
 
 export type SearchPayload = {
   bbox?: Bbox;
-  intersects?: Geometry;
-  dateRange?: DateRange;
-  datetime?: string;
+  geometry?: any[]; //for component state
+  intersects?: Geometry; //for search payload
+  dateRange?: DateRange; //for component state
+  datetime?: string; //for search payload
   collections?: CollectionIdList;
   ids?: ItemIdList;
   [key: string]: any; //additional queryables
