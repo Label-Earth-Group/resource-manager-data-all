@@ -3,10 +3,9 @@ import { AppBar, Box, IconButton, Toolbar } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Menu } from '@mui/icons-material';
 import PropTypes from 'prop-types';
-import { AccountPopover, NotificationsPopover } from '../popovers';
+import { AccountPopover } from '../popovers';
 import { Logo } from '../Logo';
 import { SettingsDrawer } from '../SettingsDrawer';
-import { ModuleNames, isModuleEnabled } from 'utils';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -45,13 +44,6 @@ export const DefaultNavbar = ({ openDrawer, onOpenDrawerChange }) => {
         <Box sx={{ ml: 1 }}>
           <SettingsDrawer />
         </Box>
-        {isModuleEnabled(ModuleNames.NOTIFICATIONS) ? (
-          <Box sx={{ ml: 1 }}>
-            <NotificationsPopover />
-          </Box>
-        ) : (
-          <Box sx={{ ml: 1 }}></Box>
-        )}
         <Box sx={{ ml: 2 }}>
           <AccountPopover />
         </Box>
