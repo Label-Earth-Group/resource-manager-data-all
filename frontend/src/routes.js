@@ -172,6 +172,10 @@ const StacItemDetail = Loadable(
 );
 const SamView = Loadable(lazy(() => import('./modules/Sam/views/SamView.tsx')));
 
+const ImageAssetsView = Loadable(
+  lazy(() => import('./modules/ImageData/views/ImageAssets'))
+);
+
 const ToolBoxView = Loadable(
   lazy(() => import('./modules/GeoToolBox/views/leafmap.js'))
 );
@@ -220,6 +224,14 @@ const routes = [
           {
             path: 'eodag/collections/:collectionID/item/:itemID',
             element: <StacItemDetail />
+          }
+        ]
+      },
+      {
+        children: [
+          {
+            path: 'repository',
+            element: <ImageAssetsView />
           }
         ]
       },

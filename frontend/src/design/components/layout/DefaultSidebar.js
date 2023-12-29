@@ -56,15 +56,15 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
     };
 
     const datasetsSection = {
-      title: 'Datasets',
-      path: '/console/datasets',
+      title: 'Data repository',
+      path: '/console/repository',
       icon: <Dataset size={15} />,
-      active: isModuleEnabled(ModuleNames.DATASETS)
+      active: true
     };
 
     const sharesSection = {
       title: 'Shares',
-      path: '/console/shares',
+      path: '#',
       icon: <Share size={15} />,
       active: isModuleEnabled(ModuleNames.SHARES)
     };
@@ -127,13 +127,13 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
 
     const organizationsSection = {
       title: 'Organizations',
-      path: '/console/organizations',
+      path: '#',
       icon: <CorporateFare size={15} />
     };
 
     const environmentsSection = {
       title: 'Environments',
-      path: '/console/environments',
+      path: '#',
       icon: <Cloud size={15} />
     };
 
@@ -244,25 +244,21 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
         </Box>
       </Scrollbar>
       <Divider />
-      {process.env.REACT_APP_CUSTOM_AUTH ? (
-        <div> </div>
-      ) : (
-        <Box sx={{ p: 2 }} style={{ position: 'relative' }}>
-          <Box sx={{ pb: 1 }}>
-            <Button
-              color="primary"
-              fullWidth
-              sx={{ mt: 3 }}
-              onClick={() => {
-                window.open(process.env.REACT_APP_USERGUIDE_LINK, '_blank');
-              }}
-              variant="contained"
-            >
-              User Guide
-            </Button>
-          </Box>
+      <Box sx={{ p: 2 }} style={{ position: 'relative' }}>
+        <Box sx={{ pb: 1 }}>
+          <Button
+            color="primary"
+            fullWidth
+            sx={{ mt: 3 }}
+            onClick={() => {
+              window.open(process.env.REACT_APP_USERGUIDE_LINK, '_blank');
+            }}
+            variant="contained"
+          >
+            User Guide
+          </Button>
         </Box>
-      )}
+      </Box>
     </Box>
   );
 
