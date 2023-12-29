@@ -96,11 +96,9 @@ function ImageAssets() {
     fetchObjList();
   }, []);
 
-  const handleDialogClose = (success) => {
+  const handleDialogClose = (changed) => {
     setDialogOpen(false);
-    if (success) {
-      // fetchObjList();
-    }
+    if (changed) fetchObjList();
   };
 
   const handleOpenUpload = () => {

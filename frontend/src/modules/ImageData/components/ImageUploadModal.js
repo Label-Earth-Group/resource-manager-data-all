@@ -1,10 +1,22 @@
-import { Box, Button, Dialog, DialogTitle, Grid } from '@mui/material';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogTitle,
+  Grid,
+  LinearProgress
+} from '@mui/material';
 import { FileDropzone } from 'design';
 import { useState } from 'react';
+import { getBucketClient } from '../services/s3storage';
 
 function ImageUploadModal(props) {
   const { open, onClose } = props;
   const [files, setFiles] = useState([]);
+  const [isChanged, setIsChanged] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const client = getBucketClient();
   const handleDrop = (newFiles) => {
     setFiles((prevFiles) => [...prevFiles, ...newFiles]);
   };
@@ -20,7 +32,35 @@ function ImageUploadModal(props) {
   };
 
   const handleClose = () => {
-    onClose(false);
+    onClose(isChanged);
+  };
+
+  const fileUpload = async (file) => {
+    const params = {
+      Bucket: 'labelearth-s3',
+      Key: file.name,
+      Body: file
+    };
+    var response = client
+      .putObject(params)
+      .on('httpUploadProgress', (e) => {
+        setProgress(Math.round((e.loaded * 100) / e.total));
+      })
+      .promise();
+    await response.then((data, err) => {
+      if (err) {
+      } else {
+        console.info(data);
+      }
+    });
+  };
+
+  const batchUpload = async () => {
+    setIsUploading(true);
+    await files.map((file) => fileUpload(file));
+    setIsUploading(false);
+    setFiles([]);
+    setIsChanged(true);
   };
 
   return (
@@ -33,8 +73,18 @@ function ImageUploadModal(props) {
           onDrop={handleDrop}
           onRemove={handleRemove}
           onRemoveAll={handleRemoveAll}
+          onUpload={batchUpload}
         />
       </Box>
+      {isUploading && (
+        <Box
+          sx={{
+            mt: 2
+          }}
+        >
+          <LinearProgress variant="determinate" value={progress} />
+        </Box>
+      )}
       <Grid container sx={{ px: 2, pb: 2 }} justifyContent="right">
         <Grid item>
           <Button variant="contained" onClick={handleClose} color="secondary">
