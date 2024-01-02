@@ -84,7 +84,7 @@ function ImageUploadModal(props) {
       {isUploading && (
         <Box
           sx={{
-            mt: 2
+            my: 2
           }}
         >
           <LinearProgress variant="determinate" value={progress} />

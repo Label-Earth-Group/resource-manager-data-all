@@ -90,7 +90,7 @@ function ImageAssets() {
       }
     });
     setLoading(false);
-  }, []);
+  }, [client]);
 
   useEffect(() => {
     fetchObjList();
@@ -108,7 +108,7 @@ function ImageAssets() {
   return (
     <>
       <Helmet>
-        <title>Image assets - data.all</title>
+        <title>Image assets | data.all</title>
       </Helmet>
       <Box
         sx={{
