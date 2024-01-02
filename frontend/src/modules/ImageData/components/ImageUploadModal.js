@@ -41,26 +41,31 @@ function ImageUploadModal(props) {
       Key: file.name,
       Body: file
     };
+    setIsUploading(true);
     var response = client
       .putObject(params)
       .on('httpUploadProgress', (e) => {
         setProgress(Math.round((e.loaded * 100) / e.total));
       })
       .promise();
-    await response.then((data, err) => {
-      if (err) {
-      } else {
+    await response
+      .then((data) => {
         console.info(data);
-      }
-    });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    setIsUploading(false);
   };
 
   const batchUpload = async () => {
-    setIsUploading(true);
-    await files.map((file) => fileUpload(file));
-    setIsUploading(false);
-    setFiles([]);
-    setIsChanged(true);
+    for (const file of files) {
+      await fileUpload(file);
+    }
+    setTimeout(() => {
+      setFiles([]);
+      setIsChanged(true);
+    }, 1000);
   };
 
   return (
