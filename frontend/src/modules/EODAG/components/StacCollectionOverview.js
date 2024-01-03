@@ -16,7 +16,7 @@ export function StacCollectionOverview(props) {
       </Grid>
       <Grid item md={4} xs={12}>
         <StacCollectionTemporalExtent extent={collection.extent?.temporal} />
-        <StacCollectionMetaData {...collection} />
+        <StacCollectionMetaData collection={collection} />
       </Grid>
     </Grid>
   );

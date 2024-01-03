@@ -16,6 +16,11 @@ import {
 import { Label } from 'design';
 import Markdown from 'react-markdown';
 import { Link as RouterLink } from 'react-router-dom';
+import StacFields from '@radiantearth/stac-fields';
+import {
+  formatTemporalExtent,
+  formatTemporalExtents
+} from '@radiantearth/stac-fields/formatters';
 
 export function StacObjectDescription(props) {
   const { description, keywords } = props;
@@ -116,6 +121,11 @@ export function StacProviders(props) {
 
 export function StacCollectionTemporalExtent(props) {
   const { extent } = props;
+  const temporalExtent = props?.extent?.interval;
+  const formatted = Array.isArray(temporalExtent)
+    ? formatTemporalExtents(temporalExtent)
+    : formatTemporalExtent(temporalExtent);
+  console.log('formatted temporal', formatted);
   return (
     <Card sx={{ mb: 3 }}>
       <Box>
@@ -135,7 +145,10 @@ export function StacCollectionTemporalExtent(props) {
 }
 
 export function StacCollectionMetaData(props) {
-  const { keywords, summaries, crs, license } = props;
+  const { collection } = props;
+  let groups = StacFields.formatCollection(collection);
+  console.log('stac formatted properties', groups);
+  const { keywords, summaries, crs, license } = collection;
   let metadata = [
     {
       label: 'Constellation',
