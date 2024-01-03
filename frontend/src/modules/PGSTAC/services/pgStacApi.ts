@@ -9,12 +9,12 @@ import type {
 import type { GenericObject } from 'types/common';
 // import { STAC } from 'stac-js';
 
-const eodagApi_URL = process.env.REACT_APP_EODAG_API;
+const pgStacApiUrl = process.env.REACT_APP_PGSTAC_API;
 
 // Define a service using a base URL and expected endpoints
-export const eodagApi = createApi({
-  reducerPath: 'eodagApi',
-  baseQuery: fetchBaseQuery({ baseUrl: eodagApi_URL }),
+export const pgStacApi = createApi({
+  reducerPath: 'pgStacApi',
+  baseQuery: fetchBaseQuery({ baseUrl: pgStacApiUrl }),
   endpoints: (builder) => ({
     getCollectionsResponse: builder.query<CollectionsResponse, void>({
       query: () => `collections`
@@ -72,4 +72,4 @@ export const {
   useGetItemDownloadByCollectionIDAndItemIDQuery,
   useSearchItemsQuery,
   useLazySearchItemsQuery
-} = eodagApi;
+} = pgStacApi;

@@ -21,11 +21,9 @@ import { SearchQuery } from '../components/SearchQuery';
 import { LeafletMapComponent } from '../components/MapComponent';
 import { StacItemDisplayList } from '../components/StacCommonComponent.js';
 import { useDispatch } from 'globalErrors';
-import { useHandleError } from '../utils.js';
-import {
-  useLazySearchItemsQuery,
-  formatPayload
-} from '../services/eodagApi.ts';
+import { useHandleError } from '../utils/utils.js';
+import { useLazySearchItemsQuery } from '../services/eodagApi.ts';
+import { formatPayload } from '../services/stacUtils.ts';
 import type { Collection, SearchPayload } from '../../../types/stac';
 
 // function StacSearchPageHeader() {

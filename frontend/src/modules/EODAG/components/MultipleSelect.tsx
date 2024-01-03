@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { useGetCollectionsResponseQuery } from '../services/eodagApi.ts';
 import { useDispatch } from 'globalErrors';
-import { useHandleError } from '../utils.js';
+import { useHandleError } from '../utils/utils.js';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

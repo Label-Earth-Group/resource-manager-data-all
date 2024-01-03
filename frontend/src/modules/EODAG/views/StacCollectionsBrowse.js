@@ -14,15 +14,15 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 import { StacCollectionListItem } from '../components/StacCollectionListItem.js';
+import { useGetCollectionsResponseQuery } from '../services/eodagApi.ts';
 import {
-  useGetCollectionsResponseQuery,
   EODAG_SUMMARY_INDEX,
-  getSummaryFilters,
+  nameFilterFunc,
   summaryFilterFunc,
-  nameFilterFunc
-} from '../services/eodagApi.ts';
+  getSummaryFilters
+} from '../services/stacUtils.ts';
 import { useDispatch } from 'globalErrors';
-import { useHandleError } from '../utils.js';
+import { useHandleError } from '../utils/utils.js';
 
 function StacCollectionPageHeader() {
   return (

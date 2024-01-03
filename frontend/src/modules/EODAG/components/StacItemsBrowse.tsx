@@ -11,11 +11,11 @@ import {
 import {
   //useGetCollectionItemsByCollectionIDQuery,
   useGetCollectionQueryablesByCollectionIDQuery,
-  useLazySearchItemsQuery,
-  formatPayload
+  useLazySearchItemsQuery
 } from '../services/eodagApi.ts';
+import { formatPayload } from '../services/stacUtils.ts';
 import { useDispatch } from 'globalErrors';
-import { useHandleError } from '../utils.js';
+import { useHandleError } from '../utils/utils.js';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { DateRangePicker } from './DateTimeRangePicker.js';
 import React, { useRef, useEffect, useState } from 'react';

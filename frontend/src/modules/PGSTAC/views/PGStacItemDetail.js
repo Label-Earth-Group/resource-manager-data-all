@@ -14,16 +14,16 @@ import {
   TableCell,
   CircularProgress
 } from '@mui/material';
-import { StacItemOverview } from '../components/StacItemOverview.js';
+import { StacItemOverview } from 'modules/EODAG/components/StacItemOverview.js';
 import { Info, List as ListIcon } from '@mui/icons-material';
 import { ChevronRightIcon, useSettings } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 import { useParams } from 'react-router';
-import { useGetItemByCollectionIDAndItemIDQuery } from '../services/eodagApi.ts';
+import { useGetItemByCollectionIDAndItemIDQuery } from '../services/pgStacApi.ts';
 import { useDispatch } from 'globalErrors';
-import { useHandleError } from '../utils/utils.js';
+import { useHandleError } from 'modules/EODAG/utils/utils.js';
 
 function StacItemViewPageHeader(props) {
   const { collectionID, itemID } = props;

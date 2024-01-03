@@ -20,7 +20,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router';
 import { useGetCollectionsResponseQuery } from '../services/eodagApi.ts';
 import { useDispatch } from 'globalErrors';
-import { useHandleError } from '../utils.js';
+import { useHandleError } from '../utils/utils.js';
 
 function StacCollectionViewPageHeader(props) {
   const { title, id } = props;

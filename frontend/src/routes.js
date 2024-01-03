@@ -158,23 +158,34 @@ const AdministrationView = Loadable(
   lazy(() => import('./modules/Administration/views/AdministrationView'))
 );
 
+// EODAG routers
+const StacSearch = Loadable(
+  lazy(() => import('./modules/EODAG/views/StacSearch.tsx'))
+);
+
 const StacCollectionsBrowse = Loadable(
   lazy(() => import('./modules/EODAG/views/StacCollectionsBrowse'))
 );
 const StacCollectionContent = Loadable(
   lazy(() => import('./modules/EODAG/views/StacCollectionContent'))
 );
-const StacSearch = Loadable(
-  lazy(() => import('./modules/EODAG/views/StacSearch.tsx'))
-);
 const StacItemDetail = Loadable(
   lazy(() => import('./modules/EODAG/views/StacItemDetail'))
 );
+
 const SamView = Loadable(lazy(() => import('./modules/Sam/views/SamView.tsx')));
 
-const ImageCollectionsView = Loadable(
-  lazy(() => import('./modules/ImageData/views/ImageCollections'))
+// PGSTAC routers
+const PGStacCollectionsBrowse = Loadable(
+  lazy(() => import('./modules/PGSTAC/views/PGStacCollectionsBrowse.js'))
 );
+const PGStacCollectionContent = Loadable(
+  lazy(() => import('./modules/PGSTAC/views/PGStacCollectionContent.js'))
+);
+const PGStacItemDetail = Loadable(
+  lazy(() => import('./modules/PGSTAC/views/PGStacItemDetail.js'))
+);
+
 const ImageAssetsView = Loadable(
   lazy(() => import('./modules/ImageData/views/ImageAssets'))
 );
@@ -234,7 +245,19 @@ const routes = [
         children: [
           {
             path: 'repository',
-            element: <ImageCollectionsView />
+            element: <PGStacCollectionsBrowse />
+          },
+          {
+            path: 'repository/collections',
+            element: <Navigate to="/console/repository" />
+          },
+          {
+            path: 'repository/collections/:collectionID',
+            element: <PGStacCollectionContent />
+          },
+          {
+            path: 'repository/collections/:collectionID/item/:itemID',
+            element: <PGStacItemDetail />
           },
           {
             path: 'repository/assets',

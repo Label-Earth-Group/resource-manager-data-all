@@ -11,13 +11,13 @@ import {
 import { ChevronRightIcon, useSettings, SearchInput } from 'design';
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
-import { StacCollectionListItem } from '../../EODAG/components/StacCollectionListItem.js';
-import { useGetCollectionsQuery } from '../services/imageApi';
-import { nameFilterFunc } from '../../EODAG/services/eodagApi.ts';
+import { StacCollectionListItem } from 'modules/EODAG/components/StacCollectionListItem.js';
+import { useGetCollectionsResponseQuery } from '../services/pgStacApi.ts';
+import { nameFilterFunc } from 'modules/EODAG/services/stacUtils.ts';
 import { useDispatch } from 'globalErrors';
-import { useHandleError } from '../../EODAG/utils.js';
+import { useHandleError } from 'modules/EODAG/utils/utils.js';
 
-function ImageCollectionsPageHeader() {
+function PGStacCollectionPageHeader() {
   return (
     <Grid
       alignItems="center"
@@ -53,23 +53,37 @@ function ImageCollectionsPageHeader() {
   );
 }
 
-function ImageCollections() {
+const PGStacCollectionsBrowse = () => {
   const { settings } = useSettings();
   const dispatch = useDispatch();
   const [nameFilter, setNameFilter] = useState('');
+  // const nullFilters = Object.fromEntries(
+  //   Object.keys(EODAG_SUMMARY_INDEX).map((filter) => [filter, []])
+  // );
+  // const [summaryFilters, setSummaryFilters] = useState(nullFilters);
+
   const handleInputChange = (event) => {
     setNameFilter(event.target.value);
   };
+  // const handleFilterChange = (filterName) => (event, value) => {
+  //   setSummaryFilters({ ...summaryFilters, [filterName]: [value] });
+  // };
 
-  const { collections, error, isLoading } = useGetCollectionsQuery(undefined, {
-    selectFromResult: ({ data, error, isLoading }) => ({
-      collections: data && data.collections,
-      error,
-      isLoading
-    })
-  });
+  const { collections, error, isLoading } = useGetCollectionsResponseQuery(
+    undefined,
+    {
+      selectFromResult: ({ data, error, isLoading }) => ({
+        collections: data && data.collections,
+        error,
+        isLoading
+      })
+    }
+  ); // NOTE: should also select error and isLoading
 
   useHandleError(error, dispatch);
+  if (error) {
+    return <>Error</>;
+  }
 
   if (isLoading) {
     return <CircularProgress />;
@@ -79,6 +93,7 @@ function ImageCollections() {
     return <></>;
   }
 
+  // filter collection based on the state of filters
   const filteredCollections = collections.filter(nameFilterFunc(nameFilter));
 
   return (
@@ -94,7 +109,7 @@ function ImageCollections() {
         }}
       >
         <Container maxWidth={settings.compact ? 'xl' : false}>
-          <ImageCollectionsPageHeader />
+          <PGStacCollectionPageHeader />
           <Box sx={{ mt: 3 }}>
             <SearchInput
               onChange={handleInputChange}
@@ -129,6 +144,6 @@ function ImageCollections() {
       </Box>
     </>
   );
-}
+};
 
-export default ImageCollections;
+export default PGStacCollectionsBrowse;
