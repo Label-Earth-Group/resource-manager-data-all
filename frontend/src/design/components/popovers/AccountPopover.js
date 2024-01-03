@@ -69,7 +69,6 @@ export const AccountPopover = () => {
           horizontal: 'center',
           vertical: 'bottom'
         }}
-        getContentAnchorEl={null}
         keepMounted
         onClose={handleClose}
         open={open}

@@ -294,7 +294,6 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
               onOpenDrawerChange(false);
             }}
           >
-            {openDrawer}
             {theme.direction === 'ltr' ? <ChevronLeft /> : <ChevronRight />}
           </IconButton>
         </Box>
@@ -341,7 +340,6 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
                   onOpenDrawerChange(false);
                 }}
               >
-                {openDrawer}
                 {openDrawer ? <ChevronLeft /> : <ChevronRight />}
               </IconButton>
             </Box>
