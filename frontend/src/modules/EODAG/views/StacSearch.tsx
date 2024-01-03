@@ -5,12 +5,8 @@ import {
   Tab,
   Grid,
   LinearProgress,
-  Typography,
-  Breadcrumbs,
-  Link,
   Box,
   Container
-  //CircularProgress
 } from '@mui/material';
 import {
   Search,
@@ -18,9 +14,8 @@ import {
   ArrowBackIos,
   ArrowForwardIos
 } from '@mui/icons-material';
-import { ChevronRightIcon, useSettings } from 'design';
+import { useSettings } from 'design';
 import React, { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { SearchQuery } from '../components/SearchQuery';
 import { LeafletMapComponent } from '../components/MapComponent';
@@ -32,46 +27,44 @@ import {
   formatPayload
 } from '../services/eodagApi.ts';
 import type { Collection, SearchPayload } from '../../../types/stac';
-//import { GeoJSON as LeaflefGeoJSON } from 'leaflet';
 
-function StacSearchPageHeader() {
-  return (
-    <Grid
-      alignItems="center"
-      container
-      justifyContent="space-between"
-      spacing={3}
-    >
-      <Grid item>
-        <Typography color="textPrimary" variant="h5">
-          Earth Open Data API Gateway -- Search
-        </Typography>
-        <Breadcrumbs
-          aria-label="breadcrumb"
-          separator={<ChevronRightIcon fontSize="small" />}
-          sx={{ mt: 1 }}
-        >
-          <Link underline="hover" color="textPrimary" variant="subtitle2">
-            Images
-          </Link>
-          <Link
-            underline="hover"
-            color="textPrimary"
-            component={RouterLink}
-            to="/console/eodag"
-            variant="subtitle2"
-          >
-            EODAG
-          </Link>
-          <Link underline="hover" color="textPrimary">
-            Search
-          </Link>
-        </Breadcrumbs>
-      </Grid>
-    </Grid>
-  );
-}
-console.log(StacSearchPageHeader);
+// function StacSearchPageHeader() {
+//   return (
+//     <Grid
+//       alignItems="center"
+//       container
+//       justifyContent="space-between"
+//       spacing={3}
+//     >
+//       <Grid item>
+//         <Typography color="textPrimary" variant="h5">
+//           Earth Open Data API Gateway -- Search
+//         </Typography>
+//         <Breadcrumbs
+//           aria-label="breadcrumb"
+//           separator={<ChevronRightIcon fontSize="small" />}
+//           sx={{ mt: 1 }}
+//         >
+//           <Link underline="hover" color="textPrimary" variant="subtitle2">
+//             Images
+//           </Link>
+//           <Link
+//             underline="hover"
+//             color="textPrimary"
+//             component={RouterLink}
+//             to="/console/eodag"
+//             variant="subtitle2"
+//           >
+//             EODAG
+//           </Link>
+//           <Link underline="hover" color="textPrimary">
+//             Search
+//           </Link>
+//         </Breadcrumbs>
+//       </Grid>
+//     </Grid>
+//   );
+// }
 
 const StacSearch = () => {
   const PAGESIZE = 20;

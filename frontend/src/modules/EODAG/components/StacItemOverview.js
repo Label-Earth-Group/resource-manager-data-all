@@ -1,11 +1,11 @@
-import { Card, CardMedia, Grid } from '@mui/material';
+import { Card, Grid } from '@mui/material';
 import {
   StacObjectDescription,
   StacProviders,
   StacItemMetaData
 } from './StacCommonComponent';
 import { MapContainer, GeoJSON } from 'react-leaflet';
-import { getThumbnailHrefFromItem } from '../services/eodagApi.ts';
+// import { getThumbnailHrefFromItem } from '../services/eodagApi.ts';
 import TianDiTuTileLayer from './TianDiTuTileLayer.js';
 
 export function StacItemOverview(props) {
@@ -40,7 +40,7 @@ export function StacItemOverview(props) {
         <StacProviders {...item.properties} />
       </Grid>
       <Grid item md={4} sm={12}>
-        {getThumbnailHrefFromItem(item) && (
+        {/* {getThumbnailHrefFromItem(item) && (
           <Card sx={{ mb: 3 }}>
             <CardMedia
               component="img"
@@ -48,7 +48,7 @@ export function StacItemOverview(props) {
               image={getThumbnailHrefFromItem(item)}
             />
           </Card>
-        )}
+        )} */}
         <StacItemMetaData {...item.properties} />
       </Grid>
     </Grid>

@@ -9,7 +9,8 @@ import {
   Cloud,
   Dataset,
   InsertComment,
-  Insights
+  Insights,
+  Image
 } from '@mui/icons-material';
 import {
   Box,
@@ -56,9 +57,16 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
     };
 
     const datasetsSection = {
-      title: 'Data repository',
+      title: 'Collections',
       path: '/console/repository',
       icon: <Dataset size={15} />,
+      active: true
+    };
+
+    const assetSection = {
+      title: 'Files',
+      path: '/console/repository/assets',
+      icon: <Image size={15} />,
       active: true
     };
 
@@ -142,15 +150,17 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
     if (isAdvancedMode) {
       sections = [
         {
-          title: 'Images',
+          title: 'External',
           items: [
             eodagSection,
             eodagSearchSection,
             catalogSection,
-            datasetsSection,
-            sharesSection,
             glossariesSection
           ]
+        },
+        {
+          title: 'Repository',
+          items: [datasetsSection, assetSection, sharesSection]
         },
         {
           title: 'Analysis',
@@ -172,13 +182,12 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
     } else {
       sections = [
         {
-          title: 'Images',
-          items: [
-            eodagSection,
-            eodagSearchSection,
-            catalogSection,
-            datasetsSection
-          ]
+          title: 'External',
+          items: [eodagSection, eodagSearchSection, catalogSection]
+        },
+        {
+          title: 'Repository',
+          items: [datasetsSection, assetSection, sharesSection]
         },
         {
           title: 'Analysis',
@@ -227,7 +236,7 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        width: '250px',
+        width: '200px',
         overflowY: 'auto'
       }}
     >

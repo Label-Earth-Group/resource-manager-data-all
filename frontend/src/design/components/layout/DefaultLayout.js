@@ -56,7 +56,7 @@ const DefaultLayoutWrapper = styled(Box)({
 const useStyles = makeStyles((theme) => ({
   defaultLayoutWrapper: {
     [theme.breakpoints.up('md')]: {
-      paddingLeft: '256px'
+      paddingLeft: '200px'
     }
   }
 }));

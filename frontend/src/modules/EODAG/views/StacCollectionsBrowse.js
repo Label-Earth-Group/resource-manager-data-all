@@ -163,6 +163,7 @@ const StacCollectionsBrowse = () => {
                   key={c.id}
                   collection={c}
                   entrypoint="eodag"
+                  showProviders={true}
                 />
               ))}
             </Grid>

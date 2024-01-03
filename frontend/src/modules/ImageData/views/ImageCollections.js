@@ -4,6 +4,7 @@ import {
   Breadcrumbs,
   Link,
   Box,
+  Button,
   Container,
   CircularProgress
 } from '@mui/material';
@@ -40,6 +41,13 @@ function ImageCollectionsPageHeader() {
             Collections
           </Link>
         </Breadcrumbs>
+      </Grid>
+      <Grid item>
+        <Box sx={{ m: -1 }}>
+          <Button color="primary" sx={{ m: 1 }} variant="contained">
+            Create new collection
+          </Button>
+        </Box>
       </Grid>
     </Grid>
   );
@@ -112,6 +120,7 @@ function ImageCollections() {
                   key={c.id}
                   entrypoint="repository"
                   collection={c}
+                  showProviders={true}
                 />
               ))}
             </Grid>
