@@ -1,6 +1,6 @@
 import { Box, Button, FormControl, Typography } from '@mui/material';
 import { DateRangePicker } from './DateTimeRangePicker.js';
-import { MultiSelectInput } from '../components/MultipleSelect.tsx';
+import { MultiSelectInput } from '../components/MultipleSelect';
 import { QuaryableFilters } from './QueryableFilters.js';
 
 export const SearchQuery = (props) => {
