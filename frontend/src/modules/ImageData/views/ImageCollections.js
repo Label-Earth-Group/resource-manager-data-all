@@ -8,7 +8,6 @@ import {
   CircularProgress
 } from '@mui/material';
 import { ChevronRightIcon, useSettings, SearchInput } from 'design';
-import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 import { StacCollectionListItem } from '../../EODAG/components/StacCollectionListItem.js';
@@ -27,7 +26,7 @@ function ImageCollectionsPageHeader() {
     >
       <Grid item>
         <Typography color="textPrimary" variant="h5">
-          Earth Open Data API Gateway
+          LabelEarth geospatial data repository
         </Typography>
         <Breadcrumbs
           aria-label="breadcrumb"
@@ -35,16 +34,10 @@ function ImageCollectionsPageHeader() {
           sx={{ mt: 1 }}
         >
           <Link underline="hover" color="textPrimary" variant="subtitle2">
-            External
+            Repository
           </Link>
-          <Link
-            underline="hover"
-            color="textPrimary"
-            component={RouterLink}
-            to="/console/eodag"
-            variant="subtitle2"
-          >
-            EODAG
+          <Link underline="hover" color="textPrimary" variant="subtitle2">
+            Collections
           </Link>
         </Breadcrumbs>
       </Grid>
@@ -72,6 +65,10 @@ function ImageCollections() {
 
   if (isLoading) {
     return <CircularProgress />;
+  }
+
+  if (!collections) {
+    return <></>;
   }
 
   const filteredCollections = collections.filter(nameFilterFunc(nameFilter));
@@ -111,7 +108,11 @@ function ImageCollections() {
             </Box>
             <Grid container spacing={3}>
               {filteredCollections.map((c) => (
-                <StacCollectionListItem key={c.id} collection={c} />
+                <StacCollectionListItem
+                  key={c.id}
+                  entrypoint="repository"
+                  collection={c}
+                />
               ))}
             </Grid>
           </Box>

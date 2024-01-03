@@ -2,7 +2,7 @@ import { Grid, Box, Card, Link, Typography, Divider } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
 export const StacCollectionListItem = (props) => {
-  const { collection } = props;
+  const { entrypoint, collection } = props;
   return (
     <Grid item key={collection.id} md={3} sm={4} xs={12}>
       <Card>
@@ -12,7 +12,7 @@ export const StacCollectionListItem = (props) => {
               underline="hover"
               color="textPrimary"
               component={RouterLink}
-              to={`/console/eodag/collections/${collection.id}`} /*eslint-disable-line*/
+              to={`/console/${entrypoint}/collections/${collection.id}`} /*eslint-disable-line*/
               variant="h6"
             >
               {collection.id}

@@ -172,6 +172,9 @@ const StacItemDetail = Loadable(
 );
 const SamView = Loadable(lazy(() => import('./modules/Sam/views/SamView.tsx')));
 
+const ImageCollectionsView = Loadable(
+  lazy(() => import('./modules/ImageData/views/ImageCollections'))
+);
 const ImageAssetsView = Loadable(
   lazy(() => import('./modules/ImageData/views/ImageAssets'))
 );
@@ -231,6 +234,10 @@ const routes = [
         children: [
           {
             path: 'repository',
+            element: <ImageCollectionsView />
+          },
+          {
+            path: 'repository/assets',
             element: <ImageAssetsView />
           }
         ]

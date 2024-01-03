@@ -1,13 +1,13 @@
 {
     "modules": {
         "mlstudio": {
-            "active": true
+            "active": false
         },
         "notebooks": {
             "active": true
         },
         "datapipelines": {
-            "active": true
+            "active": false
         },
         "datasets": {
             "active": true,
@@ -28,10 +28,10 @@
             }
         },
         "worksheets": {
-            "active": true
+            "active": false
         },
         "dashboards": {
-            "active": true
+            "active": false
         }
     },
     "core": {

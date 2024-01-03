@@ -159,7 +159,11 @@ const StacCollectionsBrowse = () => {
             </Box>
             <Grid container spacing={3}>
               {filteredCollections.map((c) => (
-                <StacCollectionListItem key={c.id} collection={c} />
+                <StacCollectionListItem
+                  key={c.id}
+                  collection={c}
+                  entrypoint="eodag"
+                />
               ))}
             </Grid>
           </Box>

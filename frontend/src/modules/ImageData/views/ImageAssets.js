@@ -40,10 +40,10 @@ function ImageAssetsPageHeader(props) {
           sx={{ mt: 1 }}
         >
           <Link underline="hover" color="textPrimary" variant="subtitle2">
-            Images
+            Repository
           </Link>
           <Link underline="hover" color="textPrimary" variant="subtitle2">
-            Repository
+            Image assets
           </Link>
         </Breadcrumbs>
       </Grid>
