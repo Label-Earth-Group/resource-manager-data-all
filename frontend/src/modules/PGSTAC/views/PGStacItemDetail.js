@@ -1,6 +1,7 @@
 import {
   Box,
   Card,
+  Button,
   Container,
   Grid,
   Divider,
@@ -44,19 +45,19 @@ function StacItemViewPageHeader(props) {
           sx={{ mt: 1 }}
         >
           <Link underline="hover" color="textPrimary" variant="subtitle2">
-            Images
+            Repository
           </Link>
           <Link
             underline="hover"
             color="textPrimary"
-            component={RouterLink}
-            to="/console/eodag"
             variant="subtitle2"
+            component={RouterLink}
+            to="/console/repository"
           >
-            EODAG
+            Collections
           </Link>
           <Link
-            to={`/console/eodag/collections/${collectionID}`}
+            to={`/console/repository/collections/${collectionID}`}
             underline="hover"
             component={RouterLink}
             color="textPrimary"
@@ -65,6 +66,19 @@ function StacItemViewPageHeader(props) {
             {collectionID}
           </Link>
         </Breadcrumbs>
+      </Grid>
+      <Grid item>
+        <Box sx={{ m: -1 }}>
+          <Button color="secondary" sx={{ m: 1 }} variant="contained">
+            Edit
+          </Button>
+          <Button color="error" sx={{ m: 1 }} variant="contained">
+            Delete
+          </Button>
+          <Button color="primary" sx={{ m: 1 }} variant="contained">
+            Add assets...
+          </Button>
+        </Box>
       </Grid>
     </Grid>
   );

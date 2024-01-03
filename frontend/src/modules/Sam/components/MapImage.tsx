@@ -2,6 +2,7 @@
 // import npyjs from 'npyjs';
 import React, { useEffect, useRef, useState } from 'react';
 import L, { LatLngBounds } from 'leaflet';
+import { Box, Button } from '@mui/material';
 // import L from 'leaflet';
 import 'leaflet.chinatmsproviders';
 import { ISamState } from '../helpers/Interfaces';
@@ -283,7 +284,11 @@ const MapImage = () => {
 
   return (
     <>
-      <button onClick={generateEmbedding}>生成embedding</button>
+      <Box sx={{ mb: 2 }}>
+        <Button variant="contained" color="primary" onClick={generateEmbedding}>
+          Generate embedding
+        </Button>
+      </Box>
       <div ref={mapRef} style={{ height: '900px' }} />
     </>
   );

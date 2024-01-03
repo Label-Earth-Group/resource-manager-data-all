@@ -4,6 +4,7 @@ import {
   Breadcrumbs,
   Link,
   Box,
+  Button,
   Container,
   CircularProgress,
   Tab,
@@ -41,21 +42,43 @@ function StacCollectionViewPageHeader(props) {
           sx={{ mt: 1 }}
         >
           <Link underline="hover" color="textPrimary" variant="subtitle2">
-            Images
+            Repository
           </Link>
           <Link
             underline="hover"
             color="textPrimary"
+            variant="subtitle2"
             component={RouterLink}
-            to="/console/eodag"
+            to="/console/repository"
+          >
+            Collections
+          </Link>
+          <Link
+            to={`/console/repository/collections/${id}`}
+            underline="hover"
+            component={RouterLink}
+            color="textPrimary"
             variant="subtitle2"
           >
-            EODAG
-          </Link>
-          <Link underline="hover" color="textPrimary" variant="subtitle2">
             {id}
           </Link>
         </Breadcrumbs>
+      </Grid>
+      <Grid item>
+        <Box sx={{ m: -1 }}>
+          <Button color="secondary" sx={{ m: 1 }} variant="contained">
+            Edit
+          </Button>
+          <Button color="error" sx={{ m: 1 }} variant="contained">
+            Delete
+          </Button>
+          <Button color="primary" sx={{ m: 1 }} variant="contained">
+            Import item...
+          </Button>
+          <Button color="primary" sx={{ m: 1 }} variant="contained">
+            Add item...
+          </Button>
+        </Box>
       </Grid>
     </Grid>
   );

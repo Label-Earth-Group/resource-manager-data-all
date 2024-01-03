@@ -173,7 +173,7 @@ const StacItemDetail = Loadable(
   lazy(() => import('./modules/EODAG/views/StacItemDetail'))
 );
 
-const SamView = Loadable(lazy(() => import('./modules/Sam/views/SamView.tsx')));
+const SamView = Loadable(lazy(() => import('./modules/Sam/views/SamView')));
 
 // PGSTAC routers
 const PGStacCollectionsBrowse = Loadable(
