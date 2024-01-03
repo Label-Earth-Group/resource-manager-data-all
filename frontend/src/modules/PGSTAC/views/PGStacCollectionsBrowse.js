@@ -54,6 +54,7 @@ function PGStacCollectionPageHeader() {
 }
 
 const PGStacCollectionsBrowse = () => {
+  const entryPoint = 'repository';
   const { settings } = useSettings();
   const dispatch = useDispatch();
   const [nameFilter, setNameFilter] = useState('');
@@ -133,7 +134,7 @@ const PGStacCollectionsBrowse = () => {
               {filteredCollections.map((c) => (
                 <StacCollectionListItem
                   key={c.id}
-                  entrypoint="repository"
+                  entryPoint={entryPoint}
                   collection={c}
                   showProviders={true}
                 />

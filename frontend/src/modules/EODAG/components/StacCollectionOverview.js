@@ -6,8 +6,7 @@ import {
   StacCollectionMetaData
 } from './StacCommonComponent';
 
-export function StacCollectionOverview(props) {
-  const { collection } = props;
+export function StacCollectionOverview({ collection, entryPoint = 'eodag' }) {
   return (
     <Grid container spacing={2}>
       <Grid item md={8} xs={12}>
@@ -16,7 +15,10 @@ export function StacCollectionOverview(props) {
       </Grid>
       <Grid item md={4} xs={12}>
         <StacCollectionTemporalExtent extent={collection.extent?.temporal} />
-        <StacCollectionMetaData collection={collection} />
+        <StacCollectionMetaData
+          collection={collection}
+          entryPoint={entryPoint}
+        />
       </Grid>
     </Grid>
   );

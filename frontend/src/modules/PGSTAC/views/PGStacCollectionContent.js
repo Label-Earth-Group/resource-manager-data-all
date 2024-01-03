@@ -62,6 +62,7 @@ function StacCollectionViewPageHeader(props) {
 }
 
 const StacCollectionContent = () => {
+  const entryPoint = 'repository';
   const params = useParams();
   const { settings } = useSettings();
   const dispatch = useDispatch();
@@ -153,10 +154,16 @@ const StacCollectionContent = () => {
           <Divider />
           <Box sx={{ mt: 3 }}>
             {currentTab === 'overview' && (
-              <StacCollectionOverview collection={collection} />
+              <StacCollectionOverview
+                collection={collection}
+                entryPoint={entryPoint}
+              />
             )}
             {currentTab === 'items' && (
-              <StacItemsBrowse collectionID={collectionID} />
+              <StacItemsBrowse
+                collectionID={collectionID}
+                entryPoint={entryPoint}
+              />
             )}
           </Box>
         </Container>

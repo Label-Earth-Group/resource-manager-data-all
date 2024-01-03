@@ -60,6 +60,7 @@ function StacCollectionPageHeader() {
 }
 
 const StacCollectionsBrowse = () => {
+  const entryPoint = 'eodag';
   const { settings } = useSettings();
   const [nameFilter, setNameFilter] = useState('');
   const nullFilters = Object.fromEntries(
@@ -162,7 +163,7 @@ const StacCollectionsBrowse = () => {
                 <StacCollectionListItem
                   key={c.id}
                   collection={c}
-                  entrypoint="eodag"
+                  entryPoint={entryPoint}
                   showProviders={true}
                 />
               ))}

@@ -10,9 +10,14 @@ import {
 } from '@mui/material';
 import {
   //useGetCollectionItemsByCollectionIDQuery,
-  useGetCollectionQueryablesByCollectionIDQuery,
-  useLazySearchItemsQuery
+  useGetCollectionQueryablesByCollectionIDQuery as useGetCollectionQueryablesByCollectionIDQueryEODAG,
+  useLazySearchItemsQuery as useLazySearchItemsQueryEODAG
 } from '../services/eodagApi.ts';
+import {
+  //useGetCollectionItemsByCollectionIDQuery,
+  useGetCollectionQueryablesByCollectionIDQuery as useGetCollectionQueryablesByCollectionIDQueryPGSTAC,
+  useLazySearchItemsQuery as useLazySearchItemsQueryPGSTAC
+} from '../../PGSTAC/services/pgStacApi.ts';
 import { formatPayload } from '../services/stacUtils.ts';
 import { useDispatch } from 'globalErrors';
 import { useHandleError } from '../utils/utils.js';
@@ -25,10 +30,17 @@ import TianDiTuTileLayer from './TianDiTuTileLayer.js';
 import { GeoJSON as LeaflefGeoJSON } from 'leaflet';
 import { StacItemDisplayList } from './StacCommonComponent.js';
 
-export function StacItemsBrowse(props: { collectionID: string }) {
+export function StacItemsBrowse({ collectionID, entryPoint = 'eodag' }) {
+  const useGetCollectionQueryablesByCollectionIDQuery =
+    entryPoint === 'eodag'
+      ? useGetCollectionQueryablesByCollectionIDQueryEODAG
+      : useGetCollectionQueryablesByCollectionIDQueryPGSTAC;
+  const useLazySearchItemsQuery =
+    entryPoint === 'eodag'
+      ? useLazySearchItemsQueryEODAG
+      : useLazySearchItemsQueryPGSTAC;
   const PAGESIZE = 20;
   const dispatch = useDispatch();
-  const { collectionID } = props;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -169,6 +181,7 @@ export function StacItemsBrowse(props: { collectionID: string }) {
               <StacItemDisplayList
                 features={items}
                 collectionID={collectionID}
+                entryPoint={entryPoint}
               ></StacItemDisplayList>
             </Card>
           </Grid>

@@ -19,7 +19,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import StacFields from '@radiantearth/stac-fields';
 import {
   formatTemporalExtent,
-  formatTemporalExtents
+  formatTemporalExtents,
+  formatTimestamp
 } from '@radiantearth/stac-fields/formatters';
 
 export function StacObjectDescription(props) {
@@ -73,7 +74,7 @@ export function StacObjectDescription(props) {
 
 function StacProviderRow(provider) {
   return (
-    <TableRow>
+    <TableRow key={provider.name}>
       <TableCell sx={{ minWidth: 80 }}>
         <Typography color="text" variant="subtitle">
           {provider.url ? (
@@ -87,7 +88,7 @@ function StacProviderRow(provider) {
       </TableCell>
       <TableCell>
         {provider.roles &&
-          provider.roles.map((role) => <Label color="info">{role}</Label>)}
+          provider.roles.map((role) => <Label color="secondary">{role}</Label>)}
       </TableCell>
       <TableCell>
         <Typography>
@@ -120,7 +121,6 @@ export function StacProviders(props) {
 }
 
 export function StacCollectionTemporalExtent(props) {
-  const { extent } = props;
   const temporalExtent = props?.extent?.interval;
   const formatted = Array.isArray(temporalExtent)
     ? formatTemporalExtents(temporalExtent)
@@ -134,53 +134,78 @@ export function StacCollectionTemporalExtent(props) {
       </Box>
       <Grid container sx={{ p: 2 }}>
         <Grid item md={12} lg={6}>
-          <Typography>From: {extent?.interval[0][0] || 'N/A'}</Typography>
+          <Typography>
+            From:{' '}
+            {temporalExtent[0][0]
+              ? formatTimestamp(temporalExtent[0][0])
+              : 'N/A'}
+          </Typography>
         </Grid>
         <Grid item md={12} lg={6}>
-          <Typography>To: {extent?.interval[0][1] || 'Present'}</Typography>
+          <Typography>
+            To:{' '}
+            {temporalExtent[0][1]
+              ? formatTimestamp(temporalExtent[0][1])
+              : 'Present'}
+          </Typography>
         </Grid>
       </Grid>
     </Card>
   );
 }
 
-export function StacCollectionMetaData(props) {
-  const { collection } = props;
-  let groups = StacFields.formatCollection(collection);
-  console.log('stac formatted properties', groups);
-  const { keywords, summaries, crs, license } = collection;
-  let metadata = [
-    {
-      label: 'Constellation',
-      value: summaries.constellation?.join(' ') || keywords[1] || 'N/A'
-    },
-    {
-      label: 'Platform',
-      value: summaries.platform?.join(' ') || keywords[0] || 'N/A'
-    },
-    {
-      label: 'Instruments',
-      value: summaries.intruments?.join(' ') || keywords[2] || 'N/A'
-    },
-    {
-      label: 'Processing level',
-      value: summaries['processing:level'] || keywords[3] || 'N/A'
-    },
-    {
-      label: 'Sensor type',
-      value: keywords[4] || 'N/A'
-    },
-    {
-      label: 'License',
-      value: license
-    }
-  ];
-  if (crs) {
-    metadata.push({
-      label: 'CRS',
-      value: <Link href={crs}>{crs}</Link>
-    });
+export function StacCollectionMetaData({ collection, entryPoint = 'eodag' }) {
+  // deal with EODAT keywords, merge it into summaries
+  if (entryPoint === 'eodag' && collection['keywords']) {
+    let keywords = collection['keywords'];
+    const EODAGMapping = {
+      constellation: keywords[1],
+      platform: keywords[0],
+      intruments: keywords[2],
+      'processing:level': keywords[3],
+      sensorType: keywords[4]
+    };
+    let summaries = { ...collection['summaries'], ...EODAGMapping };
+    collection = { ...collection, summaries };
   }
+
+  let { crs, license } = collection;
+  const summaryFormatted = StacFields.formatSummaries(collection);
+  //console.log('formatted summary', summaryFormatted);
+
+  const extraInfo = {
+    extension: '',
+    label: '',
+    properties: {}
+  };
+
+  // deal with license
+  if (license) {
+    extraInfo.properties['License'] = {
+      label: 'License',
+      value: license,
+      formatted: license
+    };
+  }
+
+  // deal with crs
+  if (crs && typeof crs === 'string') {
+    const title = crs
+      .replace(/^https?:\/\/www\.opengis\.net\/def\/crs\//i, '') // HTTP(s) URI
+      .replace(/^urn:ogc:def:crs:/i, ''); // OGC URN
+    const crsFormatted = (
+      <Link href={crs} target="_blank" rel="noopener noreferrer">
+        {title}
+      </Link>
+    );
+    extraInfo.properties['CRS'] = {
+      label: 'CRS',
+      value: crs,
+      formatted: crsFormatted
+    };
+  }
+
+  const formatted = [extraInfo, ...summaryFormatted];
 
   return (
     <Card sx={{ mb: 3 }}>
@@ -190,11 +215,8 @@ export function StacCollectionMetaData(props) {
       </Box>
       <CardContent sx={{ p: 0 }}>
         <Table>
-          {metadata.map((row) => (
-            <TableRow>
-              <TableCell>{row.label}</TableCell>
-              <TableCell>{row.value}</TableCell>
-            </TableRow>
+          {formatted.map((subSummary) => (
+            <MetaDataSubTable {...subSummary}></MetaDataSubTable>
           ))}
         </Table>
       </CardContent>
@@ -202,91 +224,63 @@ export function StacCollectionMetaData(props) {
   );
 }
 
-export function StacItemMetaData(props) {
-  const {
-    datetime,
-    start_datetime,
-    end_datetime,
-    created,
-    updated,
-    license,
-    constellation,
-    platform,
-    instruments,
-    gsd,
-    published,
-    version
-  } = props;
+function MetaDataSubTable({ extension, label, properties }) {
+  return (
+    <>
+      {extension !== '' && (
+        <TableRow key={extension}>
+          <TableCell colSpan={2}>
+            <div style={{ display: 'flex' }}>
+              <Typography variant="h6">{'Extension: '}</Typography>
+              <Typography variant="h6">
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: label
+                  }}
+                />
+              </Typography>
+            </div>
+          </TableCell>
+        </TableRow>
+      )}
+      {Object.entries(properties).map(([key, row]) => (
+        <TableRow key={extension + key}>
+          <TableCell sx={{ maxWidth: 120, minWidth: 90 }}>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: row.label
+              }}
+            />
+          </TableCell>
+          <TableCell>
+            <Typography color="textPrimary" variant="body2">
+              {typeof row.formatted === 'string' ? (
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: row.formatted.replace(
+                      '<i class="null">n/a</i>',
+                      'N/A'
+                    )
+                  }}
+                />
+              ) : (
+                row.formatted
+              )}
+            </Typography>
+          </TableCell>
+        </TableRow>
+      ))}
+    </>
+  );
+}
 
-  const metadata = [
-    {
-      label: 'datetime',
-      value: datetime || 'N/A'
-    },
-    {
-      label: 'start_datetime',
-      value: start_datetime || 'N/A'
-    },
-    {
-      label: 'end_datetime',
-      value: end_datetime || 'N/A'
-    },
-    {
-      label: 'created',
-      value: created || 'N/A'
-    },
-    {
-      label: 'updated',
-      value: updated || 'N/A'
-    },
-    {
-      label: 'license',
-      value: license || 'N/A'
-    },
-    {
-      label: 'constellation',
-      value: constellation || 'N/A'
-    },
-    {
-      label: 'platform',
-      value: platform || 'N/A'
-    },
-    {
-      label: 'instruments',
-      value: instruments?.join(' ') || 'N/A'
-    },
-    {
-      label: 'gsd',
-      value: gsd || 'N/A'
-    },
-    {
-      label: 'published',
-      value: published || 'N/A'
-    },
-    {
-      label: 'version',
-      value: version || 'N/A'
-    }
-  ];
-
-  let tables = {};
-  for (let key in props) {
-    let prefix, subKey;
-    if (key.includes(':')) {
-      [prefix, subKey] = key.split(':');
-    } else {
-      prefix = 'general';
-      subKey = key;
-    }
-    tables[prefix] = tables[prefix] ? tables[prefix] : [];
-    tables[prefix].push({
-      label: subKey,
-      value: props[key] || 'N/A'
-    });
-  }
-
-  const { general, ...metadataExtension } = tables;
-  //console.log(metadataExtension);
+export function StacItemMetaData({ item }) {
+  const excludes = ['description', 'providers'];
+  const formatted = StacFields.formatItemProperties(
+    item,
+    (key, path) => !excludes.includes(key)
+  );
+  console.log('item property formatted', formatted);
 
   return (
     <Card sx={{ mb: 3 }}>
@@ -296,38 +290,8 @@ export function StacItemMetaData(props) {
       </Box>
       <CardContent sx={{ p: 0 }}>
         <Table>
-          {metadata.map((row) => (
-            <TableRow>
-              <TableCell sx={{ maxWidth: 120, minWidth: 90 }}>
-                {row.label}
-              </TableCell>
-              <TableCell>{row.value}</TableCell>
-            </TableRow>
-          ))}
-          {Object.entries(metadataExtension).map(([extension, table]) => (
-            <>
-              <TableRow>
-                <TableCell colSpan={2}>
-                  <Typography variant="h6">
-                    STAC extension: {extension}
-                  </Typography>
-                </TableCell>
-              </TableRow>
-              {table.map((row) => (
-                <TableRow>
-                  <TableCell sx={{ maxWidth: 120, minWidth: 90 }}>
-                    {row.label}
-                  </TableCell>
-                  <TableCell>
-                    <Typography color="textPrimary" variant="body2">
-                      {typeof row.value === 'string'
-                        ? row.value
-                        : JSON.stringify(row.value)}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </>
+          {formatted.map((subProps) => (
+            <MetaDataSubTable {...subProps}></MetaDataSubTable>
           ))}
         </Table>
 
@@ -363,7 +327,7 @@ export function StacItemMetaData(props) {
 }
 
 export function StacItemDisplayList(props) {
-  const { features } = props;
+  const { features, entryPoint } = props;
 
   if (!features || features?.length === 0) {
     return <></>;
@@ -377,7 +341,7 @@ export function StacItemDisplayList(props) {
             <TableCell>
               <Link
                 component={RouterLink}
-                to={`/console/eodag/collections/${feature.collection}/item/${feature.id}`}
+                to={`/console/${entryPoint}/collections/${feature.collection}/item/${feature.id}`}
               >
                 {feature.id}
               </Link>

@@ -62,10 +62,12 @@ function StacCollectionViewPageHeader(props) {
 }
 
 const StacCollectionContent = () => {
-  const params = useParams();
+  const entryPoint = 'eodag';
   const { settings } = useSettings();
   const dispatch = useDispatch();
+  const params = useParams();
   const collectionID = params['collectionID'];
+
   const [currentTab, setCurrentTab] = useState('overview');
 
   const tabs = [
@@ -156,7 +158,10 @@ const StacCollectionContent = () => {
               <StacCollectionOverview collection={collection} />
             )}
             {currentTab === 'items' && (
-              <StacItemsBrowse collectionID={collectionID} />
+              <StacItemsBrowse
+                collectionID={collectionID}
+                entryPoint={entryPoint}
+              />
             )}
           </Box>
         </Container>

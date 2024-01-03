@@ -49,7 +49,7 @@ export function StacItemOverview(props) {
             />
           </Card>
         )} */}
-        <StacItemMetaData {...item.properties} />
+        <StacItemMetaData item={item} />
       </Grid>
     </Grid>
   );
