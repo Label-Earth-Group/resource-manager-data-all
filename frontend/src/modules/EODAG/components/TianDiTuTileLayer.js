@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import 'leaflet.chinatmsproviders';
 import { tileLayer } from 'leaflet';
 
-function TianDiTuTileLayer() {
+export function TianDiTuTileLayer() {
   const map = useMap();
   useEffect(() => {
     tileLayer
@@ -17,5 +17,3 @@ function TianDiTuTileLayer() {
 
   return <></>;
 }
-
-export default TianDiTuTileLayer;

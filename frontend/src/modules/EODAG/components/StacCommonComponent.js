@@ -359,7 +359,10 @@ export function StacItemDisplayList(props) {
   }
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      component={Paper}
+      style={{ maxHeight: '100vh', overflow: 'auto' }}
+    >
       <Table>
         <TableBody>
           {features.map((feature) => {

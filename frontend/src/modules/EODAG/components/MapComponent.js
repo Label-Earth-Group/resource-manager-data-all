@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { MapContainer, FeatureGroup } from 'react-leaflet';
-import TianDiTuTileLayer from './TianDiTuTileLayer';
-import { StacGeometryMapLayer } from './StacMapLayer';
+import { TianDiTuTileLayer } from './TianDiTuTileLayer';
+import { StacGeometryLayer } from './StacMapLayer';
 import { EditControl } from 'react-leaflet-draw';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
@@ -52,9 +52,7 @@ export const LeafletMapComponent = ({ setDrawnItems, stacDataForDisplay }) => {
     >
       <TianDiTuTileLayer />
       {stacDataForDisplay && (
-        <StacGeometryMapLayer
-          stacData={stacDataForDisplay}
-        ></StacGeometryMapLayer>
+        <StacGeometryLayer stacData={stacDataForDisplay}></StacGeometryLayer>
       )}
       <FeatureGroup ref={featureGroupRef}>
         <EditControl
