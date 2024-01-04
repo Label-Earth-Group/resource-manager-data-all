@@ -170,7 +170,12 @@ const StacItemDetail = () => {
           <Box sx={{ mt: 3 }}>
             {currentTab === 'overview' && (
               <>
-                <StacItemOverview item={item} />
+                <StacItemOverview
+                  collectionID={collectionID}
+                  itemID={itemID}
+                  item={item}
+                  entryPoint="pgstac"
+                />
               </>
             )}
             {currentTab === 'assets' && (
