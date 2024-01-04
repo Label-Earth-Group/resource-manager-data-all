@@ -1,10 +1,15 @@
-import L from 'leaflet';
+import { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 // import ReactDOM from 'react-dom';
+
+import L from 'leaflet';
 import { MapContainer, useMap } from 'react-leaflet';
 import { TianDiTuTileLayer } from './TianDiTuTileLayer';
 import { StacGeometryLayer, ItemTitilerLayer } from './StacMapLayer.js';
-import { useEffect } from 'react';
+
+import { useGetItemAssetsInfoQuery } from 'modules/PGSTAC/services/titilerApi.ts';
+import { useDispatch } from 'globalErrors';
+import { useHandleError } from '../utils/utils.js';
 
 const ViewOptionControl = (props) => {
   const ControlComponent = <button>Click Me</button>;
@@ -36,6 +41,7 @@ const ViewOptionControl = (props) => {
 
 export function PGStacItemAssetViewer(props) {
   const { collectionID, itemID, item } = props;
+  const dispatch = useDispatch();
   const { assets } = item;
   const assetName = assets.hasOwnProperty('visual') ? 'visual' : '';
   const options = {
@@ -44,6 +50,13 @@ export function PGStacItemAssetViewer(props) {
       fillOpacity: 0
     }
   };
+
+  const { data: assetsInfo, error } = useGetItemAssetsInfoQuery({
+    collectionID,
+    itemID
+  });
+  useHandleError(error, dispatch);
+  console.log('assetsInfo', assetsInfo);
 
   return (
     <MapContainer scrollWheelZoom={true} id="map">
