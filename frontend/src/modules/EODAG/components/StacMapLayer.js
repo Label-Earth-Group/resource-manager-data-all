@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useMap } from 'react-leaflet';
 import stacLayer from 'stac-layer';
 
-export const StacMapLayer = ({ stacData }) => {
+export const StacGeometryMapLayer = ({ stacData }) => {
   const map = useMap();
   const layerRef = useRef(null);
 
@@ -15,7 +15,11 @@ export const StacMapLayer = ({ stacData }) => {
 
       const options = {
         resolution: 128,
-        crossOrigin: ''
+        crossOrigin: '',
+        //debugLevel: 2,
+        displayOverview: false, //only display the spatial geometry
+        collectionStyle: { fillOpacity: 1, color: 'red' }, //this would not work, and it is a bug of stac-layer
+        boundsStyle: { stroke: false }
       };
 
       if (stacData) {

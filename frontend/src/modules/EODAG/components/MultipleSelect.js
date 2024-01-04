@@ -52,12 +52,14 @@ export const MultiSelectInput = (props) => {
       loading={isLoading}
       renderOption={(props, option) => (
         <Tooltip key={option.id} title={option.title}>
-          <li {...props}>{option.id}</li>
+          <li key={option.id} {...props}>
+            {option.id}
+          </li>
         </Tooltip>
       )}
       renderTags={(value, getTagProps) =>
         value.map((option, index) => (
-          <Tooltip title={option.title}>
+          <Tooltip key={index} title={option.title}>
             <Chip
               variant="outlined"
               label={option.id}

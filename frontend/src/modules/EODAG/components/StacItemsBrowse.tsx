@@ -23,12 +23,10 @@ import { useDispatch } from 'globalErrors';
 import { useHandleError } from '../utils/utils.js';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { DateRangePicker } from './DateTimeRangePicker.js';
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { SearchPayload } from '../../../types/stac';
-import { MapContainer, GeoJSON } from 'react-leaflet';
-import TianDiTuTileLayer from './TianDiTuTileLayer.js';
-import { GeoJSON as LeaflefGeoJSON } from 'leaflet';
 import { StacItemDisplayList } from './StacCommonComponent.js';
+import { LeafletMapComponent } from '../components/MapComponent';
 
 export function StacItemsBrowse({ collectionID, entryPoint = 'eodag' }) {
   const useGetCollectionQueryablesByCollectionIDQuery =
@@ -44,7 +42,8 @@ export function StacItemsBrowse({ collectionID, entryPoint = 'eodag' }) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const geojsonRef = useRef<LeaflefGeoJSON | null>();
+  const [drawnItems, setDrawnItems] = useState([]);
+  console.log(drawnItems);
 
   const { data: queryables, error: errorQueryable } =
     useGetCollectionQueryablesByCollectionIDQuery(collectionID);
@@ -71,12 +70,6 @@ export function StacItemsBrowse({ collectionID, entryPoint = 'eodag' }) {
     console.info('search', formatPayload(searchPayload));
     searchItems(formatPayload(searchPayload), true);
   }, [currentPage, PAGESIZE]);
-
-  useEffect(() => {
-    if (geojsonRef.current) {
-      geojsonRef.current.clearLayers().addData(searchResponse);
-    }
-  }, [geojsonRef, searchResponse]);
 
   // const {
   //   data: items,
@@ -141,8 +134,6 @@ export function StacItemsBrowse({ collectionID, entryPoint = 'eodag' }) {
     </>
   );
 
-  const redOptions = { color: 'red' };
-
   return (
     <Box>
       <Box sx={{ mb: 2 }}>
@@ -186,19 +177,10 @@ export function StacItemsBrowse({ collectionID, entryPoint = 'eodag' }) {
             </Card>
           </Grid>
           <Grid item md={7} sm={12}>
-            <MapContainer
-              scrollWheelZoom={true}
-              id="map"
-              center={[50.0, 0.0]}
-              zoom={1}
-            >
-              <TianDiTuTileLayer />
-              <GeoJSON
-                ref={geojsonRef}
-                data={searchResponse}
-                style={redOptions}
-              ></GeoJSON>
-            </MapContainer>
+            <LeafletMapComponent
+              setDrawnItems={setDrawnItems}
+              stacDataForDisplay={searchResponse}
+            ></LeafletMapComponent>
           </Grid>
         </Grid>
       </Box>

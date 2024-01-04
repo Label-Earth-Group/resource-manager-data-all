@@ -9,9 +9,12 @@ import {
   CardHeader,
   CardContent,
   Grid,
+  TableContainer,
   Table,
+  TableBody,
   TableRow,
-  TableCell
+  TableCell,
+  Paper
 } from '@mui/material';
 import { Label } from 'design';
 import Markdown from 'react-markdown';
@@ -60,7 +63,7 @@ export function StacObjectDescription(props) {
               {keywords.map((keyword) => {
                 return keyword ? (
                   <>
-                    <Label color="info">{keyword}</Label>{' '}
+                    <Label color="secondary">{keyword}</Label>{' '}
                   </>
                 ) : null;
               })}
@@ -72,10 +75,10 @@ export function StacObjectDescription(props) {
   );
 }
 
-function StacProviderRow(provider) {
+function StacProviderRow({ provider, index }) {
   return (
-    <TableRow key={provider.name}>
-      <TableCell sx={{ minWidth: 80 }}>
+    <TableRow key={index}>
+      <TableCell key={`${index}-name`} sx={{ minWidth: 80 }}>
         <Typography color="text" variant="subtitle">
           {provider.url ? (
             <Link href={provider.url} target="_blank" rel="noopener noreferrer">
@@ -86,11 +89,15 @@ function StacProviderRow(provider) {
           )}
         </Typography>
       </TableCell>
-      <TableCell>
+      <TableCell key={`${index}-role`}>
         {provider.roles &&
-          provider.roles.map((role) => <Label color="secondary">{role}</Label>)}
+          provider.roles.map((role) => (
+            <Label key={`${index}-role-label`} color="secondary">
+              {role}
+            </Label>
+          ))}
       </TableCell>
-      <TableCell>
+      <TableCell key={`${index}-description`}>
         <Typography>
           {provider.description || 'No description for this provider.'}
         </Typography>
@@ -101,6 +108,9 @@ function StacProviderRow(provider) {
 
 export function StacProviders(props) {
   const { providers } = props;
+  if (!providers) {
+    return <></>;
+  }
   return (
     <Card sx={{ mb: 3 }}>
       <Box>
@@ -109,11 +119,19 @@ export function StacProviders(props) {
       </Box>
       <CardContent sx={{ p: 0 }}>
         <Table>
-          {Array.isArray(providers) ? (
-            providers.map((provider) => <StacProviderRow {...provider} />)
-          ) : (
-            <StacProviderRow {...providers} />
-          )}
+          <TableBody>
+            {Array.isArray(providers) ? (
+              providers.map((provider, index) => (
+                <StacProviderRow
+                  provider={provider}
+                  key={index}
+                  index={index}
+                />
+              ))
+            ) : (
+              <StacProviderRow provider={providers} key={0} index={0} />
+            )}
+          </TableBody>
         </Table>
       </CardContent>
     </Card>
@@ -215,9 +233,11 @@ export function StacCollectionMetaData({ collection, entryPoint = 'eodag' }) {
       </Box>
       <CardContent sx={{ p: 0 }}>
         <Table>
-          {formatted.map((subSummary) => (
-            <MetaDataSubTable {...subSummary}></MetaDataSubTable>
-          ))}
+          <TableBody>
+            {formatted.map((subSummary) => (
+              <MetaDataSubTable {...subSummary}></MetaDataSubTable>
+            ))}
+          </TableBody>
         </Table>
       </CardContent>
     </Card>
@@ -229,7 +249,7 @@ function MetaDataSubTable({ extension, label, properties }) {
     <>
       {extension !== '' && (
         <TableRow key={extension}>
-          <TableCell colSpan={2}>
+          <TableCell key={`${extension}-header`} colSpan={2}>
             <div style={{ display: 'flex' }}>
               <Typography variant="h6">{'Extension: '}</Typography>
               <Typography variant="h6">
@@ -244,15 +264,18 @@ function MetaDataSubTable({ extension, label, properties }) {
         </TableRow>
       )}
       {Object.entries(properties).map(([key, row]) => (
-        <TableRow key={extension + key}>
-          <TableCell sx={{ maxWidth: 120, minWidth: 90 }}>
+        <TableRow key={`${extension}-${key}`}>
+          <TableCell
+            key={`${extension}-${key}-label`}
+            sx={{ maxWidth: 120, minWidth: 90 }}
+          >
             <div
               dangerouslySetInnerHTML={{
                 __html: row.label
               }}
             />
           </TableCell>
-          <TableCell>
+          <TableCell key={`${extension}-${key}-value`}>
             <Typography color="textPrimary" variant="body2">
               {typeof row.formatted === 'string' ? (
                 <div
@@ -280,7 +303,7 @@ export function StacItemMetaData({ item }) {
     item,
     (key, path) => !excludes.includes(key)
   );
-  console.log('item property formatted', formatted);
+  //console.log('item property formatted', formatted);
 
   return (
     <Card sx={{ mb: 3 }}>
@@ -290,9 +313,11 @@ export function StacItemMetaData({ item }) {
       </Box>
       <CardContent sx={{ p: 0 }}>
         <Table>
-          {formatted.map((subProps) => (
-            <MetaDataSubTable {...subProps}></MetaDataSubTable>
-          ))}
+          <TableBody>
+            {formatted.map((subProps) => (
+              <MetaDataSubTable {...subProps}></MetaDataSubTable>
+            ))}
+          </TableBody>
         </Table>
 
         {/* {Object.entries(metadataExtension).map(([extension, table]) => (
@@ -334,21 +359,25 @@ export function StacItemDisplayList(props) {
   }
 
   return (
-    <Table>
-      {features.map((feature) => {
-        return (
-          <TableRow key={feature.id}>
-            <TableCell>
-              <Link
-                component={RouterLink}
-                to={`/console/${entryPoint}/collections/${feature.collection}/item/${feature.id}`}
-              >
-                {feature.id}
-              </Link>
-            </TableCell>
-          </TableRow>
-        );
-      })}
-    </Table>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableBody>
+          {features.map((feature) => {
+            return (
+              <TableRow key={feature.id}>
+                <TableCell>
+                  <Link
+                    component={RouterLink}
+                    to={`/console/${entryPoint}/collections/${feature.collection}/items/${feature.id}`}
+                  >
+                    {feature.id}
+                  </Link>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }

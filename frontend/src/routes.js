@@ -236,7 +236,7 @@ const routes = [
             element: <StacCollectionContent />
           },
           {
-            path: 'eodag/collections/:collectionID/item/:itemID',
+            path: 'eodag/collections/:collectionID/items/:itemID',
             element: <StacItemDetail />
           }
         ]
@@ -256,7 +256,7 @@ const routes = [
             element: <PGStacCollectionContent />
           },
           {
-            path: 'repository/collections/:collectionID/item/:itemID',
+            path: 'repository/collections/:collectionID/items/:itemID',
             element: <PGStacItemDetail />
           },
           {
