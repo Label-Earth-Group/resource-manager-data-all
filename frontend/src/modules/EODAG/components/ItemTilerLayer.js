@@ -1,9 +1,11 @@
 import { useDispatch } from 'globalErrors';
 import { useEffect, useState } from 'react';
 import { TileLayer } from 'react-leaflet';
+import { LatLngBounds } from 'leaflet';
 
 const ItemTilerLayer = (props) => {
   const [tileApi, setTileApi] = useState(null);
+  const [bounds, setBounds] = useState(null);
   const dispatch = useDispatch();
 
   const { collectionID, itemID, assets } = props;
@@ -22,13 +24,19 @@ const ItemTilerLayer = (props) => {
       })
       .then((data) => {
         setTileApi(data.tiles[0]);
+        setBounds(
+          new LatLngBounds(
+            [data.bounds[1], data.bounds[0]],
+            [data.bounds[3], data.bounds[2]]
+          )
+        );
       })
       .catch((err) => {
         dispatch({ type: 'SET_ERROR', error: err.message });
       });
   }, [dispatch, tileJsonApi]);
 
-  return tileApi && <TileLayer url={tileApi} />;
+  return tileApi && <TileLayer url={tileApi} bounds={bounds} />;
 };
 
 export default ItemTilerLayer;
