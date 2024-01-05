@@ -230,9 +230,12 @@ const StacSearch = () => {
               {currentTab === 'Result' && (
                 <Card>
                   <Box sx={{ px: 2, pt: 2 }}>{pagination}</Box>
-                  <StacItemDisplayList
-                    features={searchResponse?.features}
-                  ></StacItemDisplayList>
+                  <Box sx={{ pb: 2 }}>
+                    <StacItemDisplayList
+                      features={searchResponse?.features}
+                      entryPoint="eodag"
+                    ></StacItemDisplayList>
+                  </Box>
                 </Card>
               )}
             </Grid>
