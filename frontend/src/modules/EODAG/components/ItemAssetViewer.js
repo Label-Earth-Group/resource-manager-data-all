@@ -11,14 +11,22 @@ import { useGetItemAssetsInfoQuery } from 'modules/PGSTAC/services/titilerApi.ts
 import { useDispatch } from 'globalErrors';
 import { useHandleError } from '../utils/utils.js';
 
-const ViewOptionControl = (props) => {
-  const ControlComponent = <button>Click Me</button>;
+export const LeafletControlWrapper = (props) => {
+  const { children, position } = props;
+  const positionMap = {
+    topright: 'leaflet-top leaflet-right',
+    topleft: 'leaflet-top leaflet-left',
+    bottomright: 'leaflet-bottom leaflet-right',
+    bottomleft: 'leaflet-bottom leaflet-left'
+  };
+  const positionClass = positionMap[position] || positionMap['topright'];
   /** a custom control class for binding react component to leaflet map container */
   const CustomControlClass = L.Control.extend({
     onAdd: function (map) {
-      const container = L.DomUtil.create('div', 'leaflet-top leaflet-right');
-      const root = createRoot(container); // createRoot(container!) if you use TypeScript
-      root.render(ControlComponent);
+      const container = L.DomUtil.create('div', positionClass);
+      // Transform container into a React component, and render children inside
+      const root = createRoot(container);
+      root.render(children);
       this.rootObject = root;
       return container;
     },
@@ -33,8 +41,8 @@ const ViewOptionControl = (props) => {
     function createControl(opts) {
       return new CustomControlClass(opts);
     }
-    createControl({ position: 'topright' }).addTo(map);
-  }, [CustomControlClass, map]);
+    createControl({ position }).addTo(map);
+  }, [CustomControlClass, map, position]);
 
   return <></>;
 };
@@ -60,7 +68,9 @@ export function PGStacItemAssetViewer(props) {
 
   return (
     <MapContainer scrollWheelZoom={true} id="map">
-      <ViewOptionControl />
+      <LeafletControlWrapper position="bottomleft">
+        <button>Click Me</button>
+      </LeafletControlWrapper>
       <TianDiTuTileLayer />
       {/* <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

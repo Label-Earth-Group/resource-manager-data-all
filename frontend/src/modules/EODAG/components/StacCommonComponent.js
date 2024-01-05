@@ -167,6 +167,8 @@ export function StacCollectionMetaData({ collection, entryPoint = 'eodag' }) {
   if (entryPoint === 'eodag' && collection['keywords']) {
     let keywords = collection['keywords'];
     const EODAGMapping = {
+      // Summary values are mostly arrays
+      // https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#summaries
       constellation: [keywords[1]],
       platform: [keywords[0]],
       intruments: [keywords[2]],
@@ -244,9 +246,9 @@ function MetaDataSubTable({ extension, label, properties }) {
         <TableRow key={extension}>
           <TableCell key={`${extension}-header`} colSpan={2}>
             <div style={{ display: 'flex' }}>
-              <Typography variant="h6">
+              <Typography variant="h6" component="h6">
                 {'Extension: '}
-                {label}
+                <span dangerouslySetInnerHTML={{ __html: label }}></span>
               </Typography>
             </div>
           </TableCell>
