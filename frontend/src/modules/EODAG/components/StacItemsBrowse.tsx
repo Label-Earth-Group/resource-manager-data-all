@@ -43,7 +43,7 @@ export function StacItemsBrowse({ collectionID, entryPoint = 'eodag' }) {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [drawnItems, setDrawnItems] = useState([]);
-  console.log(drawnItems);
+  console.info(drawnItems);
 
   const { data: queryables, error: errorQueryable } =
     useGetCollectionQueryablesByCollectionIDQuery(collectionID);

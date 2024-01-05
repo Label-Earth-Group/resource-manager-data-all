@@ -54,12 +54,10 @@ export const titilerApi = createApi({
       { collectionID: string; itemID: string; assets: string; params: any }
     >({
       query: ({ collectionID, itemID, assets, params }) => {
-        console.log('params', params);
         params = params || {};
         params['tileMatrixSetId'] =
           params?.tileMatrixSetId || 'WebMercatorQuad'; //set default tile matrix
         params['assets'] = assets;
-        console.log('params', params);
         const formattedParams = new URLSearchParams(params).toString();
         return {
           url: `/collections/${collectionID}/items/${itemID}/tilejson.json?${formattedParams}`

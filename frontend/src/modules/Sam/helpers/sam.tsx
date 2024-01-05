@@ -101,7 +101,7 @@ export class SAM {
         this.tensor === null ||
         this.modelScale === null
       ) {
-        console.log('model not loaded');
+        console.warn('model not loaded');
         return;
       } else {
         // Preapre the model input in the correct format for SAM.
@@ -118,7 +118,7 @@ export class SAM {
         return output;
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
       return;
     }
   }

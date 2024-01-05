@@ -1,8 +1,6 @@
 import {
   Typography,
   Link,
-  // List,
-  // ListItem,
   Box,
   Card,
   Divider,
@@ -20,11 +18,8 @@ import { Label } from 'design';
 import Markdown from 'react-markdown';
 import { Link as RouterLink } from 'react-router-dom';
 import StacFields from '@radiantearth/stac-fields';
-import {
-  formatTemporalExtent,
-  formatTemporalExtents,
-  formatTimestamp
-} from '@radiantearth/stac-fields/formatters';
+import { formatTimestamp } from '@radiantearth/stac-fields/formatters';
+import { Fragment } from 'react';
 
 export function StacObjectDescription(props) {
   const { description, keywords } = props;
@@ -52,24 +47,23 @@ export function StacObjectDescription(props) {
         <Divider />
       </Box>
       <CardContent>
-        <Typography>
+        <Typography component="div">
           <Markdown components={markdownComponent}>
             {description || 'No description for this collection.'}
           </Markdown>
         </Typography>
-        <Typography color="textPrimary" variant="body2">
-          {keywords && (
-            <Box sx={{ mt: 2 }}>
-              {keywords.map((keyword) => {
-                return keyword ? (
-                  <>
+        {keywords && (
+          <Box sx={{ mt: 2 }}>
+            {keywords.map(
+              (keyword) =>
+                keyword && (
+                  <Fragment key={keyword}>
                     <Label color="secondary">{keyword}</Label>{' '}
-                  </>
-                ) : null;
-              })}
-            </Box>
-          )}
-        </Typography>
+                  </Fragment>
+                )
+            )}
+          </Box>
+        )}
       </CardContent>
     </Card>
   );
@@ -140,10 +134,6 @@ export function StacProviders(props) {
 
 export function StacCollectionTemporalExtent(props) {
   const temporalExtent = props?.extent?.interval;
-  const formatted = Array.isArray(temporalExtent)
-    ? formatTemporalExtents(temporalExtent)
-    : formatTemporalExtent(temporalExtent);
-  console.log('formatted temporal', formatted);
   return (
     <Card sx={{ mb: 3 }}>
       <Box>
@@ -177,11 +167,11 @@ export function StacCollectionMetaData({ collection, entryPoint = 'eodag' }) {
   if (entryPoint === 'eodag' && collection['keywords']) {
     let keywords = collection['keywords'];
     const EODAGMapping = {
-      constellation: keywords[1],
-      platform: keywords[0],
-      intruments: keywords[2],
-      'processing:level': keywords[3],
-      sensorType: keywords[4]
+      constellation: [keywords[1]],
+      platform: [keywords[0]],
+      intruments: [keywords[2]],
+      'processing:level': [keywords[3]],
+      sensorType: [keywords[4]]
     };
     let summaries = { ...collection['summaries'], ...EODAGMapping };
     collection = { ...collection, summaries };
@@ -234,8 +224,11 @@ export function StacCollectionMetaData({ collection, entryPoint = 'eodag' }) {
       <CardContent sx={{ p: 0 }}>
         <Table>
           <TableBody>
-            {formatted.map((subSummary) => (
-              <MetaDataSubTable {...subSummary}></MetaDataSubTable>
+            {formatted.map((subSummary, index) => (
+              <MetaDataSubTable
+                key={`metadata-${index}`}
+                {...subSummary}
+              ></MetaDataSubTable>
             ))}
           </TableBody>
         </Table>
@@ -251,13 +244,9 @@ function MetaDataSubTable({ extension, label, properties }) {
         <TableRow key={extension}>
           <TableCell key={`${extension}-header`} colSpan={2}>
             <div style={{ display: 'flex' }}>
-              <Typography variant="h6">{'Extension: '}</Typography>
               <Typography variant="h6">
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: label
-                  }}
-                />
+                {'Extension: '}
+                {label}
               </Typography>
             </div>
           </TableCell>
@@ -269,23 +258,22 @@ function MetaDataSubTable({ extension, label, properties }) {
             key={`${extension}-${key}-label`}
             sx={{ maxWidth: 120, minWidth: 90 }}
           >
-            <div
-              dangerouslySetInnerHTML={{
-                __html: row.label
-              }}
-            />
+            <Typography color="textPrimary">
+              <span dangerouslySetInnerHTML={{ __html: row.label }}></span>
+            </Typography>
           </TableCell>
           <TableCell key={`${extension}-${key}-value`}>
-            <Typography color="textPrimary" variant="body2">
+            <Typography color="textPrimary" component="div">
               {typeof row.formatted === 'string' ? (
                 <div
+                  className="stac-metadata-value"
                   dangerouslySetInnerHTML={{
                     __html: row.formatted.replace(
                       '<i class="null">n/a</i>',
                       'N/A'
                     )
                   }}
-                />
+                ></div>
               ) : (
                 row.formatted
               )}
@@ -314,8 +302,11 @@ export function StacItemMetaData({ item }) {
       <CardContent sx={{ p: 0 }}>
         <Table>
           <TableBody>
-            {formatted.map((subProps) => (
-              <MetaDataSubTable {...subProps}></MetaDataSubTable>
+            {formatted.map((subProps, index) => (
+              <MetaDataSubTable
+                key={`metadata-${index}`}
+                {...subProps}
+              ></MetaDataSubTable>
             ))}
           </TableBody>
         </Table>
@@ -365,20 +356,18 @@ export function StacItemDisplayList(props) {
     >
       <Table>
         <TableBody>
-          {features.map((feature) => {
-            return (
-              <TableRow key={feature.id}>
-                <TableCell>
-                  <Link
-                    component={RouterLink}
-                    to={`/console/${entryPoint}/collections/${feature.collection}/items/${feature.id}`}
-                  >
-                    {feature.id}
-                  </Link>
-                </TableCell>
-              </TableRow>
-            );
-          })}
+          {features.map((feature) => (
+            <TableRow key={feature.id}>
+              <TableCell>
+                <Link
+                  component={RouterLink}
+                  to={`/console/${entryPoint}/collections/${feature.collection}/items/${feature.id}`}
+                >
+                  {feature.id}
+                </Link>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>

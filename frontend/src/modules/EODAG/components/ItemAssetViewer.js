@@ -56,7 +56,7 @@ export function PGStacItemAssetViewer(props) {
     itemID
   });
   useHandleError(error, dispatch);
-  console.log('assetsInfo', assetsInfo);
+  console.info('assetsInfo', assetsInfo);
 
   return (
     <MapContainer scrollWheelZoom={true} id="map">

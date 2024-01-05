@@ -29,7 +29,6 @@ export const StacGeometryLayer = ({ stacData, options }) => {
       if (stacData) {
         const layer = await stacLayer(stacData, options);
         if (layer) {
-          console.log('stac layer object', layer);
           layer.addTo(map);
           map.fitBounds(layer.getBounds());
           layerRef.current = layer; // Store the reference to the current layer

@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 export const useHandleError = (error, dispatch) => {
   useEffect(() => {
     if (error) {
-      console.error(error);
       dispatch({ type: 'SET_ERROR', error: error.error });
     }
   }, [error, dispatch]);

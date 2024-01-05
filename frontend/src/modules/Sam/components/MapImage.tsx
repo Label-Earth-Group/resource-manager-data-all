@@ -202,7 +202,7 @@ const MapImage = () => {
           y: px[1],
           clickType: 1
         });
-        console.log(points);
+        console.info(points);
       } else if (samState.eventType === 'selectend') {
         const topLeft = samState.samModel.lngLat2ImagePixel([
           coord[0],
@@ -223,7 +223,7 @@ const MapImage = () => {
           clickType: 3
         });
       } else if (samState.eventType === 'all') {
-        console.log(
+        console.info(
           samState.samModel.image.width,
           samState.samModel.image.height
         );
@@ -252,7 +252,7 @@ const MapImage = () => {
         });
       });
     } catch (error) {
-      console.log('请先点击[生成 embedding] 按钮');
+      console.warn('请先点击[生成 embedding] 按钮');
     }
   }, [samState.mapClick]);
 
