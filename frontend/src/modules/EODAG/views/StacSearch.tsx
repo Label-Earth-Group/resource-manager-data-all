@@ -25,7 +25,11 @@ import { useDispatch } from 'globalErrors';
 import { useHandleError } from '../utils/utils.js';
 import { useLazySearchItemsQuery } from '../services/eodagApi.ts';
 import { formatPayload } from '../services/stacUtils.ts';
-import type { Collection, SearchPayload } from '../../../types/stac';
+import type {
+  Collection,
+  SearchPayload,
+  SearchResponse
+} from '../../../types/stac';
 
 // function StacSearchPageHeader() {
 //   return (
@@ -79,10 +83,11 @@ const StacSearch = () => {
     (location.state as LocationState)?.collections || [];
 
   // initialize the states
+  // 1.the tab state
   const [currentTab, setCurrentTab] = useState(
     defaultCollections.length > 0 ? 'Result' : 'Search'
   );
-  // the search query states
+  // 2.the search query states
   const [selectedCollections, setSelectedCollections] = useState<
     Collection[] | null
   >(defaultCollections);
@@ -105,13 +110,22 @@ const StacSearch = () => {
           }
   };
   console.info('search payload', searchPayload);
+  /**
+   * the result display state
+   * configure the display state different from the rtk-query's state, by wiring them up through useEffect,
+   * allowing to clear it as needed without affecting the original data fetched from the server.
+   */
+  const [searchResponse, setSearchResponse] = useState<SearchResponse | null>(
+    null
+  );
 
   // set up the rtk-query lazy query hook
-  const [
-    searchItems,
-    { data: searchResponse, error: searchError, isLoading, isFetching }
-  ] = useLazySearchItemsQuery();
+  const [searchItems, { data, error: searchError, isLoading, isFetching }] =
+    useLazySearchItemsQuery();
   useHandleError(searchError, dispatch);
+  useEffect(() => {
+    setSearchResponse(data);
+  }, [data]); //wiring the display state with rtk-query state
   console.info('isFetching', isLoading, isFetching);
 
   // The search is always triggered when pagination changes
@@ -133,6 +147,7 @@ const StacSearch = () => {
     setStartDate(null);
     setEndDate(null);
     setCurrentPage(1);
+    setSearchResponse(null);
   };
 
   // // Pay attention to the order of handling different situations
