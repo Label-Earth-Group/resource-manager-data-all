@@ -3,11 +3,9 @@ import {
   Button,
   List,
   ListSubheader,
-  //ListItem,
   ListItemButton,
   ListItemText,
   Popper,
-  //Typography,
   ToggleButtonGroup,
   ToggleButton
 } from '@mui/material';
@@ -17,8 +15,7 @@ import {
   Square as SquareIcon
 } from '@mui/icons-material';
 import { useEffect, useRef, useState } from 'react';
-import { MapContainer, ZoomControl } from 'react-leaflet';
-import { TianDiTuTileLayer } from './TianDiTuTileLayer';
+import { MapContainer, ZoomControl, TileLayer } from 'react-leaflet';
 import { StacGeometryLayer, ItemTitilerLayer } from './StacMapLayer.js';
 import { useGetItemAssetsInfoQuery } from 'modules/PGSTAC/services/titilerApi.ts';
 import { useDispatch } from 'globalErrors';
@@ -123,7 +120,7 @@ function DisplaySettings(props) {
 
   const [showDisplaySettings, setShowDisplaySettings] = useState(false);
   const [bandsSetting, setBandsSetting] = useState({});
-  console.log('bands setting', bandsSetting);
+  console.info('bands setting', bandsSetting);
   const displaySettingsAnchorElRef = useRef(null);
   let timeoutId = null; //keep the timeoutId for clearing
 
@@ -379,11 +376,10 @@ export function PGStacItemAssetViewer(props) {
     <MapContainer scrollWheelZoom={true} id="map" zoomControl={false}>
       <ZoomControl position="topright" />
       <ViewOptionControl {...props} position="topleft"></ViewOptionControl>
-      <TianDiTuTileLayer />
-      {/* <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        /> */}
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
       <StacGeometryLayer stacData={item} options={options}></StacGeometryLayer>
       {assetName && (
         <ItemTitilerLayer
@@ -406,11 +402,10 @@ export function EODAGItemAssetViewer(props) {
   };
   return (
     <MapContainer scrollWheelZoom={true} id="map">
-      <TianDiTuTileLayer />
-      {/* <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          /> */}
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
       <StacGeometryLayer stacData={item} options={options}></StacGeometryLayer>
     </MapContainer>
   );

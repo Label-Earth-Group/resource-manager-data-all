@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
-import { MapContainer, FeatureGroup } from 'react-leaflet';
-import { TianDiTuTileLayer } from './TianDiTuTileLayer';
+import { MapContainer, FeatureGroup, TileLayer } from 'react-leaflet';
 import { StacGeometryLayer } from './StacMapLayer';
 import { EditControl } from 'react-leaflet-draw';
 import 'leaflet/dist/leaflet.css';
@@ -50,7 +49,10 @@ export const LeafletMapComponent = ({ setDrawnItems, stacDataForDisplay }) => {
       zoom={1}
       style={{ height: '100%' }}
     >
-      <TianDiTuTileLayer />
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
       {stacDataForDisplay && (
         <StacGeometryLayer stacData={stacDataForDisplay}></StacGeometryLayer>
       )}
