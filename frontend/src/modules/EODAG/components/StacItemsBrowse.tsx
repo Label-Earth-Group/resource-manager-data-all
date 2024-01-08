@@ -159,9 +159,10 @@ export function StacItemsBrowse({ collectionID, entryPoint = 'eodag' }) {
         </Grid>
         <Typography color="textSecondary">
           {pagination}{' '}
-          {Number(searchResponse.numberMatched) > 0
-            ? `${searchResponse.numberMatched} item(s) found. Provided by: ${items[0]?.properties?.providers[0]?.name}`
-            : 'No items found'}
+          {entryPoint === 'eodag' &&
+            (Number(searchResponse.numberMatched) > 0
+              ? `${searchResponse.numberMatched} item(s) found. Provided by: ${items[0]?.properties?.providers[0]?.name}`
+              : 'No items found')}
         </Typography>
       </Box>
       <Box>

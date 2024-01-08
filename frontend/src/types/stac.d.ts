@@ -26,6 +26,7 @@ export type SearchPayload = {
   [key: string]: any; //additional queryables
   limit?: number;
   page?: number;
+  token?: string;
   sortby?: Sortby[];
 };
 
