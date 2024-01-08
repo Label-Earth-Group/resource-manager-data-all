@@ -22,13 +22,18 @@ export const StacCollectionListItem = (props) => {
       <Card>
         <Box sx={{ p: 2, minHeight: 120 }}>
           <Typography>
-            <Checkbox
-              checked={checked}
-              onChange={(e) => {
-                toggleCollectionChecked &&
-                  toggleCollectionChecked(collection.id, e.target.checked);
-              }}
-            ></Checkbox>
+            {toggleCollectionChecked && (
+              <Checkbox
+                checked={checked}
+                onChange={(e) => {
+                  toggleCollectionChecked(
+                    collection.id,
+                    collection.title,
+                    e.target.checked
+                  );
+                }}
+              ></Checkbox>
+            )}
             <Link
               underline="hover"
               color="textPrimary"

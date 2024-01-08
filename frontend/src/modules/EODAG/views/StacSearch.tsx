@@ -16,6 +16,7 @@ import {
 } from '@mui/icons-material';
 import { useSettings } from 'design';
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { SearchQuery } from '../components/SearchQuery';
 import { LeafletMapComponent } from '../components/MapComponent';
@@ -69,12 +70,23 @@ const StacSearch = () => {
   const { settings } = useSettings();
   const dispatch = useDispatch();
 
-  const [currentTab, setCurrentTab] = useState('Search');
+  // get the default params from react-route state
+  interface LocationState {
+    collections?: Collection[]; // Replace 'any' with the specific type of 'collections' if known
+  }
+  const location = useLocation();
+  const defaultCollections =
+    (location.state as LocationState)?.collections || [];
 
+  // initialize the states
+  const [currentTab, setCurrentTab] = useState(
+    defaultCollections.length > 0 ? 'Result' : 'Search'
+  );
   // the search query states
   const [selectedCollections, setSelectedCollections] = useState<
     Collection[] | null
-  >([]);
+  >(defaultCollections);
+  console.log(selectedCollections);
   const [drawnItems, setDrawnItems] = useState([]);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);

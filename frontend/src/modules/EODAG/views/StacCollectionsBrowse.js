@@ -78,12 +78,15 @@ const StacCollectionsBrowse = () => {
     setSummaryFilters({ ...summaryFilters, [filterName]: [value] });
   };
 
-  const toggleCollectionChecked = (collectionID, checked) => {
+  const toggleCollectionChecked = (collectionID, collectionTitle, checked) => {
     if (checked) {
-      setSelectedCollections([...selectedCollections, collectionID]);
+      setSelectedCollections([
+        ...selectedCollections,
+        { id: collectionID, title: collectionTitle }
+      ]);
     } else {
       setSelectedCollections(
-        selectedCollections.filter((c) => c !== collectionID)
+        selectedCollections.filter((c) => c.id !== collectionID)
       );
     }
   };
@@ -115,8 +118,9 @@ const StacCollectionsBrowse = () => {
   // get the filter options from the queried collections
   const filterOptions = Object.entries(EODAG_SUMMARY_INDEX).map(
     ([filterName, pos]) => (
-      <Grid item md={2} sm={4} xs={12}>
+      <Grid item key={filterName} md={2} sm={4} xs={12}>
         <Autocomplete
+          key={filterName}
           id={filterName}
           fullWidth
           options={getSummaryFilters(collections, pos)}
@@ -202,7 +206,9 @@ const StacCollectionsBrowse = () => {
                   collection={c}
                   entryPoint={entryPoint}
                   showProviders={true}
-                  checked={selectedCollections.includes(c.id)}
+                  checked={Boolean(
+                    selectedCollections.find((selected) => selected.id === c.id)
+                  )}
                   toggleCollectionChecked={toggleCollectionChecked}
                 />
               ))}
