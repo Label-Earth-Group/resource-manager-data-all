@@ -135,7 +135,7 @@ const StacCollectionContent = () => {
   return (
     <>
       <Helmet>
-        <title>{collectionID} - EODAG | data.all</title>
+        <title>{collectionID} - Image repository | data.all</title>
       </Helmet>
       <Box
         sx={{

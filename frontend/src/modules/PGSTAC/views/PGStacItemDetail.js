@@ -130,7 +130,7 @@ const StacItemDetail = () => {
   return (
     <>
       <Helmet>
-        <title>{itemID} - EODAG | data.all</title>
+        <title>{itemID} - Image repository | data.all</title>
       </Helmet>
       <Box
         sx={{
