@@ -1,5 +1,6 @@
 import {
   Grid,
+  Button,
   Typography,
   Breadcrumbs,
   Link,
@@ -67,6 +68,7 @@ const StacCollectionsBrowse = () => {
     Object.keys(EODAG_SUMMARY_INDEX).map((filter) => [filter, []])
   );
   const [summaryFilters, setSummaryFilters] = useState(nullFilters);
+  const [selectedCollections, setSelectedCollections] = useState([]);
   const dispatch = useDispatch();
 
   const handleInputChange = (event) => {
@@ -74,6 +76,16 @@ const StacCollectionsBrowse = () => {
   };
   const handleFilterChange = (filterName) => (event, value) => {
     setSummaryFilters({ ...summaryFilters, [filterName]: [value] });
+  };
+
+  const toggleCollectionChecked = (collectionID, checked) => {
+    if (checked) {
+      setSelectedCollections([...selectedCollections, collectionID]);
+    } else {
+      setSelectedCollections(
+        selectedCollections.filter((c) => c !== collectionID)
+      );
+    }
   };
 
   const { collections, error, isLoading } = useGetCollectionsResponseQuery(
@@ -156,6 +168,31 @@ const StacCollectionsBrowse = () => {
             <Box sx={{ pb: 2 }}>
               <Typography color="textPrimary">
                 {filteredCollections.length} product(s) found.
+                {selectedCollections.length > 0 && (
+                  <>
+                    <RouterLink
+                      to="/console/eodag/search"
+                      state={{
+                        collections: selectedCollections
+                      }}
+                    >
+                      <Button sx={{ ml: 2 }} variant="contained">
+                        Search within selected {selectedCollections.length}{' '}
+                        collection(s)
+                      </Button>
+                    </RouterLink>
+                    <Button
+                      sx={{ ml: 2 }}
+                      variant="contained"
+                      color="warning"
+                      onClick={() => {
+                        setSelectedCollections([]);
+                      }}
+                    >
+                      Clear
+                    </Button>
+                  </>
+                )}
               </Typography>
             </Box>
             <Grid container spacing={3}>
@@ -165,6 +202,8 @@ const StacCollectionsBrowse = () => {
                   collection={c}
                   entryPoint={entryPoint}
                   showProviders={true}
+                  checked={selectedCollections.includes(c.id)}
+                  toggleCollectionChecked={toggleCollectionChecked}
                 />
               ))}
             </Grid>

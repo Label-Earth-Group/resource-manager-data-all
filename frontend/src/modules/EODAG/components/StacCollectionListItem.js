@@ -1,13 +1,34 @@
-import { Grid, Box, Card, Link, Typography, Divider } from '@mui/material';
+import {
+  Grid,
+  Box,
+  Card,
+  Link,
+  Typography,
+  Divider,
+  Checkbox
+} from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
 export const StacCollectionListItem = (props) => {
-  const { entryPoint, collection, showProviders } = props;
+  const {
+    entryPoint,
+    collection,
+    showProviders,
+    checked,
+    toggleCollectionChecked
+  } = props;
   return (
     <Grid item key={collection.id} lg={4} md={6} sm={12}>
       <Card>
         <Box sx={{ p: 2, minHeight: 120 }}>
           <Typography>
+            <Checkbox
+              checked={checked}
+              onChange={(e) => {
+                toggleCollectionChecked &&
+                  toggleCollectionChecked(collection.id, e.target.checked);
+              }}
+            ></Checkbox>
             <Link
               underline="hover"
               color="textPrimary"
@@ -34,7 +55,10 @@ export const StacCollectionListItem = (props) => {
             <Typography color="textSecondary" variant="body2">
               <span>
                 Provider(s):{' '}
-                {collection.providers?.map((p) => p.name).join(', ') || 'None'}
+                {collection.providers
+                  ?.filter((p) => p.roles?.includes('host'))
+                  .map((p) => p.name)
+                  .join(', ') || 'None'}
               </span>
             </Typography>
           )}
