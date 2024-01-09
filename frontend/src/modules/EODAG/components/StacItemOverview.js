@@ -25,7 +25,7 @@ export function StacItemOverview(props) {
         {item?.properties?.description && (
           <StacObjectDescription description={item.properties.description} />
         )}
-        <StacProviders {...item.properties} />
+        <StacProviders providers={item.properties.providers} />
       </Grid>
       <Grid item md={4} sm={12}>
         {/* {getThumbnailHrefFromItem(item) && (
