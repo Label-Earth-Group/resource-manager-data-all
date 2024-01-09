@@ -3,6 +3,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useSettings } from 'design';
 import MapImage from '../components/MapImage.tsx';
+import { MapContainer } from 'react-leaflet';
 
 const SamView = () => {
   const { settings } = useSettings();
@@ -20,7 +21,9 @@ const SamView = () => {
         }}
       >
         <Container maxWidth={settings.compact ? 'xl' : false}>
-          <MapImage />
+          <MapContainer style={{ height: '100vh' }} zoomControl={false}>
+            <MapImage />
+          </MapContainer>
         </Container>
       </Box>
     </>
