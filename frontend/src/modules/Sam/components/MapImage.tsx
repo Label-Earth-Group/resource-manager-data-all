@@ -1,13 +1,15 @@
 // @ts-ignore
 // import npyjs from 'npyjs';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import L, { LatLngBounds } from 'leaflet';
-import { Box, Button } from '@mui/material';
+import { Button, Backdrop, CircularProgress } from '@mui/material';
 // import L from 'leaflet';
 import 'leaflet.chinatmsproviders';
 import { ISamState } from '../helpers/Interfaces';
 import { SAMGeo } from '../helpers/samgeo.tsx';
 import { EMBEDDING_URL } from '../helpers/contant.tsx';
+import { useMap, ZoomControl } from 'react-leaflet';
+import { LeafletControl } from '../../EODAG/components/LeafletControl.tsx';
 
 const Model_URL = '/assets/sam_onnx_quantized_example.onnx';
 
@@ -22,8 +24,51 @@ const initState = {
   satelliteData: []
 };
 
+function loadImage(url) {
+  return new Promise((resolve, reject) => {
+    var img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error(`Failed to load image at ${url}`));
+    img.crossOrigin = 'Anonymous'; // 如果需要的话设置跨域
+    img.src = url;
+  });
+}
+
+async function loadAllImages(minx, miny, maxx, maxy, zoom, ctx) {
+  let promises = [];
+  for (var x = minx; x <= maxx; x++) {
+    for (var y = miny; y <= maxy; y++) {
+      let tileUrl = `https://t0.tianditu.gov.cn/DataServer?T=img_w&X=${x}&Y=${y}&L=${zoom}&tk=331d1f3b55990949af7a50f8223c8e20`;
+      promises.push(loadImage(tileUrl));
+    }
+  }
+
+  try {
+    let images = await Promise.all(promises);
+    var x_draw = minx;
+    var y_draw = miny;
+    images.forEach((img, index) => {
+      ctx.drawImage(
+        img,
+        (x_draw - minx) * 256,
+        (y_draw - miny) * 256,
+        256,
+        256
+      );
+      if ((index + 1) % (maxy - miny + 1) === 0) {
+        x_draw++;
+        y_draw = miny;
+      } else {
+        y_draw++;
+      }
+    });
+  } catch (error) {
+    console.error('One or more images failed to load:', error);
+  }
+}
+
 const MapImage = () => {
-  const mapRef = useRef(null);
+  const map = useMap();
   const [bounds, setBounds] = useState<LatLngBounds | null>(null);
   const [zoom, setZoom] = useState<number>(0);
   const [samState, setSamState] = useState<ISamState>(initState);
@@ -41,10 +86,7 @@ const MapImage = () => {
   // 初始化地图，添加一个底图、一个polygon图层，将map对象（scene）、polygon图层对象（boundsLayer）、底图对象（layerSource）保存到samInfo中，最后监听地图点击事件
   useEffect(() => {
     //leaflet与div进行绑定，并指明默认的地图中心和缩放比例
-    const map = L.map(mapRef.current, { attributionControl: false }).setView(
-      [39.89945, 116.40969],
-      13
-    );
+    map.setView([39.89945, 116.40969], 13);
     //构建一个切片图层对象，并添加到map容器中
     L.tileLayer
       .chinaProvider('TianDiTu.Satellite.Map', {
@@ -73,6 +115,7 @@ const MapImage = () => {
 
   // 点击生成 embedding=》获取当前地图的范围生成图片=》将图片保存到samInfo.samModel中=》获取这个图片的embedding并保存到samInfo.samModel中
   const generateEmbedding = async () => {
+    console.log('started');
     setSamState((pre) => ({ ...pre, loading: true }));
     setBounds(samState.map.getBounds());
     setZoom(samState.map.getZoom());
@@ -114,6 +157,10 @@ const MapImage = () => {
         ).arrayBuffer();
 
         samState.samModel.setEmbedding(res);
+
+        // should set the finished state here
+        console.log('fetched response');
+        setSamState((pre) => ({ ...pre, loading: false }));
       });
 
       // console.log(samInfo.samModel)
@@ -143,52 +190,10 @@ const MapImage = () => {
         height: canvas!.height
       });
 
-      setSamState((pre) => ({ ...pre, loading: false }));
+      // setSamState((pre) => ({ ...pre, loading: false }));
     } else return;
   };
 
-  function loadImage(url) {
-    return new Promise((resolve, reject) => {
-      var img = new Image();
-      img.onload = () => resolve(img);
-      img.onerror = () => reject(new Error(`Failed to load image at ${url}`));
-      img.crossOrigin = 'Anonymous'; // 如果需要的话设置跨域
-      img.src = url;
-    });
-  }
-
-  async function loadAllImages(minx, miny, maxx, maxy, zoom, ctx) {
-    let promises = [];
-    for (var x = minx; x <= maxx; x++) {
-      for (var y = miny; y <= maxy; y++) {
-        let tileUrl = `https://t0.tianditu.gov.cn/DataServer?T=img_w&X=${x}&Y=${y}&L=${zoom}&tk=331d1f3b55990949af7a50f8223c8e20`;
-        promises.push(loadImage(tileUrl));
-      }
-    }
-
-    try {
-      let images = await Promise.all(promises);
-      var x_draw = minx;
-      var y_draw = miny;
-      images.forEach((img, index) => {
-        ctx.drawImage(
-          img,
-          (x_draw - minx) * 256,
-          (y_draw - miny) * 256,
-          256,
-          256
-        );
-        if ((index + 1) % (maxy - miny + 1) === 0) {
-          x_draw++;
-          y_draw = miny;
-        } else {
-          y_draw++;
-        }
-      });
-    } catch (error) {
-      console.error('One or more images failed to load:', error);
-    }
-  }
   // 地图点击=》获取坐标保存到points中=》调用模型预测=》模型输出转化为多边形，裁剪对应图片=》保存到samInfo的satelliteData中
   useEffect(() => {
     if (!samState.mapClick || !samState.samModel) return;
@@ -281,15 +286,19 @@ const MapImage = () => {
       samState.polygonLayer.addData(newPolygon);
     }
   }, [samState.polygonLayer, samState.satelliteData]);
+  console.log('loading', samState.loading);
 
   return (
     <>
-      <Box sx={{ mb: 2 }}>
+      <LeafletControl position={'topleft'}>
         <Button variant="contained" color="primary" onClick={generateEmbedding}>
           Generate embedding
         </Button>
-      </Box>
-      <div ref={mapRef} style={{ height: '900px' }} />
+      </LeafletControl>
+      <ZoomControl position="topright" />
+      <Backdrop sx={{ color: '#fff', zIndex: 3000 }} open={samState.loading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 };

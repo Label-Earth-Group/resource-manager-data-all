@@ -6,7 +6,8 @@ import {
   Grid,
   LinearProgress,
   Box,
-  Container
+  Container,
+  Typography
 } from '@mui/material';
 import {
   Search,
@@ -254,17 +255,23 @@ const StacSearch = () => {
                   ></SearchQuery>
                 </Card>
               )}
-              {currentTab === 'Result' && (
-                <Card>
-                  <Box sx={{ px: 2, pt: 2 }}>{pagination}</Box>
-                  <Box sx={{ pb: 2 }}>
-                    <StacItemDisplayList
-                      features={searchResponse?.features}
-                      entryPoint="eodag"
-                    ></StacItemDisplayList>
-                  </Box>
-                </Card>
-              )}
+              {currentTab === 'Result' &&
+                (searchResponse?.features.length > 0 ? (
+                  <Card>
+                    <Box sx={{ p: 2 }}>{pagination}</Box>
+                    <Box sx={{ pb: 2 }}>
+                      <StacItemDisplayList
+                        features={searchResponse?.features}
+                        entryPoint="eodag"
+                        showCollection={true}
+                      ></StacItemDisplayList>
+                    </Box>
+                  </Card>
+                ) : (
+                  <Card sx={{ p: 2 }}>
+                    <Typography>No items found.</Typography>
+                  </Card>
+                ))}
             </Grid>
             <Grid item md={8} xs={12}>
               <Box sx={{ height: '100%' }}>
