@@ -345,7 +345,7 @@ export function StacItemMetaData({ item }) {
 }
 
 export function StacItemDisplayList(props) {
-  const { features, entryPoint } = props;
+  const { features, entryPoint, showCollection = false } = props;
 
   if (!features || features?.length === 0) {
     return <></>;
@@ -369,12 +369,14 @@ export function StacItemDisplayList(props) {
                 </Link>
                 <br />
                 {' in '}
-                <Link
-                  component={RouterLink}
-                  to={`/console/${entryPoint}/collections/${feature.collection}`}
-                >
-                  {feature.collection}
-                </Link>
+                {showCollection && (
+                  <Link
+                    component={RouterLink}
+                    to={`/console/${entryPoint}/collections/${feature.collection}`}
+                  >
+                    {feature.collection}
+                  </Link>
+                )}
               </TableCell>
             </TableRow>
           ))}

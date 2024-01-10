@@ -261,6 +261,7 @@ const StacSearch = () => {
                     <StacItemDisplayList
                       features={searchResponse?.features}
                       entryPoint="eodag"
+                      showCollection={true}
                     ></StacItemDisplayList>
                   </Box>
                 </Card>
