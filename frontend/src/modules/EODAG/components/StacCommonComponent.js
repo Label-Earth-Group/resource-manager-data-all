@@ -367,6 +367,14 @@ export function StacItemDisplayList(props) {
                 >
                   {feature.id}
                 </Link>
+                <br />
+                {' in '}
+                <Link
+                  component={RouterLink}
+                  to={`/console/${entryPoint}/collections/${feature.collection}`}
+                >
+                  {feature.collection}
+                </Link>
               </TableCell>
             </TableRow>
           ))}

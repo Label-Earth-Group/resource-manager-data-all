@@ -256,7 +256,7 @@ const StacSearch = () => {
               )}
               {currentTab === 'Result' && (
                 <Card>
-                  <Box sx={{ px: 2, pt: 2 }}>{pagination}</Box>
+                  <Box sx={{ p: 2 }}>{pagination}</Box>
                   <Box sx={{ pb: 2 }}>
                     <StacItemDisplayList
                       features={searchResponse?.features}
