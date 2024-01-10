@@ -13,7 +13,7 @@ import {
 import { ChevronRightIcon, useSettings, SearchInput } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { StacCollectionListItem } from '../components/StacCollectionListItem.js';
 import { useGetCollectionsResponseQuery } from '../services/eodagApi.ts';
 import {
@@ -78,18 +78,22 @@ const StacCollectionsBrowse = () => {
     setSummaryFilters({ ...summaryFilters, [filterName]: [value] });
   };
 
-  const toggleCollectionChecked = (collectionID, collectionTitle, checked) => {
-    if (checked) {
-      setSelectedCollections([
-        ...selectedCollections,
-        { id: collectionID, title: collectionTitle }
-      ]);
-    } else {
-      setSelectedCollections(
-        selectedCollections.filter((c) => c.id !== collectionID)
-      );
-    }
-  };
+  /** employ useCallback hook to memoize the function, preventing unnecessary re-renders.
+   *  here should use a state modification function,
+   *  so that the current state in not in dependency
+   */
+  const toggleCollectionChecked = useCallback(
+    (collectionID, collectionTitle, checked) => {
+      setSelectedCollections((prev) => {
+        if (checked) {
+          return [...prev, { id: collectionID, title: collectionTitle }];
+        } else {
+          return prev.filter((c) => c.id !== collectionID);
+        }
+      });
+    },
+    []
+  );
 
   const { collections, error, isLoading } = useGetCollectionsResponseQuery(
     undefined,
