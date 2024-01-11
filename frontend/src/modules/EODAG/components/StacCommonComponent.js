@@ -363,7 +363,9 @@ export function StacItemDisplayList(props) {
           {features.map((feature) => (
             <TableRow key={feature.id}>
               <TableCell
-                onClick={highlightBbox(feature.bbox)}
+                onClick={() => {
+                  highlightBbox(feature.bbox);
+                }}
                 sx={{
                   ':hover': {
                     backgroundColor: theme.palette.action.hover

@@ -85,14 +85,11 @@ const StacSearch = () => {
 
   // initialize the states
   // 1.the tab state
-  const [currentTab, setCurrentTab] = useState(
-    defaultCollections.length > 0 ? 'Result' : 'Search'
-  );
+  const [currentTab, setCurrentTab] = useState('Search');
   // 2.the search query states
   const [selectedCollections, setSelectedCollections] = useState<
     Collection[] | null
   >(defaultCollections);
-  console.log(selectedCollections);
   const [drawnItems, setDrawnItems] = useState([]);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -110,7 +107,6 @@ const StacSearch = () => {
             to: endDate ? endDate.toISOString() : undefined
           }
   };
-  console.info('search payload', searchPayload);
   /**
    * the result display state
    * configure the display state different from the rtk-query's state, by wiring them up through useEffect,
@@ -127,11 +123,9 @@ const StacSearch = () => {
   useEffect(() => {
     setSearchResponse(data);
   }, [data]); //wiring the display state with rtk-query state
-  console.info('isFetching', isLoading, isFetching);
 
   // The search is always triggered when pagination changes
   useEffect(() => {
-    console.info('search', formatPayload(searchPayload));
     searchItems(formatPayload(searchPayload), true);
   }, [currentPage, PAGESIZE]);
 
