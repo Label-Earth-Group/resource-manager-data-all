@@ -174,6 +174,9 @@ export function StacItemsBrowse({ collectionID, entryPoint = 'eodag' }) {
                 features={items}
                 collectionID={collectionID}
                 entryPoint={entryPoint}
+                highlightBbox={(bbox) => {
+                  console.info(bbox);
+                }}
               ></StacItemDisplayList>
             </Card>
           </Grid>
