@@ -2,8 +2,8 @@ import AWS from 'aws-sdk';
 
 export const getBucketClient = () => {
   AWS.config.update({
-    accessKeyId: 'AKIASSNSOCEYNCSEEAGC',
-    secretAccessKey: '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'
+    accessKeyId: process.env.REACT_APP_STORAGE_ACCESS_KEY,
+    secretAccessKey: process.env.REACT_APP_STORAGE_SECRET_ACCESS_KEY
   });
 
   return new AWS.S3({
