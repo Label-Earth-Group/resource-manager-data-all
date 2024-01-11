@@ -14,6 +14,7 @@ import {
   TableCell,
   Paper
 } from '@mui/material';
+import { useTheme } from '@mui/styles';
 import { Label } from 'design';
 import Markdown from 'react-markdown';
 import { Link as RouterLink } from 'react-router-dom';
@@ -345,7 +346,8 @@ export function StacItemMetaData({ item }) {
 }
 
 export function StacItemDisplayList(props) {
-  const { features, entryPoint, showCollection = false } = props;
+  const theme = useTheme();
+  const { features, entryPoint, showCollection = false, highlightBbox } = props;
 
   if (!features || features?.length === 0) {
     return <></>;
@@ -360,7 +362,14 @@ export function StacItemDisplayList(props) {
         <TableBody>
           {features.map((feature) => (
             <TableRow key={feature.id}>
-              <TableCell>
+              <TableCell
+                onClick={highlightBbox(feature.bbox)}
+                sx={{
+                  ':hover': {
+                    backgroundColor: theme.palette.action.hover
+                  }
+                }}
+              >
                 <Link
                   component={RouterLink}
                   to={`/console/${entryPoint}/collections/${feature.collection}/items/${feature.id}`}

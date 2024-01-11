@@ -257,19 +257,24 @@ const StacSearch = () => {
               )}
               {currentTab === 'Result' &&
                 (searchResponse?.features.length > 0 ? (
-                  <Card>
-                    <Box sx={{ p: 2 }}>{pagination}</Box>
-                    <Box sx={{ pb: 2 }}>
+                  <Card sx={{ py: 2 }}>
+                    <Box sx={{ mb: 2, mx: 2 }}>{pagination}</Box>
+                    <Box>
                       <StacItemDisplayList
                         features={searchResponse?.features}
                         entryPoint="eodag"
                         showCollection={true}
+                        highlightBbox={(bbox) => {
+                          console.info(bbox);
+                        }}
                       ></StacItemDisplayList>
                     </Box>
                   </Card>
                 ) : (
                   <Card sx={{ p: 2 }}>
-                    <Typography>No items found.</Typography>
+                    <Typography>
+                      {isFetching ? `Fetching...` : `No items found.`}
+                    </Typography>
                   </Card>
                 ))}
             </Grid>
