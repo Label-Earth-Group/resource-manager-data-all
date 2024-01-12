@@ -347,6 +347,7 @@ export function StacItemMetaData({ item }) {
 }
 
 export function StacItemDisplayList(props) {
+  const theme = useTheme();
   const {
     features,
     entryPoint,
@@ -375,12 +376,22 @@ export function StacItemDisplayList(props) {
               key={feature.id}
               onFocus={() => setListItemHighlighted(feature)}
               onClick={() => setListItemHighlighted(feature)}
-              sx={{
-                border:
-                  highlightedItems.filter((i) => i.id === feature.id).length > 0
-                    ? '2px solid red'
-                    : '1px solid grey'
-              }}
+              sx={
+                highlightedItems?.some((i) => i.id === feature.id)
+                  ? {
+                      backgroundColor: theme.palette.action.selected,
+                      borderTop: `2px solid ${theme.palette.primary.main}`,
+                      borderBottom: `2px solid ${theme.palette.primary.main}`,
+                      ':hover': {
+                        backgroundColor: theme.palette.action.hover
+                      }
+                    }
+                  : {
+                      ':hover': {
+                        backgroundColor: theme.palette.action.hover
+                      }
+                    }
+              }
             >
               <TableCell>
                 <Link
