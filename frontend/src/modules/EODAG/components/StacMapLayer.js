@@ -9,6 +9,7 @@ import { useHandleError } from '../utils/utils.js';
 export const StacGeometryLayer = memo(
   ({
     stacData,
+    collectionStyle = undefined,
     options = undefined,
     highlightedItems = undefined,
     setHighlightedItems = undefined
@@ -32,7 +33,7 @@ export const StacGeometryLayer = memo(
       // Cleanup previous layer
       if (layerRef.current) {
         layerRef.current.removeFrom(map);
-        setHighlightedItems([]);
+        setHighlightedItems && setHighlightedItems([]);
       }
 
       // Add stac layer
@@ -51,7 +52,7 @@ export const StacGeometryLayer = memo(
       return () => {
         if (layerRef.current) {
           layerRef.current.removeFrom(map);
-          setHighlightedItems([]);
+          setHighlightedItems && setHighlightedItems([]);
         }
       };
     }, [map, stacData]);
@@ -71,10 +72,7 @@ export const StacGeometryLayer = memo(
       };
       const styleFeatureFn = (item) => {
         item = createStacObject(item);
-        if (
-          highlightedItems &&
-          highlightedItems.filter((i) => i.equals(item)).length > 0
-        ) {
+        if (highlightedItems && highlightedItems.some((i) => i.equals(item))) {
           return highlightStyle;
         } else {
           return defaultStyle;
@@ -83,14 +81,17 @@ export const StacGeometryLayer = memo(
 
       // set the layer style based on highlighted items
       const layer = layerRef.current;
-      layer.eachLayer((l) => l.setStyle(styleFeatureFn));
+      layer.eachLayer((l) =>
+        l.setStyle(collectionStyle ? collectionStyle : styleFeatureFn)
+      );
       layer.addTo(map);
 
       // set the clicked items to be highlighted
-      layer.on('click', (event) => {
-        const clicked = event.stac; //this is an array, could be multiple items
-        setHighlightedItems(clicked);
-      });
+      setHighlightedItems &&
+        layer.on('click', (event) => {
+          const clicked = event.stac; //this is an array, could be multiple items
+          setHighlightedItems(clicked);
+        });
     }, [map, highlightedItems, setHighlightedItems]);
 
     return null;

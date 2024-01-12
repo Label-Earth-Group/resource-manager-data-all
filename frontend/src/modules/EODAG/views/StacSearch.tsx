@@ -94,6 +94,7 @@ const StacSearch = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [highlightedItems, setHighlightedItems] = useState([]);
   const searchPayload: SearchPayload = {
     page: currentPage,
     limit: PAGESIZE,
@@ -258,9 +259,8 @@ const StacSearch = () => {
                         features={searchResponse?.features}
                         entryPoint="eodag"
                         showCollection={true}
-                        highlightBbox={(bbox) => {
-                          console.info(bbox);
-                        }}
+                        highlightedItems={highlightedItems}
+                        setHighlightedItems={setHighlightedItems}
                       ></StacItemDisplayList>
                     </Box>
                   </Card>
@@ -277,6 +277,8 @@ const StacSearch = () => {
                 <LeafletMapComponent
                   setDrawnItems={setDrawnItems}
                   stacDataForDisplay={searchResponse}
+                  highlightedItems={highlightedItems}
+                  setHighlightedItems={setHighlightedItems}
                 ></LeafletMapComponent>
               </Box>
             </Grid>

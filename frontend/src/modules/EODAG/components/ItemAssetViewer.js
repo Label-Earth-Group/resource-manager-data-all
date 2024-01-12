@@ -363,6 +363,11 @@ function ViewOptionControl(props) {
 
 export function PGStacItemAssetViewer(props) {
   const { collectionID, itemID, item } = props;
+  const collectionStyle = {
+    weight: 3,
+    color: 'red',
+    fillOpacity: 0
+  };
 
   const assetName = 'visual';
 
@@ -374,7 +379,10 @@ export function PGStacItemAssetViewer(props) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <StacGeometryLayer stacData={item}></StacGeometryLayer>
+      <StacGeometryLayer
+        stacData={item}
+        collectionStyle={collectionStyle}
+      ></StacGeometryLayer>
       {assetName && (
         <ItemTitilerLayer
           collectionID={collectionID}
@@ -388,11 +396,9 @@ export function PGStacItemAssetViewer(props) {
 
 export function EODAGItemAssetViewer(props) {
   const { item } = props;
-  const options = {
-    boundsStyle: {
-      color: 'red',
-      fillOpacity: 0.3
-    }
+  const collectionStyle = {
+    color: 'red',
+    fillOpacity: 0.3
   };
   return (
     <MapContainer scrollWheelZoom={true} id="map">
@@ -400,7 +406,10 @@ export function EODAGItemAssetViewer(props) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <StacGeometryLayer stacData={item} options={options}></StacGeometryLayer>
+      <StacGeometryLayer
+        stacData={item}
+        collectionStyle={collectionStyle}
+      ></StacGeometryLayer>
     </MapContainer>
   );
 }

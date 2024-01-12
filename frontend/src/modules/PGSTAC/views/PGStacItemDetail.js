@@ -11,6 +11,7 @@ import {
   Tab,
   Tabs,
   Table,
+  TableBody,
   TableRow,
   TableCell,
   CircularProgress
@@ -182,13 +183,15 @@ const StacItemDetail = () => {
               <>
                 <Card sx={{ mb: 3 }}>
                   <Table>
-                    {Object.keys(stac_assets).map((k) => (
-                      <TableRow>
-                        <TableCell>{stac_assets[k].title || 'N/A'}</TableCell>
-                        <TableCell>{stac_assets[k].href || 'N/A'}</TableCell>
-                        <TableCell>{stac_assets[k].type || 'N/A'}</TableCell>
-                      </TableRow>
-                    ))}
+                    <TableBody>
+                      {Object.keys(stac_assets).map((k, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{stac_assets[k].title || 'N/A'}</TableCell>
+                          <TableCell>{stac_assets[k].href || 'N/A'}</TableCell>
+                          <TableCell>{stac_assets[k].type || 'N/A'}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
                   </Table>
                 </Card>
                 {origin_assets && Object.keys(origin_assets).length > 0 && (
@@ -200,19 +203,21 @@ const StacItemDetail = () => {
                     </Box>
                     <Divider />
                     <Table>
-                      {Object.keys(origin_assets).map((k) => (
-                        <TableRow>
-                          <TableCell>
-                            {origin_assets[k].title || 'N/A'}
-                          </TableCell>
-                          <TableCell>
-                            {origin_assets[k].href || 'N/A'}
-                          </TableCell>
-                          <TableCell>
-                            {origin_assets[k].type || 'N/A'}
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      <TableBody>
+                        {Object.keys(origin_assets).map((k, index) => (
+                          <TableRow key={index}>
+                            <TableCell>
+                              {origin_assets[k].title || 'N/A'}
+                            </TableCell>
+                            <TableCell>
+                              {origin_assets[k].href || 'N/A'}
+                            </TableCell>
+                            <TableCell>
+                              {origin_assets[k].type || 'N/A'}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
                     </Table>
                   </Card>
                 )}
