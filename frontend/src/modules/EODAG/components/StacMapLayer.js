@@ -1,53 +1,101 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, memo } from 'react';
 import { useMap, TileLayer } from 'react-leaflet';
-import stacLayer from 'stac-layer';
+import { default as createStacObject } from 'stac-js';
+import { stacGeometryLayer } from '../utils/stacLayer/stacLayer.js';
 import { useGetItemAssetTileJsonQuery } from 'modules/PGSTAC/services/titilerApi.ts';
 import { useDispatch } from 'globalErrors';
 import { useHandleError } from '../utils/utils.js';
 
-export const StacGeometryLayer = ({ stacData, options }) => {
-  const map = useMap();
-  const layerRef = useRef(null);
+export const StacGeometryLayer = memo(
+  ({
+    stacData,
+    options = undefined,
+    highlightedItems = undefined,
+    setHighlightedItems = undefined
+  }) => {
+    const map = useMap();
+    const layerRef = useRef(null);
 
-  const defaultOptions = {
-    resolution: 128,
-    crossOrigin: '',
-    //debugLevel: 2,
-    displayOverview: false, //only display the spatial geometry
-    collectionStyle: { fillOpacity: 1, color: 'red' }, //this would not work, and it is a bug of stac-layer
-    boundsStyle: { stroke: false }
-  };
-  options = Object.assign({}, defaultOptions, options);
+    // format the options
+    const defaultOptions = {
+      crossOrigin: '',
+      //debugLevel: 2,
+      displayOverview: false, //only display the spatial geometry
+      //collectionStyle: stylePolygon, //the original stac-layer implementation would not work
+      //set collectionStyle separately inside hooks
+      boundsStyle: { stroke: false }
+    };
+    options = Object.assign(defaultOptions, options);
 
-  useEffect(() => {
-    async function addStacLayer() {
+    // re-initialize the map only when stacData changes
+    useEffect(() => {
       // Cleanup previous layer
       if (layerRef.current) {
         layerRef.current.removeFrom(map);
+        setHighlightedItems([]);
       }
 
-      if (stacData) {
-        const layer = await stacLayer(stacData, options);
-        if (layer) {
-          layer.addTo(map);
-          map.fitBounds(layer.getBounds());
-          layerRef.current = layer; // Store the reference to the current layer
+      // Add stac layer
+      function addStacLayer() {
+        if (stacData) {
+          const layer = stacGeometryLayer(stacData, options);
+          if (layer) {
+            map.fitBounds(layer.getBounds());
+            layerRef.current = layer; // Store the reference to the current layer
+          }
         }
       }
-    }
+      addStacLayer();
 
-    addStacLayer();
+      // Cleanup function for useEffect
+      return () => {
+        if (layerRef.current) {
+          layerRef.current.removeFrom(map);
+          setHighlightedItems([]);
+        }
+      };
+    }, [map, stacData]);
 
-    // Cleanup function for useEffect
-    return () => {
-      if (layerRef.current) {
-        layerRef.current.removeFrom(map);
-      }
-    };
-  }, [map, options, stacData]); // Dependency array
+    // manage the highlighted features
+    useEffect(() => {
+      // style differently for highlighted items
+      const highlightStyle = {
+        weight: 3,
+        color: 'red',
+        fillOpacity: 0.3
+      };
+      const defaultStyle = {
+        weight: 1,
+        color: 'blue',
+        fillOpacity: 0.2
+      };
+      const styleFeatureFn = (item) => {
+        item = createStacObject(item);
+        if (
+          highlightedItems &&
+          highlightedItems.filter((i) => i.equals(item)).length > 0
+        ) {
+          return highlightStyle;
+        } else {
+          return defaultStyle;
+        }
+      };
 
-  return null;
-};
+      // set the layer style based on highlighted items
+      const layer = layerRef.current;
+      layer.eachLayer((l) => l.setStyle(styleFeatureFn));
+      layer.addTo(map);
+
+      // set the clicked items to be highlighted
+      layer.on('click', (event) => {
+        const clicked = event.stac; //this is an array, could be multiple items
+        setHighlightedItems(clicked);
+      });
+    }, [map, highlightedItems, setHighlightedItems]);
+
+    return null;
+  }
+);
 
 export const ItemTitilerLayer = (props) => {
   const { collectionID, itemID, assets, params } = props;

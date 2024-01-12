@@ -21,6 +21,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import StacFields from '@radiantearth/stac-fields';
 import { formatTimestamp } from '@radiantearth/stac-fields/formatters';
 import { Fragment } from 'react';
+import { default as createStacObject } from 'stac-js';
 
 export function StacObjectDescription(props) {
   const { description, keywords } = props;
@@ -346,12 +347,21 @@ export function StacItemMetaData({ item }) {
 }
 
 export function StacItemDisplayList(props) {
-  const theme = useTheme();
-  const { features, entryPoint, showCollection = false, highlightBbox } = props;
+  const {
+    features,
+    entryPoint,
+    showCollection = false,
+    highlightedItems = undefined,
+    setHighlightedItems = undefined
+  } = props;
 
   if (!features || features?.length === 0) {
     return <></>;
   }
+
+  const setListItemHighlighted = (feature) => {
+    setHighlightedItems && setHighlightedItems([createStacObject(feature)]);
+  };
 
   return (
     <TableContainer
@@ -361,17 +371,18 @@ export function StacItemDisplayList(props) {
       <Table>
         <TableBody>
           {features.map((feature) => (
-            <TableRow key={feature.id}>
-              <TableCell
-                onClick={() => {
-                  highlightBbox(feature.bbox);
-                }}
-                sx={{
-                  ':hover': {
-                    backgroundColor: theme.palette.action.hover
-                  }
-                }}
-              >
+            <TableRow
+              key={feature.id}
+              onFocus={() => setListItemHighlighted(feature)}
+              onClick={() => setListItemHighlighted(feature)}
+              sx={{
+                border:
+                  highlightedItems.filter((i) => i.id === feature.id).length > 0
+                    ? '2px solid red'
+                    : '1px solid grey'
+              }}
+            >
+              <TableCell>
                 <Link
                   component={RouterLink}
                   to={`/console/${entryPoint}/collections/${feature.collection}/items/${feature.id}`}

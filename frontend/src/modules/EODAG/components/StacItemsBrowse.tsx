@@ -43,13 +43,15 @@ export function StacItemsBrowse({ collectionID, entryPoint = 'eodag' }) {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [drawnItems, setDrawnItems] = useState([]);
-  console.info(drawnItems);
+  const [highlightedItems, setHighlightedItems] = useState([]);
+  console.info('drawn items', drawnItems);
+  console.info('highlighted', highlightedItems);
 
   const { data: queryables, error: errorQueryable } =
     useGetCollectionQueryablesByCollectionIDQuery(collectionID);
   useHandleError(errorQueryable, dispatch);
   const additionalFilters = queryables?.properties;
-  console.info(additionalFilters);
+  console.info('queryables', additionalFilters);
 
   const [
     searchItems,
@@ -174,9 +176,8 @@ export function StacItemsBrowse({ collectionID, entryPoint = 'eodag' }) {
                 features={items}
                 collectionID={collectionID}
                 entryPoint={entryPoint}
-                highlightBbox={(bbox) => {
-                  console.info(bbox);
-                }}
+                highlightedItems={highlightedItems}
+                setHighlightedItems={setHighlightedItems}
               ></StacItemDisplayList>
             </Card>
           </Grid>
@@ -184,6 +185,8 @@ export function StacItemsBrowse({ collectionID, entryPoint = 'eodag' }) {
             <LeafletMapComponent
               setDrawnItems={setDrawnItems}
               stacDataForDisplay={searchResponse}
+              highlightedItems={highlightedItems}
+              setHighlightedItems={setHighlightedItems}
             ></LeafletMapComponent>
           </Grid>
         </Grid>

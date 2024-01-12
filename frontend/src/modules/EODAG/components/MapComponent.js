@@ -5,7 +5,12 @@ import { EditControl } from 'react-leaflet-draw';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 
-export const LeafletMapComponent = ({ setDrawnItems, stacDataForDisplay }) => {
+export const LeafletMapComponent = ({
+  setDrawnItems,
+  stacDataForDisplay,
+  highlightedItems = undefined,
+  setHighlightedItems = undefined
+}) => {
   const featureGroupRef = useRef();
 
   const onCreated = (e) => {
@@ -54,7 +59,11 @@ export const LeafletMapComponent = ({ setDrawnItems, stacDataForDisplay }) => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {stacDataForDisplay && (
-        <StacGeometryLayer stacData={stacDataForDisplay}></StacGeometryLayer>
+        <StacGeometryLayer
+          stacData={stacDataForDisplay}
+          highlightedItems={highlightedItems}
+          setHighlightedItems={setHighlightedItems}
+        ></StacGeometryLayer>
       )}
       <FeatureGroup ref={featureGroupRef}>
         <EditControl
