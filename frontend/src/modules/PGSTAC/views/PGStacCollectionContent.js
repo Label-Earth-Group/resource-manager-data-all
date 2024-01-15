@@ -21,7 +21,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router';
 import { useGetCollectionsResponseQuery } from '../services/pgStacApi.ts';
 import { useDispatch } from 'globalErrors';
-import { useHandleError } from 'modules/EODAG/utils/utils.js';
+import { useHandleError } from 'utils/utils.js';
 
 function StacCollectionViewPageHeader(props) {
   const { title, id } = props;

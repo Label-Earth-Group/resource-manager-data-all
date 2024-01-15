@@ -77,10 +77,12 @@ const MapImage = () => {
   const onMapClick = (e) => {
     const isArray = Array.isArray(e);
     const coords = !isArray ? [e.latlng.lng, e.latlng.lat] : e;
-    setSamState((pre) => ({
-      ...pre,
-      mapClick: coords
-    }));
+    if (!samState.loading) {
+      setSamState((pre) => ({
+        ...pre,
+        mapClick: coords
+      }));
+    }
   };
 
   // 初始化地图，添加一个底图、一个polygon图层，将map对象（scene）、polygon图层对象（boundsLayer）、底图对象（layerSource）保存到samInfo中，最后监听地图点击事件

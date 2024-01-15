@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { useGetCollectionsResponseQuery } from '../services/eodagApi.ts';
 import { useDispatch } from 'globalErrors';
-import { useHandleError } from '../utils/utils.js';
+import { useHandleError } from 'utils/utils.js';
 
 export const MultiSelectInput = (props) => {
   const { selectedCollections, setSelectedCollections } = props;

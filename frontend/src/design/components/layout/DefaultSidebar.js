@@ -32,6 +32,7 @@ import { ModuleNames, isModuleEnabled } from 'utils';
 import { useSettings } from '../../hooks';
 import { NavSection } from '../NavSection';
 import { Scrollbar } from '../Scrollbar';
+import { repo } from 'utils/constants';
 
 export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
   const getSections = (isAdvancedMode) => {
@@ -107,7 +108,7 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
 
     const notebooksSection = {
       title: 'GeoJournal',
-      path: '/console/notebooks',
+      path: `/console/geojournal/repos/${repo.owner}/${repo.repo}`,
       icon: <SiJupyter size={15} />,
       active: isModuleEnabled(ModuleNames.NOTEBOOKS)
     };

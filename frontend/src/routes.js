@@ -194,6 +194,10 @@ const ToolBoxView = Loadable(
   lazy(() => import('./modules/GeoToolBox/views/leafmap.js'))
 );
 
+const GeoJournalView = Loadable(
+  lazy(() => import('./modules/GeoJournal/views/RepoExplorer.js'))
+);
+
 const routes = [
   {
     children: [
@@ -278,6 +282,14 @@ const routes = [
           {
             path: 'geotoolbox',
             element: <ToolBoxView />
+          }
+        ]
+      },
+      {
+        children: [
+          {
+            path: 'geojournal/repos/:owner/:repo/*',
+            element: <GeoJournalView />
           }
         ]
       },

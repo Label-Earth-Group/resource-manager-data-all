@@ -24,7 +24,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router';
 import { useGetItemByCollectionIDAndItemIDQuery } from '../services/eodagApi.ts';
 import { useDispatch } from 'globalErrors';
-import { useHandleError } from '../utils/utils.js';
+import { useHandleError } from 'utils/utils.js';
 
 function StacItemViewPageHeader(props) {
   const { collectionID, itemID } = props;

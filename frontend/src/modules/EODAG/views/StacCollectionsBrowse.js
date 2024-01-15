@@ -23,7 +23,7 @@ import {
   getSummaryFilters
 } from '../services/stacUtils.ts';
 import { useDispatch } from 'globalErrors';
-import { useHandleError } from '../utils/utils.js';
+import { useHandleError } from 'utils/utils.js';
 
 function StacCollectionPageHeader() {
   return (
