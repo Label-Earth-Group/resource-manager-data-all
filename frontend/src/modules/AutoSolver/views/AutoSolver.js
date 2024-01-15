@@ -82,8 +82,10 @@ const AutoSolver = () => {
               Query
             </Button>
           </Box>
-          {chunks.map((c) => (
-            <Card sx={{ mb: 2, p: 2 }}>{renderMessage(c)}</Card>
+          {chunks.map((c, index) => (
+            <Card key={`step-${index}`} sx={{ mb: 2, p: 2 }}>
+              {renderMessage(c)}
+            </Card>
           ))}
         </Container>
       </Box>
