@@ -3786,6 +3786,11 @@
   resolved "https://registry.npmmirror.com/@mapbox/tilebelt/-/tilebelt-1.0.2.tgz#32936c3acad3ea3e669bb083a598bcc7d74b4ec9"
   integrity sha512-tGJN2VIgWrXqBTPIxFVklklIpcy6ss8W5ouq+cjNLXPXFraRaDR4Ice+5Q8/uLX+6aH23lWBMydOIn8PcdVcpA==
 
+"@microsoft/fetch-event-source@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.npmmirror.com/@microsoft/fetch-event-source/-/fetch-event-source-2.0.1.tgz#9ceecc94b49fbaa15666e38ae8587f64acce007d"
+  integrity sha512-W6CLUJ2eBMw3Rec70qrsEW0jOm/3twwJv21mrmj2yORiaVmVYGS4sSS5yUwvQc1ZlDLYGPnClVWmUUMagKNsfA==
+
 "@monaco-editor/loader@^1.4.0":
   version "1.4.0"
   resolved "https://registry.npmmirror.com/@monaco-editor/loader/-/loader-1.4.0.tgz#f08227057331ec890fa1e903912a5b711a2ad558"
@@ -4077,16 +4082,7 @@
     content-type "^1.0.4"
     multihashes "^3.1.2"
 
-"@radiantearth/stac-migrate@^1.5.0":
-  version "1.6.0"
-  resolved "https://registry.npmmirror.com/@radiantearth/stac-migrate/-/stac-migrate-1.6.0.tgz#481ec9d7451dda3da90508443bfaab04590f41d4"
-  integrity sha512-/Ke5Uyz4gvi0EyhYF3X2ZrMZ96Ikc9LvhgXgo1RbTWzFhD2s9w9KzK1N9V7odGdsBLlqVjvVwQCT73pghfdZzg==
-  dependencies:
-    compare-versions "^3.6.0"
-    multihashes "^3.1.2"
-    yargs "^17.6.2"
-
-"@radiantearth/stac-migrate@^1.6.0":
+"@radiantearth/stac-migrate@^1.5.0", "@radiantearth/stac-migrate@^1.6.0":
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/@radiantearth/stac-migrate/-/stac-migrate-1.6.0.tgz#481ec9d7451dda3da90508443bfaab04590f41d4"
   integrity sha512-/Ke5Uyz4gvi0EyhYF3X2ZrMZ96Ikc9LvhgXgo1RbTWzFhD2s9w9KzK1N9V7odGdsBLlqVjvVwQCT73pghfdZzg==
