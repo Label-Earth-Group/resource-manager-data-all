@@ -9,6 +9,7 @@ import {
   Cloud,
   Dataset,
   InsertComment,
+  Psychology,
   Insights,
   Image
 } from '@mui/icons-material';
@@ -133,6 +134,13 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
       active: true
     };
 
+    const autoSolverSection = {
+      title: 'AutoSolver',
+      path: '/console/autosolver',
+      icon: <Psychology size={15} />,
+      active: true
+    };
+
     const organizationsSection = {
       title: 'Organizations',
       path: '#',
@@ -171,7 +179,8 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
             pipelinesSection,
             dashboardsSection,
             toolboxSection,
-            samSection
+            samSection,
+            autoSolverSection
           ]
         },
         {
@@ -198,7 +207,8 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
             pipelinesSection,
             dashboardsSection,
             toolboxSection,
-            samSection
+            samSection,
+            autoSolverSection
           ]
         }
       ];

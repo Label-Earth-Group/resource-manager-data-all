@@ -194,6 +194,10 @@ const ToolBoxView = Loadable(
   lazy(() => import('./modules/GeoToolBox/views/leafmap.js'))
 );
 
+const AutoSolverView = Loadable(
+  lazy(() => import('./modules/AutoSolver/views/AutoSolver.js'))
+);
+
 const routes = [
   {
     children: [
@@ -278,6 +282,14 @@ const routes = [
           {
             path: 'geotoolbox',
             element: <ToolBoxView />
+          }
+        ]
+      },
+      {
+        children: [
+          {
+            path: 'autosolver',
+            element: <AutoSolverView />
           }
         ]
       },
