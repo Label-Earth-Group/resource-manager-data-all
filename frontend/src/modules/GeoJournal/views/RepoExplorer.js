@@ -124,6 +124,9 @@ const RepositoryContent = ({ owner, repo, folderPath }) => {
           name={item.name}
           type={item.type}
           size={item.size}
+          openExternal={extensionsToOpenInJupyterHub.includes(
+            item.name.split('.').pop()
+          )}
           onClick={() => handleItemClick(item)}
         />
       ))}
