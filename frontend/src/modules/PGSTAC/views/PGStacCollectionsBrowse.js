@@ -15,7 +15,7 @@ import { StacCollectionListItem } from 'modules/EODAG/components/StacCollectionL
 import { useGetCollectionsResponseQuery } from '../services/pgStacApi.ts';
 import { nameFilterFunc } from 'modules/EODAG/services/stacUtils.ts';
 import { useDispatch } from 'globalErrors';
-import { useHandleError } from 'modules/EODAG/utils/utils.js';
+import { useHandleError } from 'utils/utils.js';
 
 function PGStacCollectionPageHeader() {
   return (

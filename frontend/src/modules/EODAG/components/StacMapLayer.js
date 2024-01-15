@@ -4,7 +4,7 @@ import { default as createStacObject } from 'stac-js';
 import { stacGeometryLayer } from '../utils/stacLayer/stacLayer.js';
 import { useGetItemAssetTileJsonQuery } from 'modules/PGSTAC/services/titilerApi.ts';
 import { useDispatch } from 'globalErrors';
-import { useHandleError } from '../utils/utils.js';
+import { useHandleError } from 'utils/utils.js';
 
 export const StacGeometryLayer = memo(
   ({

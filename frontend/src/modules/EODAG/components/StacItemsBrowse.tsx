@@ -20,7 +20,7 @@ import {
 } from '../../PGSTAC/services/pgStacApi.ts';
 import { formatPayload } from '../services/stacUtils.ts';
 import { useDispatch } from 'globalErrors';
-import { useHandleError } from '../utils/utils.js';
+import { useHandleError } from '../../../utils/utils.js';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { DateRangePicker } from './DateTimeRangePicker.js';
 import React, { useEffect, useState } from 'react';

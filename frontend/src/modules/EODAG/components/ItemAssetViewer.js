@@ -19,7 +19,7 @@ import { MapContainer, ZoomControl, TileLayer } from 'react-leaflet';
 import { StacGeometryLayer, ItemTitilerLayer } from './StacMapLayer.js';
 import { useGetItemAssetsInfoQuery } from 'modules/PGSTAC/services/titilerApi.ts';
 import { useDispatch } from 'globalErrors';
-import { useHandleError } from '../utils/utils.js';
+import { useHandleError } from 'utils/utils.js';
 import { LeafletControl } from './LeafletControl.tsx';
 // import { LeafletControlWrapper } from './LeafletControlWrapper.js';
 // import L from 'leaflet';
