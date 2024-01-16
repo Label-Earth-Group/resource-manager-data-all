@@ -59,6 +59,7 @@ export class SAMGeo extends SAM {
     );
     // 图片像素坐标转经纬度坐标;
     // 图表像素坐标->墨卡托->经纬度
+    // polygon: {type: "Feature", properties: {value: undefined}, geometry: {type: 'MultiPolygon', coordinates: Array(1):array(11):array(2)}}
     return {
       type: 'FeatureCollection',
       features: [polygon]

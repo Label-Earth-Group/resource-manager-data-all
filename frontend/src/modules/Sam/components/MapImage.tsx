@@ -117,6 +117,9 @@ const MapImage = () => {
 
   // 点击生成 embedding=》获取当前地图的范围生成图片=》将图片保存到samInfo.samModel中=》获取这个图片的embedding并保存到samInfo.samModel中
   const generateEmbedding = async () => {
+    if (samState.polygonLayer) {
+      samState.polygonLayer.clearLayers();
+    }
     console.log('started');
     setSamState((pre) => ({ ...pre, loading: true }));
     setBounds(samState.map.getBounds());
@@ -252,9 +255,10 @@ const MapImage = () => {
           if (hasData) {
             return { ...pre };
           }
+          // satelliteData: [...pre.satelliteData, newData]
           return {
             ...pre,
-            satelliteData: [...pre.satelliteData, newData]
+            satelliteData: [newData]
           };
         });
       });
