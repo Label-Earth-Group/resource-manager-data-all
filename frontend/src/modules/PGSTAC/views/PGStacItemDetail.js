@@ -55,7 +55,7 @@ function StacItemViewPageHeader(props) {
             component={RouterLink}
             to="/console/repository"
           >
-            Collections
+            Products
           </Link>
           <Link
             to={`/console/repository/collections/${collectionID}`}

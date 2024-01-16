@@ -38,7 +38,7 @@ function PGStacCollectionPageHeader() {
             Repository
           </Link>
           <Link underline="hover" color="textPrimary" variant="subtitle2">
-            Collections
+            Products
           </Link>
         </Breadcrumbs>
       </Grid>

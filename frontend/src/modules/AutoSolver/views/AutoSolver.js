@@ -1,6 +1,14 @@
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 
-import { Box, Container, Card, Button } from '@mui/material';
+import {
+  Box,
+  Container,
+  Card,
+  Button,
+  Grid,
+  TextField,
+  Typography
+} from '@mui/material';
 import { useSettings } from 'design';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -73,14 +81,43 @@ const AutoSolver = () => {
       >
         <Container maxWidth={settings.compact ? 'xl' : false}>
           <Box sx={{ mb: 2 }}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                fetchStreamApi(testTaskData);
-              }}
-            >
-              Query
-            </Button>
+            <Grid container rowSpacing={2}>
+              <Grid item lg={2}>
+                <Typography color="textSecondary">Task detail</Typography>
+              </Grid>
+              <Grid item lg={10}>
+                <TextField
+                  multiline
+                  sx={{ width: '100%' }}
+                  minRows={2}
+                  value={testTaskData.task}
+                ></TextField>
+              </Grid>
+              <Grid item lg={2}>
+                <Typography color="textSecondary">
+                  Data location and description <br />
+                  (one line per data)
+                </Typography>
+              </Grid>
+              <Grid item lg={10}>
+                <TextField
+                  multiline
+                  minRows={2}
+                  sx={{ width: '100%' }}
+                  value={testTaskData.data_locations.join('\n')}
+                ></TextField>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    fetchStreamApi(testTaskData);
+                  }}
+                >
+                  Query
+                </Button>
+              </Grid>
+            </Grid>
           </Box>
           {chunks.map((c, index) => (
             <Card key={`step-${index}`} sx={{ mb: 2, p: 2 }}>

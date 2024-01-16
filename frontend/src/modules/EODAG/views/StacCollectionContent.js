@@ -41,7 +41,7 @@ function StacCollectionViewPageHeader(props) {
           sx={{ mt: 1 }}
         >
           <Link underline="hover" color="textPrimary" variant="subtitle2">
-            Images
+            ImageHub
           </Link>
           <Link
             underline="hover"

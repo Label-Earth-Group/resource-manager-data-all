@@ -38,14 +38,14 @@ import { repo } from 'utils/constants';
 export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
   const getSections = (isAdvancedMode) => {
     const eodagSection = {
-      title: 'EODAG',
+      title: 'Public datasets',
       path: '/console/eodag',
       icon: <Public size={15} />,
       active: true
     };
 
     const eodagSearchSection = {
-      title: 'Search',
+      title: 'Search image',
       path: '/console/eodag/search',
       icon: <Search size={15} />,
       active: true
@@ -59,7 +59,7 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
     };
 
     const datasetsSection = {
-      title: 'Collections',
+      title: 'Datasets',
       path: '/console/repository',
       icon: <Dataset size={15} />,
       active: true
@@ -136,7 +136,7 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
     };
 
     const autoSolverSection = {
-      title: 'AutoSolver',
+      title: 'GeoCopilot',
       path: '/console/autosolver',
       icon: <Psychology size={15} />,
       active: true
@@ -159,7 +159,7 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
     if (isAdvancedMode) {
       sections = [
         {
-          title: 'External',
+          title: 'Earth Open Data',
           items: [
             eodagSection,
             eodagSearchSection,
@@ -168,7 +168,7 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
           ]
         },
         {
-          title: 'Repository',
+          title: 'My repository',
           items: [datasetsSection, assetSection, sharesSection]
         },
         {
@@ -192,11 +192,11 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
     } else {
       sections = [
         {
-          title: 'External',
+          title: 'Earth Open Data',
           items: [eodagSection, eodagSearchSection, catalogSection]
         },
         {
-          title: 'Repository',
+          title: 'My repository',
           items: [datasetsSection, assetSection, sharesSection]
         },
         {

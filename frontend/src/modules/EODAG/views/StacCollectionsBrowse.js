@@ -43,7 +43,7 @@ function StacCollectionPageHeader() {
           sx={{ mt: 1 }}
         >
           <Link underline="hover" color="textPrimary" variant="subtitle2">
-            External
+            ImageHub
           </Link>
           <Link
             underline="hover"
