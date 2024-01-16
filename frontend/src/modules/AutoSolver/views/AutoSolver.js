@@ -47,9 +47,11 @@ const CustomMarkDown = ({ content }) => {
     }
   };
   return (
-    <Typography component="div">
-      <Markdown components={markdownComponent}>{content}</Markdown>
-    </Typography>
+    <Card sx={{ p: 2, mt: 2 }}>
+      <Typography component="div" color="textPrimary">
+        <Markdown components={markdownComponent}>{content}</Markdown>
+      </Typography>
+    </Card>
   );
 };
 
@@ -303,7 +305,12 @@ const AutoSolver = () => {
           ))}
           <CustomMarkDown content={graphCode} />
           {graphHTML && (
-            <span dangerouslySetInnerHTML={{ __html: graphHTML }}></span>
+            <iframe
+              width={'100%'}
+              height={800}
+              title="Solution code"
+              srcDoc={graphHTML}
+            ></iframe>
           )}
           <CustomMarkDown content={operationCode} />
         </Container>
