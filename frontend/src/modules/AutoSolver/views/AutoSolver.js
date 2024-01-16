@@ -1,4 +1,4 @@
-import { fetchEventSource } from '@microsoft/fetch-event-source';
+// import { fetchEventSource } from '@microsoft/fetch-event-source';
 
 import {
   Box,
@@ -6,14 +6,18 @@ import {
   Card,
   Button,
   Grid,
+  Link,
   TextField,
   Typography
 } from '@mui/material';
 import { useSettings } from 'design';
 import { useEffect, useState, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
+import axios from 'axios';
+import Markdown from 'react-markdown';
 
-const solverApi = 'http://54.212.38.192:8086/stream_suite';
+//const solverApi = 'http://54.212.38.192:8086/stream_suite';
+const solverURL = 'http://54.213.71.82:8000'; //the address of the server started from code synced from LabelEarth/LLM-Geo
 
 const testTaskData = {
   task_name: 'test',
@@ -25,6 +29,30 @@ const testTaskData = {
   ]
 };
 
+const CustomMarkDown = ({ content }) => {
+  const markdownComponent = {
+    a: (props) => {
+      const { children, node, href, title, ...rest } = props;
+      return (
+        <Link
+          href={href}
+          target="_blank"
+          rel="noreferrer"
+          title={title}
+          {...rest}
+        >
+          {children}
+        </Link>
+      );
+    }
+  };
+  return (
+    <Typography component="div">
+      <Markdown components={markdownComponent}>{content}</Markdown>
+    </Typography>
+  );
+};
+
 const AutoSolver = () => {
   const settings = useSettings();
   const [taskData, setTaskData] = useState({
@@ -33,6 +61,14 @@ const AutoSolver = () => {
     data_locations: []
   });
   const [chunks, setChunks] = useState([]);
+  const [session, setSession] = useState(null);
+  console.log('current session', session);
+  const [eventSourceInstance, setEventSourceInstance] = useState(null);
+  console.log(eventSourceInstance);
+  const [graphHTML, setGraphHTML] = useState('');
+
+  const [graphCode, setGraphCode] = useState('');
+  const [operationCode, setOperationCode] = useState('');
 
   const updateTaskDetail = (taskDetail) => {
     setTaskData((taskData) => {
@@ -46,37 +82,96 @@ const AutoSolver = () => {
     });
   };
 
-  const appendChunkFromMessage = (content) => {
-    setChunks((c) => [...c, content]);
-  };
+  // const appendChunkFromMessage = (content) => {
+  //   setChunks((c) => [...c, content]);
+  // };
 
   const ctrl = new AbortController();
 
+  // const fetchStreamApi = async (taskData) => {
+  //   setChunks([]);
+  //   await fetchEventSource(solverApi, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Cache-Control': 'no-cache',
+  //       Connection: 'Keep-Alive'
+  //     },
+  //     body: JSON.stringify(taskData),
+  //     signal: ctrl.signal,
+  //     openWhenHidden: true,
+  //     onmessage: (msg) => {
+  //       appendChunkFromMessage(msg.data);
+  //     },
+  //     onerror: (err) => {
+  //       throw err;
+  //     },
+  //     onclose: () => {
+  //       console.info('Server closed');
+  //     }
+  //   });
+  // };
   const fetchStreamApi = async (taskData) => {
-    setChunks([]);
-    await fetchEventSource(solverApi, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache',
-        Connection: 'Keep-Alive'
-      },
-      body: JSON.stringify(taskData),
-      signal: ctrl.signal,
-      openWhenHidden: true,
-      onmessage: (msg) => {
-        appendChunkFromMessage(msg.data);
-      },
-      onerror: (err) => {
-        throw err;
-      },
-      onclose: () => {
-        console.info('Server closed');
-      }
+    const response = await axios.post(
+      `${solverURL}/generate_session`,
+      taskData
+    );
+    setSession(response.data?.session_id);
+  };
+
+  const getGraphCode = async () => {
+    const eventSource = new EventSource(
+      `${solverURL}/${session}/get_graph_code`
+    );
+    eventSource.onmessage = function (event) {
+      setGraphCode((prev) => prev + event.data);
+      console.log('New message:', event.data);
+    };
+
+    eventSource.onerror = function (error) {
+      console.error('EventSource failed:', error);
+      eventSource.close();
+    };
+    eventSource.addEventListener('close', (event) => {
+      console.log('Server closed the stream');
+      eventSource.close();
     });
+    setEventSourceInstance(eventSource);
+  };
+
+  const getGraphHTML = async () => {
+    try {
+      const response = await axios.get(
+        `${solverURL}/${session}/get_graph_html`
+      );
+      setGraphHTML(response.data);
+    } catch (error) {
+      console.error('Error fetching HTML:', error);
+    }
+  };
+
+  const getOperationCode = async () => {
+    const eventSource = new EventSource(
+      `${solverURL}/${session}/get_operation_code`
+    );
+    eventSource.onmessage = function (event) {
+      setOperationCode((prev) => prev + event.data);
+      console.log('New message:', event.data);
+    };
+
+    eventSource.onerror = function (error) {
+      console.error('EventSource failed:', error);
+      eventSource.close();
+    };
+    eventSource.addEventListener('close', (event) => {
+      console.log('Server closed the stream');
+      eventSource.close();
+    });
+    setEventSourceInstance(eventSource);
   };
 
   const reset = useCallback(() => {
+    eventSourceInstance.close();
     ctrl.abort();
     setChunks([]);
   }, []);
@@ -168,6 +263,36 @@ const AutoSolver = () => {
                 >
                   Reset
                 </Button>
+                <Button
+                  sx={{ ml: 2 }}
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => {
+                    getGraphCode();
+                  }}
+                >
+                  getGraphCode
+                </Button>
+                <Button
+                  sx={{ ml: 2 }}
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => {
+                    getGraphHTML();
+                  }}
+                >
+                  getGraphHTML
+                </Button>
+                <Button
+                  sx={{ ml: 2 }}
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => {
+                    getOperationCode();
+                  }}
+                >
+                  getOperationCode
+                </Button>
               </Grid>
             </Grid>
           </Box>
@@ -176,6 +301,11 @@ const AutoSolver = () => {
               <Typography>{c}</Typography>
             </Card>
           ))}
+          <CustomMarkDown content={graphCode} />
+          {graphHTML && (
+            <span dangerouslySetInnerHTML={{ __html: graphHTML }}></span>
+          )}
+          <CustomMarkDown content={operationCode} />
         </Container>
       </Box>
     </>

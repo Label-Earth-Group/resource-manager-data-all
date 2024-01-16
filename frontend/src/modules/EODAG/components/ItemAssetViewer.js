@@ -205,7 +205,7 @@ function DisplaySettings(props) {
               setSelectedBand={setChanelBand('Grey')}
             ></BandSelect>
           ) : (
-            <Box display={'block'} flexDirection={'row'}>
+            <Box display="block" flexDirection="row">
               {['Red', 'Green', 'Blue'].map((chanel) => (
                 <BandSelect
                   {...props}

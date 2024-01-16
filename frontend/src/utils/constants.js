@@ -27,6 +27,6 @@ export const AwsRegions = [
 ];
 
 export const repo = {
-  owner: 'gladcolor',
+  owner: 'Label-Earth-Group',
   repo: 'LLM-Geo'
 };
