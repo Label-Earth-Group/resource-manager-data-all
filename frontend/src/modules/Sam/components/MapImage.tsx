@@ -1,8 +1,8 @@
 // @ts-ignore
 // import npyjs from 'npyjs';
 import React, { useEffect, useState } from 'react';
-import L, { LatLngBounds } from 'leaflet';
-import { Button, Backdrop, CircularProgress } from '@mui/material';
+import L, { LatLngBounds, GeoJSON } from 'leaflet';
+import { Button, Backdrop, CircularProgress, Grid } from '@mui/material';
 // import L from 'leaflet';
 import 'leaflet.chinatmsproviders';
 import { ISamState } from '../helpers/Interfaces';
@@ -19,6 +19,7 @@ const initState = {
   mapClick: null,
   loading: false,
   polygonLayer: null,
+  boxLayer: null,
   eventType: 'click',
   collapsed: true,
   satelliteData: []
@@ -117,19 +118,63 @@ const MapImage = () => {
 
   // 点击生成 embedding=》获取当前地图的范围生成图片=》将图片保存到samInfo.samModel中=》获取这个图片的embedding并保存到samInfo.samModel中
   const generateEmbedding = async () => {
+    // 每次清除多边形图层的内容
     if (samState.polygonLayer) {
       samState.polygonLayer.clearLayers();
     }
+
+    //每次清除地图边缘框
+    if (samState.boxLayer) {
+      samState.boxLayer.clearLayers();
+    }
+
     console.log('started');
     setSamState((pre) => ({ ...pre, loading: true }));
     setBounds(samState.map.getBounds());
     setZoom(samState.map.getZoom());
 
+    // 生成一个矩形的geojson，标识当前地图的范围
+    const boundPolygon: GeoJSON.FeatureCollection = {
+      type: 'FeatureCollection',
+      features: [
+        {
+          geometry: {
+            type: 'MultiPolygon',
+            coordinates: [
+              [
+                [
+                  [bounds.getSouthWest().lng, bounds.getNorthEast().lat],
+                  [bounds.getSouthWest().lng, bounds.getSouthWest().lat],
+                  [bounds.getNorthEast().lng, bounds.getSouthWest().lat],
+                  [bounds.getNorthEast().lng, bounds.getNorthEast().lat]
+                ]
+              ]
+            ]
+          },
+          properties: { value: undefined },
+          type: 'Feature'
+        }
+      ]
+    };
+    if (samState.boxLayer) {
+      samState.boxLayer.addData(boundPolygon);
+    } else {
+      const boxLayer = L.geoJSON(boundPolygon, {
+        style: { color: 'red', fillOpacity: 0 }
+      }).addTo(map);
+
+      setSamState((pre) => ({
+        ...pre,
+        boxLayer: boxLayer
+      }));
+    }
+
+    // 生成图片
     if (bounds && zoom && samState.map) {
       var sw = samState.map.project(bounds.getSouthWest(), zoom);
       var ne = samState.map.project(bounds.getNorthEast(), zoom);
       const tileSize = 256;
-
+      console.log('sw', bounds.getSouthWest());
       var tileBounds = L.bounds(
         sw.divideBy(tileSize).floor(),
         ne.divideBy(tileSize).floor()
@@ -289,17 +334,42 @@ const MapImage = () => {
         type: 'FeatureCollection',
         features: newFeature.flat()
       };
+      console.log('newPolygon', newPolygon);
       samState.polygonLayer.addData(newPolygon);
     }
   }, [samState.polygonLayer, samState.satelliteData]);
   console.log('loading', samState.loading);
 
+  // 清除地图上的多边形图层
+  const clearMap = () => {
+    if (samState.polygonLayer) {
+      samState.polygonLayer.clearLayers();
+    }
+    setSamState((pre) => ({
+      ...pre,
+      satelliteData: []
+    }));
+  };
+
   return (
     <>
       <LeafletControl position={'topleft'}>
-        <Button variant="contained" color="primary" onClick={generateEmbedding}>
-          Generate embedding
-        </Button>
+        <Grid container spacing={2} justifyContent="center">
+          <Grid item xs={12}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={generateEmbedding}
+            >
+              Generate embedding
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Button variant="contained" color="primary" onClick={clearMap}>
+              Clear
+            </Button>
+          </Grid>
+        </Grid>
       </LeafletControl>
       <ZoomControl position="topright" />
       <Backdrop sx={{ color: '#fff', zIndex: 3000 }} open={samState.loading}>

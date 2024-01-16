@@ -42,6 +42,7 @@ export interface ISamState {
   mapClick: any;
   loading: boolean;
   polygonLayer: L.GeoJSON;
+  boxLayer: L.GeoJSON;
   eventType: string;
   collapsed: boolean;
   satelliteData: SatelliteData[];
