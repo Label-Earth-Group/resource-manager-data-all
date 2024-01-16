@@ -10,23 +10,40 @@ import {
   Typography
 } from '@mui/material';
 import { useSettings } from 'design';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 const solverApi = 'http://54.212.38.192:8084/stream_suite';
 
+const testTaskData = {
+  task_name: 'test',
+  task: '1) Find out Census tracts that contain hazardous waste facilities, then comppute and print out the population living in those tracts. The study area is North Carolina (NC), US. 2) Generate a population choropleth map for all tract polygons in NC, rendering the color by population; and then highlight the borders of tracts that have hazardous waste facilities. Please draw all polygons, not only the highlighted ones. The map size is 15*10 inches.',
+  data_locations: [
+    'NC hazardous waste facility ESRI shape file: https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/HW_Sites_EPSG4326.zip.',
+    "NC tract boundary shapefile: https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/tract_37_EPSG4326.zip. The tract ID column is 'GEOID', data types is integer.",
+    "NC tract population CSV file: https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/NC_tract_population.csv. The population is stored in 'TotalPopulation' column. The tract ID column is 'GEOID', data types is integer."
+  ]
+};
+
 const AutoSolver = () => {
   const settings = useSettings();
+  const [taskData, setTaskData] = useState({
+    task_name: 'test',
+    task: '',
+    data_locations: []
+  });
   const [chunks, setChunks] = useState([]);
 
-  const testTaskData = {
-    task_name: 'test',
-    task: '1) Find out Census tracts that contain hazardous waste facilities, then comppute and print out the population living in those tracts. The study area is North Carolina (NC), US. 2) Generate a population choropleth map for all tract polygons in NC, rendering the color by population; and then highlight the borders of tracts that have hazardous waste facilities. Please draw all polygons, not only the highlighted ones. The map size is 15*10 inches.',
-    data_locations: [
-      'NC hazardous waste facility ESRI shape file: https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/HW_Sites_EPSG4326.zip.',
-      "NC tract boundary shapefile: https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/tract_37_EPSG4326.zip. The tract ID column is 'GEOID', data types is integer.",
-      "NC tract population CSV file: https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/NC_tract_population.csv. The population is stored in 'TotalPopulation' column. The tract ID column is 'GEOID', data types is integer."
-    ]
+  const updateTaskDetail = (taskDetail) => {
+    setTaskData((taskData) => {
+      return { ...taskData, task: taskDetail };
+    });
+  };
+
+  const updateTaskDataLocations = (locations) => {
+    setTaskData((taskData) => {
+      return { ...taskData, data_locations: locations.split('\n') };
+    });
   };
 
   const appendChunkFromMessage = (content) => {
@@ -67,6 +84,10 @@ const AutoSolver = () => {
     }
   };
 
+  useEffect(() => {
+    setTaskData(testTaskData);
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -90,7 +111,10 @@ const AutoSolver = () => {
                   multiline
                   sx={{ width: '100%' }}
                   minRows={2}
-                  value={testTaskData.task}
+                  value={taskData.task}
+                  onChange={(e) => {
+                    updateTaskDetail(e.target.value);
+                  }}
                 ></TextField>
               </Grid>
               <Grid item lg={2}>
@@ -104,14 +128,17 @@ const AutoSolver = () => {
                   multiline
                   minRows={2}
                   sx={{ width: '100%' }}
-                  value={testTaskData.data_locations.join('\n')}
+                  value={taskData.data_locations.join('\n')}
+                  onChange={(e) => {
+                    updateTaskDataLocations(e.target.value);
+                  }}
                 ></TextField>
               </Grid>
               <Grid item>
                 <Button
                   variant="contained"
                   onClick={() => {
-                    fetchStreamApi(testTaskData);
+                    fetchStreamApi(taskData);
                   }}
                 >
                   Query
