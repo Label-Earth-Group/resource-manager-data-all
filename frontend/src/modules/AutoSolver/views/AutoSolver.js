@@ -1,5 +1,3 @@
-// import { fetchEventSource } from '@microsoft/fetch-event-source';
-
 import {
   Box,
   Container,
@@ -62,7 +60,6 @@ const AutoSolver = () => {
     task: '',
     data_locations: []
   });
-  const [chunks, setChunks] = useState([]);
   const [session, setSession] = useState(null);
   console.log('current session', session);
   const [eventSourceInstance, setEventSourceInstance] = useState(null);
@@ -84,35 +81,6 @@ const AutoSolver = () => {
     });
   };
 
-  // const appendChunkFromMessage = (content) => {
-  //   setChunks((c) => [...c, content]);
-  // };
-
-  const ctrl = new AbortController();
-
-  // const fetchStreamApi = async (taskData) => {
-  //   setChunks([]);
-  //   await fetchEventSource(solverApi, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Cache-Control': 'no-cache',
-  //       Connection: 'Keep-Alive'
-  //     },
-  //     body: JSON.stringify(taskData),
-  //     signal: ctrl.signal,
-  //     openWhenHidden: true,
-  //     onmessage: (msg) => {
-  //       appendChunkFromMessage(msg.data);
-  //     },
-  //     onerror: (err) => {
-  //       throw err;
-  //     },
-  //     onclose: () => {
-  //       console.info('Server closed');
-  //     }
-  //   });
-  // };
   const fetchStreamApi = async (taskData) => {
     const response = await axios.post(
       `${solverURL}/generate_session`,
@@ -173,9 +141,11 @@ const AutoSolver = () => {
   };
 
   const reset = useCallback(() => {
-    eventSourceInstance.close();
-    ctrl.abort();
-    setChunks([]);
+    eventSourceInstance?.close();
+    setSession(null);
+    setGraphCode('');
+    setGraphHTML('');
+    setOperationCode('');
   }, []);
 
   // const renderMessage = (content) => {
@@ -268,6 +238,7 @@ const AutoSolver = () => {
                 <Button
                   sx={{ ml: 2 }}
                   variant="contained"
+                  disabled={!Boolean(session)}
                   color="secondary"
                   onClick={() => {
                     getGraphCode();
@@ -279,6 +250,7 @@ const AutoSolver = () => {
                   sx={{ ml: 2 }}
                   variant="contained"
                   color="secondary"
+                  disabled={!Boolean(session)}
                   onClick={() => {
                     getGraphHTML();
                   }}
@@ -289,6 +261,7 @@ const AutoSolver = () => {
                   sx={{ ml: 2 }}
                   variant="contained"
                   color="secondary"
+                  disabled={!Boolean(session)}
                   onClick={() => {
                     getOperationCode();
                   }}
@@ -298,12 +271,7 @@ const AutoSolver = () => {
               </Grid>
             </Grid>
           </Box>
-          {chunks.map((c, index) => (
-            <Card key={`step-${index}`} sx={{ mb: 2, p: 2 }}>
-              <Typography>{c}</Typography>
-            </Card>
-          ))}
-          <CustomMarkDown content={graphCode} />
+          {graphCode && <CustomMarkDown content={graphCode} />}
           {graphHTML && (
             <iframe
               width={'100%'}
@@ -312,7 +280,7 @@ const AutoSolver = () => {
               srcDoc={graphHTML}
             ></iframe>
           )}
-          <CustomMarkDown content={operationCode} />
+          {operationCode && <CustomMarkDown content={operationCode} />}
         </Container>
       </Box>
     </>
