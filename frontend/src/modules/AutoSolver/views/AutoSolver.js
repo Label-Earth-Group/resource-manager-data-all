@@ -10,10 +10,10 @@ import {
   Typography
 } from '@mui/material';
 import { useSettings } from 'design';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 
-const solverApi = 'http://54.212.38.192:8084/stream_suite';
+const solverApi = 'http://54.212.38.192:8086/stream_suite';
 
 const testTaskData = {
   task_name: 'test',
@@ -49,6 +49,7 @@ const AutoSolver = () => {
   const appendChunkFromMessage = (content) => {
     setChunks((c) => [...c, content]);
   };
+
   const ctrl = new AbortController();
 
   const fetchStreamApi = async (taskData) => {
@@ -56,33 +57,47 @@ const AutoSolver = () => {
     await fetchEventSource(solverApi, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache',
+        Connection: 'Keep-Alive'
       },
       body: JSON.stringify(taskData),
       signal: ctrl.signal,
+      openWhenHidden: true,
       onmessage: (msg) => {
-        appendChunkFromMessage(JSON.parse(msg.data));
+        appendChunkFromMessage(msg.data);
+      },
+      onerror: (err) => {
+        throw err;
+      },
+      onclose: () => {
+        console.info('Server closed');
       }
     });
   };
 
-  const renderMessage = (content) => {
-    switch (content.type) {
-      case 'html':
-        return (
-          <iframe
-            srcDoc={content.data}
-            width="100%"
-            height={800}
-            title="Web frame"
-          />
-        );
-      case 'image':
-        return <img src={content.data} alt="Rendered content" />;
-      default:
-        return <pre>{content.data}</pre>;
-    }
-  };
+  const reset = useCallback(() => {
+    ctrl.abort();
+    setChunks([]);
+  }, []);
+
+  // const renderMessage = (content) => {
+  //   switch (content.type) {
+  //     case 'html':
+  //       return (
+  //         <iframe
+  //           srcDoc={content.data}
+  //           width="100%"
+  //           height={800}
+  //           title="Web frame"
+  //         />
+  //       );
+  //     case 'image':
+  //       return <img src={content.data} alt="Rendered content" />;
+  //     default:
+  //       return <pre>{content.data}</pre>;
+  //   }
+  // };
 
   useEffect(() => {
     setTaskData(testTaskData);
@@ -143,12 +158,22 @@ const AutoSolver = () => {
                 >
                   Query
                 </Button>
+                <Button
+                  sx={{ ml: 2 }}
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => {
+                    reset();
+                  }}
+                >
+                  Reset
+                </Button>
               </Grid>
             </Grid>
           </Box>
           {chunks.map((c, index) => (
             <Card key={`step-${index}`} sx={{ mb: 2, p: 2 }}>
-              {renderMessage(c)}
+              <Typography>{c}</Typography>
             </Card>
           ))}
         </Container>
