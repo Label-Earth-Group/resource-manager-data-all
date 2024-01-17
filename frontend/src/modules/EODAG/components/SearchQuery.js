@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, Typography } from '@mui/material';
+import { Box, Button, FormControl, Typography, TextField } from '@mui/material';
 import { DateRangePicker } from './DateTimeRangePicker.js';
 import { MultiSelectInput } from '../components/MultipleSelect';
 import { QuaryableFilters } from './QueryableFilters.js';
@@ -12,7 +12,9 @@ export const SearchQuery = (props) => {
     selectedCollections,
     setSelectedCollections,
     triggerSearch,
-    triggerReset
+    triggerReset,
+    triggerPilot,
+    pilotError
   } = props;
 
   return (
@@ -30,6 +32,26 @@ export const SearchQuery = (props) => {
           Reset
         </Button>
       </Box>
+      <Box sx={{ mb: 2 }}>
+        <Typography variant="h6">AI-powered spatial/temporal search</Typography>
+      </Box>
+      <Box sx={{ mb: 2 }}>
+        <TextField
+          fullWidth
+          label="Describe 'where' and 'when', press 'Enter' to input"
+          onKeyUp={(e) => {
+            e.preventDefault();
+            if (e.key === 'Enter') {
+              triggerPilot(e.target.value);
+            }
+          }}
+        ></TextField>
+      </Box>
+      {pilotError && (
+        <Box sx={{ mb: 2 }}>
+          <Typography color="error">{pilotError}</Typography>
+        </Box>
+      )}
       <Box sx={{ mb: 2 }}>
         <Typography variant="h6">Date Range</Typography>
       </Box>

@@ -95,6 +95,7 @@ const StacSearch = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [highlightedItems, setHighlightedItems] = useState([]);
+  const [pilotError, setPilotError] = useState('');
   const searchPayload: SearchPayload = {
     page: currentPage,
     limit: PAGESIZE,
@@ -144,6 +145,11 @@ const StacSearch = () => {
     setEndDate(null);
     setCurrentPage(1);
     setSearchResponse(null);
+  };
+
+  const handlePilot = (prompt) => {
+    console.info(prompt);
+    setPilotError('returned');
   };
 
   // // Pay attention to the order of handling different situations
@@ -244,6 +250,8 @@ const StacSearch = () => {
                     setEndDate={setEndDate}
                     triggerSearch={handleSearchItems}
                     triggerReset={handleReset}
+                    triggerPilot={handlePilot}
+                    pilotError={pilotError}
                     selectedCollections={selectedCollections}
                     setSelectedCollections={setSelectedCollections}
                     setCurrentPage={setCurrentPage}
