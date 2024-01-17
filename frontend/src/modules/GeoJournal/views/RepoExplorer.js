@@ -40,7 +40,7 @@ function generateNBGitPullerLink(
   filepath = null,
   branchName = 'master'
 ) {
-  const jupyterHubURL = 'http://54.184.95.98';
+  const jupyterHubURL = 'http://54.201.12.37';
   const repoUrl = `https://github.com/${owner}/${repo}`;
 
   const params = new URLSearchParams({

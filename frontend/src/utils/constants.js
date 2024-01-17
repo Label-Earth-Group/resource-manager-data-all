@@ -28,5 +28,5 @@ export const AwsRegions = [
 
 export const repo = {
   owner: 'Label-Earth-Group',
-  repo: 'LLM-Geo'
+  repo: 'geospatial-usecase'
 };
