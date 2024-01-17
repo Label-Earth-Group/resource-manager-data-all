@@ -13,9 +13,11 @@ import { useEffect, useState, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
 import Markdown from 'react-markdown';
+import { useEventSource } from '../services/useEventSource';
+import StopCircleOutlinedIcon from '@mui/icons-material/StopCircleOutlined';
 
 //const solverApi = 'http://54.212.38.192:8086/stream_suite';
-const solverURL = 'http://54.213.71.82:8000'; //the address of the server started from code synced from LabelEarth/LLM-Geo
+const solverURL = 'http://10.168.34.61:8081'; //the address of the server started from code synced from LabelEarth/LLM-Geo
 
 const testTaskData = {
   task_name: 'test',
@@ -45,7 +47,7 @@ const CustomMarkDown = ({ content }) => {
     }
   };
   return (
-    <Card sx={{ p: 2, mt: 2 }}>
+    <Card sx={{ p: 2, mt: 2, overflowX: 'scroll' }}>
       <Typography component="div" color="textPrimary">
         <Markdown components={markdownComponent}>{content}</Markdown>
       </Typography>
@@ -62,12 +64,15 @@ const AutoSolver = () => {
   });
   const [session, setSession] = useState(null);
   console.log('current session', session);
-  const [eventSourceInstance, setEventSourceInstance] = useState(null);
-  console.log(eventSourceInstance);
-  const [graphHTML, setGraphHTML] = useState('');
+  const [onGoingEventSource, setOnGoingEventSource] = useState(null);
+  console.log('active', Boolean(onGoingEventSource));
 
   const [graphCode, setGraphCode] = useState('');
+  const [graphHTML, setGraphHTML] = useState('');
   const [operationCode, setOperationCode] = useState('');
+  const [assemblyCode, setAssemblyCode] = useState('');
+  const [finalOutputFiles, setFinalOutputFiles] = useState('');
+  console.log(finalOutputFiles);
 
   const updateTaskDetail = (taskDetail) => {
     setTaskData((taskData) => {
@@ -81,7 +86,21 @@ const AutoSolver = () => {
     });
   };
 
-  const fetchStreamApi = async (taskData) => {
+  useEffect(() => {
+    setTaskData(testTaskData);
+  }, []);
+
+  // a cleanup mechanism for EventSource when the component unmounts
+  useEffect(() => {
+    return () => {
+      if (onGoingEventSource) {
+        onGoingEventSource.close();
+        setOnGoingEventSource(null);
+      }
+    };
+  }, []);
+
+  const registerSession = async (taskData) => {
     const response = await axios.post(
       `${solverURL}/generate_session`,
       taskData
@@ -89,25 +108,15 @@ const AutoSolver = () => {
     setSession(response.data?.session_id);
   };
 
-  const getGraphCode = async () => {
-    const eventSource = new EventSource(
-      `${solverURL}/${session}/get_graph_code`
-    );
-    eventSource.onmessage = function (event) {
-      setGraphCode((prev) => prev + event.data);
-      console.log('New message:', event.data);
-    };
-
-    eventSource.onerror = function (error) {
-      console.error('EventSource failed:', error);
-      eventSource.close();
-    };
-    eventSource.addEventListener('close', (event) => {
-      console.log('Server closed the stream');
-      eventSource.close();
+  const { startEventSource: getGraphCode, isFinished: graphCodeFinished } =
+    useEventSource({
+      url: `${session}/get_graph_code`,
+      onMessage: (data) => {
+        setGraphCode((prev) => prev + data);
+      },
+      onGoingEventSource,
+      setOnGoingEventSource
     });
-    setEventSourceInstance(eventSource);
-  };
 
   const getGraphHTML = async () => {
     try {
@@ -120,55 +129,56 @@ const AutoSolver = () => {
     }
   };
 
-  const getOperationCode = async () => {
-    const eventSource = new EventSource(
-      `${solverURL}/${session}/get_operation_code`
-    );
-    eventSource.onmessage = function (event) {
-      setOperationCode((prev) => prev + event.data);
-      console.log('New message:', event.data);
-    };
+  const {
+    startEventSource: getOperationCode,
+    isFinished: operationCodeFinished
+  } = useEventSource({
+    url: `${session}/get_operation_code`,
+    onMessage: (data) => {
+      setOperationCode((prev) => prev + data);
+    },
+    onGoingEventSource,
+    setOnGoingEventSource
+  });
 
-    eventSource.onerror = function (error) {
-      console.error('EventSource failed:', error);
-      eventSource.close();
-    };
-    eventSource.addEventListener('close', (event) => {
-      console.log('Server closed the stream');
-      eventSource.close();
-    });
-    setEventSourceInstance(eventSource);
+  const {
+    startEventSource: getAssemblyCode,
+    isFinished: assemblyCodeFinished
+  } = useEventSource({
+    url: `${session}/get_assembly_code`,
+    onMessage: (data) => {
+      setAssemblyCode((prev) => prev + data);
+    },
+    onGoingEventSource,
+    setOnGoingEventSource
+  });
+
+  const getFinalOutput = async () => {
+    try {
+      const response = await axios.get(
+        `${solverURL}/${session}/execute_complete_code`
+      );
+      console.log('final output', response);
+      setFinalOutputFiles(response.data);
+    } catch (error) {
+      console.error('Error fetching HTML:', error);
+    }
   };
 
   const reset = useCallback(() => {
-    eventSourceInstance?.close();
+    onGoingEventSource?.close();
+    setOnGoingEventSource(null);
     setSession(null);
     setGraphCode('');
     setGraphHTML('');
     setOperationCode('');
-  }, []);
+    setAssemblyCode('');
+  }, [onGoingEventSource]);
 
-  // const renderMessage = (content) => {
-  //   switch (content.type) {
-  //     case 'html':
-  //       return (
-  //         <iframe
-  //           srcDoc={content.data}
-  //           width="100%"
-  //           height={800}
-  //           title="Web frame"
-  //         />
-  //       );
-  //     case 'image':
-  //       return <img src={content.data} alt="Rendered content" />;
-  //     default:
-  //       return <pre>{content.data}</pre>;
-  //   }
-  // };
-
-  useEffect(() => {
-    setTaskData(testTaskData);
-  }, []);
+  const stopStream = useCallback(() => {
+    onGoingEventSource?.close();
+    setOnGoingEventSource(null);
+  }, [onGoingEventSource]);
 
   return (
     <>
@@ -220,7 +230,7 @@ const AutoSolver = () => {
                 <Button
                   variant="contained"
                   onClick={() => {
-                    fetchStreamApi(taskData);
+                    registerSession(taskData);
                   }}
                 >
                   Query
@@ -240,34 +250,74 @@ const AutoSolver = () => {
                   variant="contained"
                   disabled={!Boolean(session)}
                   color="secondary"
-                  onClick={() => {
-                    getGraphCode();
-                  }}
+                  onClick={getGraphCode}
                 >
                   getGraphCode
+                  {Boolean(onGoingEventSource) && (
+                    <StopCircleOutlinedIcon onClick={stopStream} />
+                  )}
                 </Button>
-                <Button
-                  sx={{ ml: 2 }}
-                  variant="contained"
-                  color="secondary"
-                  disabled={!Boolean(session)}
-                  onClick={() => {
-                    getGraphHTML();
-                  }}
-                >
-                  getGraphHTML
-                </Button>
-                <Button
-                  sx={{ ml: 2 }}
-                  variant="contained"
-                  color="secondary"
-                  disabled={!Boolean(session)}
-                  onClick={() => {
-                    getOperationCode();
-                  }}
-                >
-                  getOperationCode
-                </Button>
+                {graphCodeFinished && (
+                  <Button
+                    sx={{ ml: 2 }}
+                    variant="contained"
+                    color="secondary"
+                    disabled={!Boolean(session)}
+                    onClick={() => {
+                      getGraphHTML();
+                    }}
+                  >
+                    getGraphHTML
+                    {Boolean(onGoingEventSource) && (
+                      <StopCircleOutlinedIcon onClick={stopStream} />
+                    )}
+                  </Button>
+                )}
+                {graphCodeFinished && (
+                  <Button
+                    sx={{ ml: 2 }}
+                    variant="contained"
+                    color="secondary"
+                    disabled={!Boolean(session)}
+                    onClick={() => {
+                      getOperationCode();
+                    }}
+                  >
+                    getOperationCode
+                    {Boolean(onGoingEventSource) && (
+                      <StopCircleOutlinedIcon onClick={stopStream} />
+                    )}
+                  </Button>
+                )}
+                {operationCodeFinished && (
+                  <Button
+                    sx={{ ml: 2 }}
+                    variant="contained"
+                    color="secondary"
+                    disabled={!Boolean(session)}
+                    onClick={() => {
+                      getAssemblyCode();
+                    }}
+                  >
+                    getAssemblyCode
+                    {Boolean(onGoingEventSource) && (
+                      <StopCircleOutlinedIcon onClick={stopStream} />
+                    )}
+                  </Button>
+                )}
+                {assemblyCodeFinished && (
+                  <Button
+                    sx={{ ml: 2 }}
+                    variant="contained"
+                    color="secondary"
+                    disabled={!Boolean(session)}
+                    onClick={() => {
+                      getFinalOutput();
+                    }}
+                  >
+                    getFinalOutput
+                  </Button>
+                )}
               </Grid>
             </Grid>
           </Box>
@@ -281,6 +331,17 @@ const AutoSolver = () => {
             ></iframe>
           )}
           {operationCode && <CustomMarkDown content={operationCode} />}
+          {assemblyCode && <CustomMarkDown content={assemblyCode} />}
+          {finalOutputFiles &&
+            finalOutputFiles
+              .filter((filename) => /\.(png|jpg)$/i.test(filename))
+              .map((filename) => (
+                <img
+                  width={'100%'}
+                  alt="result"
+                  src={`${solverURL}/${session}/return_file?file_name=${filename}`}
+                ></img>
+              ))}
         </Container>
       </Box>
     </>
