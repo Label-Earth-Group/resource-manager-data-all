@@ -15,6 +15,7 @@ import {
   ArrowBackIos,
   ArrowForwardIos
 } from '@mui/icons-material';
+import axios from 'axios';
 import { useSettings } from 'design';
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -147,9 +148,24 @@ const StacSearch = () => {
     setSearchResponse(null);
   };
 
-  const handlePilot = (prompt) => {
-    console.info(prompt);
-    setPilotError('returned');
+  const aiSearchApi = 'http://54.212.38.192:8001';
+
+  const handlePilot = async (prompt) => {
+    setPilotError('');
+    try {
+      const response = await axios.get(aiSearchApi, {
+        params: {
+          prompt: prompt
+        }
+      });
+      const data = response.data;
+      if (data.bbox && data.datetime) {
+      } else {
+        setPilotError('Failed to understand. Maybe you can try it later.');
+      }
+    } catch (err) {
+      setPilotError('Error occured. Maybe you can try it later.');
+    }
   };
 
   // // Pay attention to the order of handling different situations
