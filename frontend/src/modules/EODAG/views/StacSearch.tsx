@@ -148,7 +148,7 @@ const StacSearch = () => {
     setSearchResponse(null);
   };
 
-  const aiSearchApi = 'http://54.212.38.192:8001';
+  const aiSearchApi = 'http://54.212.38.192:8001/chatgpt';
 
   const handlePilot = async (prompt) => {
     setPilotError('');
@@ -160,8 +160,10 @@ const StacSearch = () => {
       });
       const data = response.data;
       if (data.bbox && data.datetime) {
+      } else if (typeof data === 'string') {
+        setPilotError(data);
       } else {
-        setPilotError('Failed to understand. Maybe you can try it later.');
+        setPilotError('Error occured. Maybe you can try it later.');
       }
     } catch (err) {
       setPilotError('Error occured. Maybe you can try it later.');
