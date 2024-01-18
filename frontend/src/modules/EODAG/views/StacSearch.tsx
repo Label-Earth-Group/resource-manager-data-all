@@ -98,6 +98,7 @@ const StacSearch = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [highlightedItems, setHighlightedItems] = useState([]);
   const [pilotError, setPilotError] = useState('');
+  const [pilotFecthing, setPilotFetching] = useState(false);
   const searchPayload: SearchPayload = {
     page: currentPage,
     limit: PAGESIZE,
@@ -154,6 +155,7 @@ const StacSearch = () => {
 
   const handlePilot = async (prompt) => {
     setPilotError('');
+    setPilotFetching(true);
     try {
       const response = await axios.get(aiSearchApi, {
         params: {
@@ -181,6 +183,7 @@ const StacSearch = () => {
     } catch (err) {
       setPilotError('Error occured. Maybe you can try it later.');
     }
+    setPilotFetching(false);
   };
 
   // // Pay attention to the order of handling different situations
@@ -285,6 +288,7 @@ const StacSearch = () => {
                     triggerReset={handleReset}
                     triggerPilot={handlePilot}
                     pilotError={pilotError}
+                    pilotFetching={pilotFecthing}
                     selectedCollections={selectedCollections}
                     setSelectedCollections={setSelectedCollections}
                     setCurrentPage={setCurrentPage}

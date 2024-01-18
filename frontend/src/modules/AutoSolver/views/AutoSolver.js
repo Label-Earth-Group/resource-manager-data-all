@@ -346,7 +346,7 @@ const AutoSolver = () => {
               ></CustomTriggerButton>
             )}
             {assemblyCode && <CustomMarkDown content={assemblyCode} />}
-            {
+            {assemblyCode && (
               <CustomTriggerButton
                 session={session}
                 startAction={getExecuteCodePrint}
@@ -354,7 +354,7 @@ const AutoSolver = () => {
                 isFetching={getExecuteCodePrintFetching}
                 stopAction={stopStream}
               ></CustomTriggerButton>
-            }
+            )}
             {executeCodePrint && <CustomMarkDown content={executeCodePrint} />}
             {finalOutputFiles.length > 0 && (
               <Card sx={{ p: 2, mt: 2 }}>

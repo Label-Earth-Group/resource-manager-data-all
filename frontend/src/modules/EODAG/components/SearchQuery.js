@@ -1,4 +1,11 @@
-import { Box, Button, FormControl, Typography, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  Typography,
+  TextField,
+  LinearProgress
+} from '@mui/material';
 import { DateRangePicker } from './DateTimeRangePicker.js';
 import { MultiSelectInput } from '../components/MultipleSelect';
 import { QuaryableFilters } from './QueryableFilters.js';
@@ -16,7 +23,8 @@ export const SearchQuery = (props) => {
     triggerSearch,
     triggerReset,
     triggerPilot,
-    pilotError
+    pilotError,
+    pilotFetching
   } = props;
 
   return (
@@ -58,6 +66,7 @@ export const SearchQuery = (props) => {
           <Typography color="error">{pilotError}</Typography>
         </Box>
       )}
+      {pilotFetching && <LinearProgress />}
       <Box sx={{ mb: 2 }}>
         <Typography variant="h6">Date Range</Typography>
       </Box>
