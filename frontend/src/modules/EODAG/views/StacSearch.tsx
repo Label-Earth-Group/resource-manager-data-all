@@ -91,6 +91,7 @@ const StacSearch = () => {
   const [selectedCollections, setSelectedCollections] = useState<
     Collection[] | null
   >(defaultCollections);
+  const [LLMSearchPrompt, setLLMSearchPrompt] = useState('');
   const [drawnItems, setDrawnItems] = useState([]);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -110,6 +111,7 @@ const StacSearch = () => {
             to: endDate ? endDate.toISOString() : undefined
           }
   };
+  console.log('searchPayload', searchPayload);
   /**
    * the result display state
    * configure the display state different from the rtk-query's state, by wiring them up through useEffect,
@@ -159,7 +161,18 @@ const StacSearch = () => {
         }
       });
       const data = response.data;
+
       if (data.bbox && data.datetime) {
+        // sync temporal extent
+        setStartDate(new Date(data.datetime[0]));
+        setEndDate(new Date(data.datetime[1]));
+
+        // sync spatial extent
+        const southWest = L.latLng(data.bbox[1], data.bbox[0]);
+        const northEast = L.latLng(data.bbox[3], data.bbox[2]);
+        const bounds = L.latLngBounds(southWest, northEast);
+        const rectangle = L.rectangle(bounds);
+        setDrawnItems((prev) => [rectangle]);
       } else if (typeof data === 'string') {
         setPilotError(data);
       } else {
@@ -224,15 +237,15 @@ const StacSearch = () => {
         sx={{
           backgroundColor: 'background.default',
           height: '100%',
-          py: 5
+          py: 0
         }}
       >
         <Container
           maxWidth={settings.compact ? 'xl' : false}
-          sx={{ height: '100%' }}
+          sx={{ height: '100%', p: 0, m: 0 }}
         >
-          <Grid container spacing={2} sx={{ height: '100%' }}>
-            <Grid item md={4} xs={12}>
+          <Grid container spacing={2} sx={{ height: '100%', p: 0, m: 0 }}>
+            <Grid item md={4} xs={12} sx={{ pt: 0, pl: 0, m: 0 }}>
               <Tabs
                 indicatorColor="primary"
                 onChange={(event, value) => {
@@ -262,6 +275,8 @@ const StacSearch = () => {
               {currentTab === 'Search' && (
                 <Card sx={{ p: 2 }}>
                   <SearchQuery
+                    LLMSearchPrompt={LLMSearchPrompt}
+                    setLLMSearchPrompt={setLLMSearchPrompt}
                     startDate={startDate}
                     endDate={endDate}
                     setStartDate={setStartDate}
@@ -298,9 +313,10 @@ const StacSearch = () => {
                   </Card>
                 ))}
             </Grid>
-            <Grid item md={8} xs={12}>
+            <Grid item md={8} xs={12} sx={{ padding: 0, m: 0 }}>
               <Box sx={{ height: '100%' }}>
                 <LeafletMapComponent
+                  drawnItems={drawnItems}
                   setDrawnItems={setDrawnItems}
                   stacDataForDisplay={searchResponse}
                   highlightedItems={highlightedItems}

@@ -150,7 +150,7 @@ function makeDatetimePayload(dateRange?: DateRange): string | undefined {
 }
 
 /**
- * Get Geometry as Polygon or MultiPolygon
+ * Get Geometry from leaflet layer object as Polygon or MultiPolygon
  */
 function makeGeometryPayload(target: any): Geometry | undefined {
   // I didn’t found a method from leaflet that returns a Multipolygon so we build it if there are more than one polygon

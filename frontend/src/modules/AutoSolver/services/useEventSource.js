@@ -1,8 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export const useEventSource = ({
   url,
-  onMessage,
+  setContent,
   onGoingEventSource,
   setOnGoingEventSource
 }) => {
@@ -18,14 +18,13 @@ export const useEventSource = ({
     const eventSource = new EventSource(`${solverURL}/${url}`);
 
     eventSource.onopen = () => {
+      setContent('');
       setOnGoingEventSource(eventSource);
       setIsFetching(true);
     };
 
     eventSource.onmessage = function (event) {
-      if (onMessage) {
-        onMessage(event.data);
-      }
+      setContent((prev) => prev + event.data);
       console.log('New message:', event.data);
     };
 
@@ -44,7 +43,13 @@ export const useEventSource = ({
       setIsFinished(true);
       setIsFetching(false);
     });
-  }, [url, onMessage, onGoingEventSource, setOnGoingEventSource]);
+  }, [url, setContent, onGoingEventSource, setOnGoingEventSource]);
+
+  useEffect(() => {
+    if (!onGoingEventSource) {
+      setIsFetching(false);
+    }
+  }, [onGoingEventSource]);
 
   return { startEventSource, isFetching, isError, isFinished };
 };
