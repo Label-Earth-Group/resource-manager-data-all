@@ -5,6 +5,8 @@ import { QuaryableFilters } from './QueryableFilters.js';
 
 export const SearchQuery = (props) => {
   const {
+    LLMSearchPrompt,
+    setLLMSearchPrompt,
     startDate,
     endDate,
     setStartDate,
@@ -38,11 +40,15 @@ export const SearchQuery = (props) => {
       <Box sx={{ mb: 2 }}>
         <TextField
           fullWidth
+          value={LLMSearchPrompt}
           label="Describe 'where' and 'when', press 'Enter' to input"
+          onChange={(event) => {
+            setLLMSearchPrompt(event.target.value);
+          }}
           onKeyUp={(e) => {
             e.preventDefault();
             if (e.key === 'Enter') {
-              triggerPilot(e.target.value);
+              triggerPilot(LLMSearchPrompt);
             }
           }}
         ></TextField>
