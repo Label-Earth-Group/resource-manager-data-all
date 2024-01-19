@@ -6,9 +6,7 @@ export const useEventSource = ({
   onGoingEventSource,
   setOnGoingEventSource
 }) => {
-  const [isFetching, setIsFetching] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [isFinished, setIsFinished] = useState(false);
+  const [status, setStatus] = useState('NotStarted');
 
   const startEventSource = useCallback(() => {
     const solverURL = 'http://10.168.34.61:8081';
@@ -18,9 +16,9 @@ export const useEventSource = ({
     const eventSource = new EventSource(`${solverURL}/${url}`);
 
     eventSource.onopen = () => {
+      setStatus('Fetching');
       setContent('');
       setOnGoingEventSource(eventSource);
-      setIsFetching(true);
     };
 
     eventSource.onmessage = function (event) {
@@ -30,26 +28,25 @@ export const useEventSource = ({
 
     eventSource.onerror = function (error) {
       console.error('EventSource failed:', error);
+      setStatus('Error');
       eventSource.close();
       setOnGoingEventSource(null);
-      setIsError(true);
-      setIsFetching(false);
     };
 
     eventSource.addEventListener('contentclose', (event) => {
       console.log('Server closed the stream');
+      setStatus('Finished');
       eventSource.close();
       setOnGoingEventSource(null);
-      setIsFinished(true);
-      setIsFetching(false);
     });
   }, [url, setContent, onGoingEventSource, setOnGoingEventSource]);
 
+  // when closed the ongoing evert source from outside
   useEffect(() => {
     if (!onGoingEventSource) {
-      setIsFetching(false);
+      status === 'Fetching' && setStatus('Error');
     }
-  }, [onGoingEventSource]);
+  }, [onGoingEventSource, status]);
 
-  return { startEventSource, isFetching, isError, isFinished };
+  return { startEventSource, status };
 };

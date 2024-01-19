@@ -2,10 +2,12 @@ import {
   Box,
   Button,
   FormControl,
+  IconButton,
   Typography,
   TextField,
   LinearProgress
 } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 import { DateRangePicker } from './DateTimeRangePicker.js';
 import { MultiSelectInput } from '../components/MultipleSelect';
 import { QuaryableFilters } from './QueryableFilters.js';
@@ -59,7 +61,11 @@ export const SearchQuery = (props) => {
               triggerPilot(LLMSearchPrompt);
             }
           }}
-        ></TextField>
+        >
+          <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+            <SearchIcon />
+          </IconButton>
+        </TextField>
       </Box>
       {pilotError && (
         <Box sx={{ mb: 2 }}>

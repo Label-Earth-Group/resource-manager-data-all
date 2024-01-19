@@ -115,7 +115,7 @@ const AutoSolver = () => {
   };
 
   useEffect(() => {
-    setSession('931a80b2-efeb-4255-b1c7-c3e9564f7856');
+    //setSession('931a80b2-efeb-4255-b1c7-c3e9564f7856');
     setTaskData(testTaskData);
   }, []);
 
@@ -137,20 +137,18 @@ const AutoSolver = () => {
     setSession(response.data?.session_id);
   };
 
-  const {
-    startEventSource: getGraphCode,
-    isFetching: graphCodeFetching,
-    isFinished: graphCodeFinished
-  } = useEventSource({
-    url: `${session}/get_graph_code`,
-    setContent: setGraphCode,
-    onGoingEventSource,
-    setOnGoingEventSource
-  });
+  const { startEventSource: getGraphCode, status: graphCodeStatus } =
+    useEventSource({
+      url: `${session}/get_graph_code`,
+      setContent: setGraphCode,
+      onGoingEventSource,
+      setOnGoingEventSource
+    });
 
   // once the getGraphCode is finished, get the graph html
   useEffect(() => {
     const getGraphHTML = async () => {
+      console.log('get graph html');
       try {
         const response = await axios.get(
           `${solverURL}/${session}/get_graph_html`
@@ -160,35 +158,29 @@ const AutoSolver = () => {
         console.error('Error fetching HTML:', error);
       }
     };
-    graphCodeFinished && getGraphHTML();
-  }, [graphCodeFinished, session]);
+    graphCodeStatus === 'Finished' && getGraphHTML();
+  }, [graphCodeStatus, session]);
+  console.log('graphCodeStatus', graphCodeStatus);
 
-  const {
-    startEventSource: getOperationCode,
-    isFetching: operationCodeFetching,
-    isFinished: operationCodeFinished
-  } = useEventSource({
-    url: `${session}/get_operation_code`,
-    setContent: setOperationCode,
-    onGoingEventSource,
-    setOnGoingEventSource
-  });
+  const { startEventSource: getOperationCode, status: operationCodeStatus } =
+    useEventSource({
+      url: `${session}/get_operation_code`,
+      setContent: setOperationCode,
+      onGoingEventSource,
+      setOnGoingEventSource
+    });
 
-  const {
-    startEventSource: getAssemblyCode,
-    isFetching: assemblyCodeFetching
-    // isFinished: assemblyCodeFinished
-  } = useEventSource({
-    url: `${session}/get_assembly_code`,
-    setContent: setAssemblyCode,
-    onGoingEventSource,
-    setOnGoingEventSource
-  });
+  const { startEventSource: getAssemblyCode, status: assemblyCodeStatus } =
+    useEventSource({
+      url: `${session}/get_assembly_code`,
+      setContent: setAssemblyCode,
+      onGoingEventSource,
+      setOnGoingEventSource
+    });
 
   const {
     startEventSource: getExecuteCodePrint,
-    isFetching: getExecuteCodePrintFetching,
-    isFinished: getExecuteCodePrintFinished
+    status: getExecuteCodePrintStatus
   } = useEventSource({
     url: `${session}/execute_complete_code`,
     setContent: setExecuteCodePrint,
@@ -209,8 +201,8 @@ const AutoSolver = () => {
         console.error('Error fetching HTML:', error);
       }
     };
-    getExecuteCodePrintFinished && getFinalOutput();
-  }, [getExecuteCodePrintFinished, session]);
+    getExecuteCodePrintStatus === 'Finished' && getFinalOutput();
+  }, [getExecuteCodePrintStatus, session]);
 
   const reset = useCallback(() => {
     onGoingEventSource?.close();
@@ -308,13 +300,15 @@ const AutoSolver = () => {
               alignItems: 'center'
             }}
           >
-            <CustomTriggerButton
-              session={session}
-              startAction={getGraphCode}
-              actionName={'Generate Graph Code'}
-              isFetching={graphCodeFetching}
-              stopAction={stopStream}
-            ></CustomTriggerButton>
+            {session && (
+              <CustomTriggerButton
+                session={session}
+                startAction={getGraphCode}
+                actionName={'Generate Graph Code'}
+                isFetching={graphCodeStatus === 'Fetching'}
+                stopAction={stopStream}
+              ></CustomTriggerButton>
+            )}
             {graphCode && <CustomMarkDown content={graphCode} />}
             {graphHTML && (
               <iframe
@@ -331,27 +325,27 @@ const AutoSolver = () => {
                 session={session}
                 startAction={getOperationCode}
                 actionName={'Generate Code for Each Operation'}
-                isFetching={operationCodeFetching}
+                isFetching={operationCodeStatus === 'Fetching'}
                 stopAction={stopStream}
               ></CustomTriggerButton>
             )}
             {operationCode && <CustomMarkDown content={operationCode} />}
-            {operationCodeFinished && (
+            {operationCodeStatus === 'Finished' && (
               <CustomTriggerButton
                 session={session}
                 startAction={getAssemblyCode}
                 actionName={'Generate Assemly Code'}
-                isFetching={assemblyCodeFetching}
+                isFetching={assemblyCodeStatus === 'Fetching'}
                 stopAction={stopStream}
               ></CustomTriggerButton>
             )}
             {assemblyCode && <CustomMarkDown content={assemblyCode} />}
-            {assemblyCode && (
+            {assemblyCodeStatus === 'Finished' && (
               <CustomTriggerButton
                 session={session}
                 startAction={getExecuteCodePrint}
                 actionName={'Generate Final Output'}
-                isFetching={getExecuteCodePrintFetching}
+                isFetching={getExecuteCodePrintStatus === 'Fetching'}
                 stopAction={stopStream}
               ></CustomTriggerButton>
             )}
