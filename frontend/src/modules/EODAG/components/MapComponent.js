@@ -1,17 +1,30 @@
-import React, { useRef, useEffect } from 'react';
-import { MapContainer, FeatureGroup, TileLayer } from 'react-leaflet';
+import React, {
+  useRef,
+  useEffect,
+  useImperativeHandle,
+  forwardRef
+} from 'react';
+import {
+  MapContainer,
+  FeatureGroup,
+  TileLayer,
+  ZoomControl
+} from 'react-leaflet';
 import { StacGeometryLayer } from './StacMapLayer';
 import { EditControl } from 'react-leaflet-draw';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 
-export const LeafletMapComponent = ({
-  drawnItems,
-  setDrawnItems,
-  stacDataForDisplay,
-  highlightedItems = undefined,
-  setHighlightedItems = undefined
-}) => {
+export const LeafletMapComponent = forwardRef((props, ref) => {
+  const {
+    drawnItems,
+    setDrawnItems,
+    stacDataForDisplay,
+    children,
+    highlightedItems,
+    setHighlightedItems
+  } = props;
+  const mapRef = useRef();
   const featureGroupRef = useRef();
   console.log('featureGroupRef', featureGroupRef.current);
 
@@ -64,12 +77,23 @@ export const LeafletMapComponent = ({
     );
   };
 
+  // expose some methods to parent components
+  useImperativeHandle(ref, () => ({
+    fitBoundsToItem: (item) => {
+      if (item && mapRef.current) {
+        mapRef.current.fitBounds(item.getBounds());
+      }
+    }
+  }));
+
   return (
     <MapContainer
+      ref={mapRef}
       scrollWheelZoom={true}
-      center={[50.0, 0.0]}
-      zoom={1}
+      center={[40, 120]}
+      zoom={8}
       style={{ height: '100%' }}
+      zoomControl={false}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -98,6 +122,8 @@ export const LeafletMapComponent = ({
           }}
         />
       </FeatureGroup>
+      <ZoomControl position="topright" />
+      {children && children}
     </MapContainer>
   );
-};
+});

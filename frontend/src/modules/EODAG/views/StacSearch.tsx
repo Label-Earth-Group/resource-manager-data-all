@@ -17,7 +17,7 @@ import {
 } from '@mui/icons-material';
 import axios from 'axios';
 import { useSettings } from 'design';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { SearchQuery } from '../components/SearchQuery';
@@ -75,6 +75,8 @@ const StacSearch = () => {
   const PAGESIZE = 20;
   const { settings } = useSettings();
   const dispatch = useDispatch();
+
+  const mapRef = useRef();
 
   // get the default params from react-route state
   interface LocationState {
@@ -175,6 +177,7 @@ const StacSearch = () => {
         const bounds = L.latLngBounds(southWest, northEast);
         const rectangle = L.rectangle(bounds);
         setDrawnItems((prev) => [rectangle]);
+        mapRef.current && mapRef.current.fitBoundsToItem(rectangle);
       } else if (typeof data === 'string') {
         setPilotError(data);
       } else {
@@ -320,6 +323,7 @@ const StacSearch = () => {
             <Grid item md={8} xs={12} sx={{ padding: 0, m: 0 }}>
               <Box sx={{ height: '100%' }}>
                 <LeafletMapComponent
+                  ref={mapRef}
                   drawnItems={drawnItems}
                   setDrawnItems={setDrawnItems}
                   stacDataForDisplay={searchResponse}

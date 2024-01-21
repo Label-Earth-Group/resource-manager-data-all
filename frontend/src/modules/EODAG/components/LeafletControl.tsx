@@ -24,6 +24,9 @@ export const LeafletControl = (props: Props): JSX.Element => {
   const positionClass =
     (props.position && POSITION_CLASSES[props.position]) ||
     POSITION_CLASSES.topright;
+  const className =
+    (props.container?.className?.concat(' ') || '') + 'leaflet-control'; //Concatenate the props.container className to the class of the control div
+
   const controlContainerRef = React.createRef<HTMLDivElement>();
   const map = useMap();
 
@@ -63,12 +66,6 @@ export const LeafletControl = (props: Props): JSX.Element => {
       }
     }
   }, [portalRoot, props.prepend, controlContainerRef]);
-
-  /**
-   * Concatenate the props.container className to the class of the control div
-   */
-  const className =
-    (props.container?.className?.concat(' ') || '') + 'leaflet-control';
 
   /**
    * Render
