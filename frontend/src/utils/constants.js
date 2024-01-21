@@ -30,3 +30,5 @@ export const repo = {
   owner: 'Label-Earth-Group',
   repo: 'geospatial-usecase'
 };
+
+export const solverURL = 'http://localhost:8081'; //the address of the server started from code synced from LabelEarth/LLM-Geo

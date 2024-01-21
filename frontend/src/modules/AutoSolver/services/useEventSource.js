@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { solverURL } from 'utils/constants.js';
 
 export const useEventSource = ({
   url,
@@ -9,11 +10,12 @@ export const useEventSource = ({
   const [status, setStatus] = useState('NotStarted');
 
   const startEventSource = useCallback(() => {
-    const solverURL = 'http://10.168.34.61:8081';
-
     if (onGoingEventSource) return; // Avoid starting a new EventSource if one is already ongoing
 
     const eventSource = new EventSource(`${solverURL}/${url}`);
+    setStatus('Fetching');
+    setContent('');
+    setOnGoingEventSource(eventSource);
 
     eventSource.onopen = () => {
       setStatus('Fetching');

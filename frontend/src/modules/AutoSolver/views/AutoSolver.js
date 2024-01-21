@@ -17,8 +17,7 @@ import axios from 'axios';
 import Markdown from 'react-markdown';
 import { useEventSource } from '../services/useEventSource';
 import StopCircleOutlinedIcon from '@mui/icons-material/StopCircleOutlined';
-
-const solverURL = 'http://10.168.34.61:8081'; //the address of the server started from code synced from LabelEarth/LLM-Geo
+import { solverURL } from 'utils/constants.js';
 
 const testTaskData = {
   task_name: 'test',
@@ -115,7 +114,7 @@ const AutoSolver = () => {
   };
 
   useEffect(() => {
-    //setSession('931a80b2-efeb-4255-b1c7-c3e9564f7856');
+    setSession('b48a2ad7-fa6e-40e2-84c2-196667f0cbff');
     setTaskData(testTaskData);
   }, []);
 
@@ -316,8 +315,7 @@ const AutoSolver = () => {
                 height={800}
                 title="Solution code"
                 srcDoc={graphHTML}
-                overflowY={false}
-                overflowX={false}
+                style={{ overflow: 'hidden' }}
               ></iframe>
             )}
             {graphHTML && (
@@ -340,7 +338,7 @@ const AutoSolver = () => {
               ></CustomTriggerButton>
             )}
             {assemblyCode && <CustomMarkDown content={assemblyCode} />}
-            {assemblyCodeStatus === 'Finished' && (
+            {true /* { assemblyCodeStatus === 'Finished*/ && (
               <CustomTriggerButton
                 session={session}
                 startAction={getExecuteCodePrint}
