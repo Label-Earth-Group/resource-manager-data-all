@@ -15,6 +15,21 @@ import { EditControl } from 'react-leaflet-draw';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 
+/**
+ * @typedef LeafletMapComponentProps
+ * @property {any[]} drawnItems
+ * @property {React.Dispatch<React.SetStateAction<any[]>>} setDrawnItems
+ * @property {any} stacDataForDisplay
+ * @property {any[]} highlightedItems
+ * @property {React.Dispatch<React.SetStateAction<any[]>>} setHighlightedItems
+ * @property {React.ReactNode} [children]
+ */
+
+/**
+ * Leaflet Map Component
+ * @param {LeafletMapComponentProps} props
+ * @param {React.Ref<any>} ref
+ */
 export const LeafletMapComponent = forwardRef((props, ref) => {
   const {
     drawnItems,
