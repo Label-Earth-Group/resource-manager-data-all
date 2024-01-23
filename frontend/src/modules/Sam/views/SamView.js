@@ -1,12 +1,12 @@
-import { Box, Container } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useSettings } from 'design';
+// import { useSettings } from 'design';
 import MapImage from '../components/MapImage.tsx';
 import { MapContainer } from 'react-leaflet';
 
 const SamView = () => {
-  const { settings } = useSettings();
+  // const { settings } = useSettings();
 
   return (
     <>
@@ -16,15 +16,15 @@ const SamView = () => {
       <Box
         sx={{
           backgroundColor: 'background.default',
-          minHeight: '100%',
-          py: 5
+          height: 'auto'
         }}
       >
-        <Container maxWidth={settings.compact ? 'xl' : false}>
-          <MapContainer style={{ height: '100vh' }} zoomControl={false}>
-            <MapImage />
-          </MapContainer>
-        </Container>
+        <MapContainer
+          style={{ height: 'calc(100vh - 64px)' }}
+          zoomControl={false}
+        >
+          <MapImage />
+        </MapContainer>
       </Box>
     </>
   );

@@ -47,7 +47,7 @@ const DefaultLayoutContent = styled(Box)({
 const DefaultLayoutWrapper = styled(Box)({
   display: 'flex',
   flex: '1 1 auto',
-  overflow: 'scroll',
+  overflow: 'auto',
   paddingTop: '64px',
   flexDirection: 'column',
   height: '100%'
