@@ -114,7 +114,7 @@ const AutoSolver = () => {
   };
 
   useEffect(() => {
-    setSession('b48a2ad7-fa6e-40e2-84c2-196667f0cbff');
+    setSession('276ce93b-c3b5-4560-91c3-86c4f2a2c7b6');
     setTaskData(testTaskData);
   }, []);
 
@@ -144,6 +144,17 @@ const AutoSolver = () => {
       setOnGoingEventSource
     });
 
+  const getGraphHTML = async () => {
+    console.log('get graph html');
+    try {
+      const response = await axios.get(
+        `${solverURL}/${session}/get_graph_html`
+      );
+      setGraphHTML(response.data);
+    } catch (error) {
+      console.error('Error fetching HTML:', error);
+    }
+  };
   // once the getGraphCode is finished, get the graph html
   useEffect(() => {
     const getGraphHTML = async () => {
@@ -309,14 +320,25 @@ const AutoSolver = () => {
               ></CustomTriggerButton>
             )}
             {graphCode && <CustomMarkDown content={graphCode} />}
+            <CustomTriggerButton
+              session={session}
+              startAction={getGraphHTML}
+              actionName={'Generate Graph HTML'}
+            ></CustomTriggerButton>
             {graphHTML && (
-              <iframe
-                width={'100%'}
-                height={800}
-                title="Solution code"
-                srcDoc={graphHTML}
-                style={{ overflow: 'hidden' }}
-              ></iframe>
+              <Card sx={{ p: 2, mb: 2, width: '100%', overflow: 'hidden' }}>
+                <iframe
+                  style={{
+                    width: '100%',
+                    height: '800px',
+                    overflow: 'hidden',
+                    border: 'none'
+                  }}
+                  title="Solution Operation Graph"
+                  scrolling="no"
+                  srcDoc={graphHTML}
+                ></iframe>
+              </Card>
             )}
             {graphHTML && (
               <CustomTriggerButton
@@ -349,7 +371,7 @@ const AutoSolver = () => {
             )}
             {executeCodePrint && <CustomMarkDown content={executeCodePrint} />}
             {finalOutputFiles.length > 0 && (
-              <Card sx={{ p: 2, mt: 2 }}>
+              <Card sx={{ p: 2, mb: 2, width: '100%' }}>
                 {finalOutputFiles
                   .filter((filename) => /\.(png|jpg)$/i.test(filename))
                   .map((filename) => (
