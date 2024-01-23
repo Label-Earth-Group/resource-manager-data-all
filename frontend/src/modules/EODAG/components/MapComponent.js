@@ -107,7 +107,7 @@ export const LeafletMapComponent = forwardRef((props, ref) => {
       scrollWheelZoom={true}
       center={[40, 120]}
       zoom={8}
-      style={{ height: '100%' }}
+      style={{ height: 'calc(100vh - 120px)' }}
       zoomControl={false}
     >
       <TileLayer
