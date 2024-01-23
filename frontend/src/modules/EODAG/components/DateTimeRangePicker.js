@@ -17,11 +17,11 @@ export function DateRangePicker({
       <DateTimePicker
         sx={{ mr: 2, mb: 2 }}
         label="Start Date"
-        openTo="day"
+        openTo="year"
         views={['year', 'month', 'day']}
         value={startDate}
         maxDate={endDate}
-        onChange={(newValue) => setStartDate(newValue)}
+        onAccept={(newValue) => setStartDate(newValue)}
         slotProps={{
           inputAdornment: {
             position: 'start'

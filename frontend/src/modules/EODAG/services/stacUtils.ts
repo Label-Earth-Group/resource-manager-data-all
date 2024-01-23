@@ -176,8 +176,22 @@ function makeGeometryPayload(target: any): Geometry | undefined {
 }
 
 export function formatPayload(searchFilters: SearchPayload): SearchPayload {
-  const { ids, bbox, dateRange, collections, geometry, ...restPayload } =
-    searchFilters;
+  const {
+    ids,
+    bbox,
+    startDate,
+    endDate,
+    collections,
+    geometry,
+    ...restPayload
+  } = searchFilters;
+  const dateRange =
+    !startDate && !endDate
+      ? undefined
+      : {
+          from: startDate ? startDate.toISOString() : undefined,
+          to: endDate ? endDate.toISOString() : undefined
+        };
   const requestPayload: Partial<SearchPayload> = {
     ...restPayload,
     ids: makeArrayPayload(ids),

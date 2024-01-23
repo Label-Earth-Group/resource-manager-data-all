@@ -19,7 +19,8 @@ export type SearchPayload = {
   bbox?: Bbox;
   geometry?: any[]; //for component state
   intersects?: Geometry; //for search payload
-  dateRange?: DateRange; //for component state
+  startDate?: Date; //for component state
+  endDate?: Date; //for component state
   datetime?: string; //for search payload
   collections?: CollectionIdList;
   ids?: ItemIdList;
