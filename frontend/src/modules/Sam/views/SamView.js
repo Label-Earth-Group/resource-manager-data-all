@@ -16,12 +16,15 @@ const SamView = () => {
       <Box
         sx={{
           backgroundColor: 'background.default',
-          minHeight: '100%',
-          py: 5
+          height: 'auto',
+          py: 3
         }}
       >
         <Container maxWidth={settings.compact ? 'xl' : false}>
-          <MapContainer style={{ height: '100vh' }} zoomControl={false}>
+          <MapContainer
+            style={{ height: 'calc(100vh - 108px)' }}
+            zoomControl={false}
+          >
             <MapImage />
           </MapContainer>
         </Container>
