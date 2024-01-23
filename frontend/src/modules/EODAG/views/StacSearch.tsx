@@ -15,7 +15,6 @@ import {
   ArrowBackIos,
   ArrowForwardIos
 } from '@mui/icons-material';
-import axios from 'axios';
 import { useSettings } from 'design';
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -93,28 +92,22 @@ const StacSearch = () => {
   const [selectedCollections, setSelectedCollections] = useState<
     Collection[] | null
   >(defaultCollections);
-  const [LLMSearchPrompt, setLLMSearchPrompt] = useState('');
   const [drawnItems, setDrawnItems] = useState([]);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [highlightedItems, setHighlightedItems] = useState([]);
-  const [pilotError, setPilotError] = useState('');
-  const [pilotFecthing, setPilotFetching] = useState(false);
+
   const searchPayload: SearchPayload = {
     page: currentPage,
     limit: PAGESIZE,
     collections: selectedCollections.map((c) => c.id),
     geometry: drawnItems,
-    dateRange:
-      !startDate && !endDate
-        ? undefined
-        : {
-            from: startDate ? startDate.toISOString() : undefined,
-            to: endDate ? endDate.toISOString() : undefined
-          }
+    startDate: startDate,
+    endDate: endDate
   };
   console.log('searchPayload', searchPayload);
+
   /**
    * the result display state
    * configure the display state different from the rtk-query's state, by wiring them up through useEffect,
@@ -151,42 +144,6 @@ const StacSearch = () => {
     setEndDate(null);
     setCurrentPage(1);
     setSearchResponse(null);
-  };
-
-  const aiSearchApi = 'http://54.212.38.192:8001/chatgpt';
-
-  const handlePilot = async (prompt) => {
-    setPilotError('');
-    setPilotFetching(true);
-    try {
-      const response = await axios.get(aiSearchApi, {
-        params: {
-          prompt: prompt
-        }
-      });
-      const data = response.data;
-
-      if (data.bbox && data.datetime) {
-        // sync temporal extent
-        setStartDate(new Date(data.datetime[0]));
-        setEndDate(new Date(data.datetime[1]));
-
-        // sync spatial extent
-        const southWest = L.latLng(data.bbox[1], data.bbox[0]);
-        const northEast = L.latLng(data.bbox[3], data.bbox[2]);
-        const bounds = L.latLngBounds(southWest, northEast);
-        const rectangle = L.rectangle(bounds);
-        setDrawnItems((prev) => [rectangle]);
-        mapRef.current && mapRef.current.fitBoundsToItem(rectangle);
-      } else if (typeof data === 'string') {
-        setPilotError(data);
-      } else {
-        setPilotError('Error occured. Maybe you can try it later.');
-      }
-    } catch (err) {
-      setPilotError('Error occured. Maybe you can try it later.');
-    }
-    setPilotFetching(false);
   };
 
   // // Pay attention to the order of handling different situations
@@ -261,6 +218,7 @@ const StacSearch = () => {
                 textColor="primary"
                 value={currentTab}
                 variant="fullWidth"
+                sx={{ width: '100%' }}
               >
                 <Tab
                   key="Search"
@@ -281,17 +239,14 @@ const StacSearch = () => {
               {currentTab === 'Search' && (
                 <Card sx={{ p: 2 }}>
                   <SearchQuery
-                    LLMSearchPrompt={LLMSearchPrompt}
-                    setLLMSearchPrompt={setLLMSearchPrompt}
+                    mapRef={mapRef}
                     startDate={startDate}
                     endDate={endDate}
                     setStartDate={setStartDate}
                     setEndDate={setEndDate}
+                    setDrawnItems={setDrawnItems}
                     triggerSearch={handleSearchItems}
                     triggerReset={handleReset}
-                    triggerPilot={handlePilot}
-                    pilotError={pilotError}
-                    pilotFetching={pilotFecthing}
                     selectedCollections={selectedCollections}
                     setSelectedCollections={setSelectedCollections}
                     setCurrentPage={setCurrentPage}
