@@ -144,17 +144,6 @@ const AutoSolver = () => {
       setOnGoingEventSource
     });
 
-  const getGraphHTML = async () => {
-    console.log('get graph html');
-    try {
-      const response = await axios.get(
-        `${solverURL}/${session}/get_graph_html`
-      );
-      setGraphHTML(response.data);
-    } catch (error) {
-      console.error('Error fetching HTML:', error);
-    }
-  };
   // once the getGraphCode is finished, get the graph html
   useEffect(() => {
     const getGraphHTML = async () => {
@@ -320,11 +309,6 @@ const AutoSolver = () => {
               ></CustomTriggerButton>
             )}
             {graphCode && <CustomMarkDown content={graphCode} />}
-            <CustomTriggerButton
-              session={session}
-              startAction={getGraphHTML}
-              actionName={'Generate Graph HTML'}
-            ></CustomTriggerButton>
             {graphHTML && (
               <Card sx={{ p: 2, mb: 2, width: '100%', overflow: 'hidden' }}>
                 <iframe
