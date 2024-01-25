@@ -31,6 +31,6 @@ export const repo = {
   repo: 'geospatial-usecase'
 };
 
-export const solverURL = 'http://10.168.34.61:8081'; //the address of the server started from code synced from LabelEarth/LLM-Geo
+export const solverURL = 'http://54.212.38.192:8086'; //the address of the server started from code synced from LabelEarth/LLM-Geo
 
 export const aiSearchApi = 'http://54.212.38.192:8001/chatgpt'; //the address of the server

@@ -21,7 +21,7 @@ import { solverURL } from 'utils/constants.js';
 
 const testTaskData = {
   task_name: 'test',
-  task: '1) Find out Census tracts that contain hazardous waste facilities, then comppute and print out the population living in those tracts. The study area is North Carolina (NC), US. 2) Generate a population choropleth map for all tract polygons in NC, rendering the color by population; and then highlight the borders of tracts that have hazardous waste facilities. Please draw all polygons, not only the highlighted ones. The map size is 15*10 inches.',
+  task: '1) Find out Census tracts that contain hazardous waste facilities, then compute and print out the population living in those tracts. The study area is North Carolina (NC), US. 2) Generate a population choropleth map for all tract polygons in NC, rendering the color by population; and then highlight the borders of tracts that have hazardous waste facilities. Please draw all polygons, not only the highlighted ones. The map size is 15*10 inches.',
   data_locations: [
     'NC hazardous waste facility ESRI shape file: https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/HW_Sites_EPSG4326.zip.',
     "NC tract boundary shapefile: https://github.com/gladcolor/LLM-Geo/raw/master/overlay_analysis/tract_37_EPSG4326.zip. The tract ID column is 'GEOID', data types is integer.",
@@ -114,7 +114,7 @@ const AutoSolver = () => {
   };
 
   useEffect(() => {
-    setSession('276ce93b-c3b5-4560-91c3-86c4f2a2c7b6');
+    // setSession('276ce93b-c3b5-4560-91c3-86c4f2a2c7b6');
     setTaskData(testTaskData);
   }, []);
 
@@ -344,7 +344,7 @@ const AutoSolver = () => {
               ></CustomTriggerButton>
             )}
             {assemblyCode && <CustomMarkDown content={assemblyCode} />}
-            {true /* { assemblyCodeStatus === 'Finished*/ && (
+            {assemblyCodeStatus === 'Finished' && (
               <CustomTriggerButton
                 session={session}
                 startAction={getExecuteCodePrint}
