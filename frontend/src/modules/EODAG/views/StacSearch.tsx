@@ -208,7 +208,12 @@ const StacSearch = () => {
           sx={{ height: '100%', p: 0, m: 0 }}
         >
           <Grid container spacing={2} sx={{ height: '100%', p: 0, m: 0 }}>
-            <Grid item md={4} xs={12} sx={{ pt: 0, pl: 0, m: 0 }}>
+            <Grid
+              item
+              md={4}
+              xs={12}
+              sx={{ height: '100%', pt: 0, pl: 0, m: 0 }}
+            >
               <Tabs
                 indicatorColor="primary"
                 onChange={(event, value) => {
@@ -218,7 +223,7 @@ const StacSearch = () => {
                 textColor="primary"
                 value={currentTab}
                 variant="fullWidth"
-                sx={{ width: '100%' }}
+                sx={{ width: '100%', p: 0 }}
               >
                 <Tab
                   key="Search"
@@ -255,8 +260,13 @@ const StacSearch = () => {
               )}
               {currentTab === 'Result' &&
                 (searchResponse?.features.length > 0 ? (
-                  <Card sx={{ py: 2 }}>
-                    <Box sx={{ mb: 2, mx: 2 }}>{pagination}</Box>
+                  <Card
+                    sx={{
+                      mb: 2,
+                      height: 'calc(100% - 112px)',
+                      overflowY: 'auto'
+                    }}
+                  >
                     <Box>
                       <StacItemDisplayList
                         features={searchResponse?.features}
@@ -266,6 +276,7 @@ const StacSearch = () => {
                         setHighlightedItems={setHighlightedItems}
                       ></StacItemDisplayList>
                     </Box>
+                    <Box sx={{ my: 2, mx: 2 }}>{pagination}</Box>
                   </Card>
                 ) : (
                   <Card sx={{ p: 2 }}>

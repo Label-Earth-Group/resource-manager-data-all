@@ -154,6 +154,7 @@ export function StacItemsBrowse({ collectionID, entryPoint = 'eodag' }) {
               disabled={isLoading || isFetching}
               onClick={handleSearchItems}
               size="large"
+              sx={{ mb: 2 }}
             >
               Search Items
             </Button>
