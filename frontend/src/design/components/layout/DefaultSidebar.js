@@ -128,9 +128,16 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
       active: true
     };
 
-    const samSection = {
+    // const samSection = {
+    //   title: 'Labelling',
+    //   path: '/console/sam',
+    //   icon: <InsertComment size={15} />,
+    //   active: true
+    // };
+
+    const labelSection = {
       title: 'Labelling',
-      path: '/console/sam',
+      path: '/console/labelling',
       icon: <InsertComment size={15} />,
       active: true
     };
@@ -180,7 +187,7 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
             pipelinesSection,
             dashboardsSection,
             toolboxSection,
-            samSection,
+            labelSection,
             autoSolverSection
           ]
         },
@@ -208,7 +215,7 @@ export const DefaultSidebar = ({ openDrawer, onOpenDrawerChange }) => {
             pipelinesSection,
             dashboardsSection,
             toolboxSection,
-            samSection,
+            labelSection,
             autoSolverSection
           ]
         }

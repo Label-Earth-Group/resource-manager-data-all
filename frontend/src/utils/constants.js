@@ -31,6 +31,12 @@ export const repo = {
   repo: 'geospatial-usecase'
 };
 
-export const solverURL = 'http://54.212.38.192:8086'; //the address of the server started from code synced from LabelEarth/LLM-Geo
+export const solverURL = 'http://18.236.186.120:8086'; //the address of the server started from code synced from LabelEarth/LLM-Geo
 
-export const aiSearchApi = 'http://54.212.38.192:8001/chatgpt'; //the address of the server
+export const aiSearchApi = 'http://18.236.186.120:8001/chatgpt'; //the address of the server of AI-aided search
+
+export const jupyterHubURL = 'http://35.89.148.41'; //the address of server for jupyter hub
+
+export const leafmapURL = 'http://118.31.15.5:8088/'; //the address of server for voila serving leafmap
+
+export const labelStudioURL = 'http://54.200.211.239:8080/'; //the address for label studio server

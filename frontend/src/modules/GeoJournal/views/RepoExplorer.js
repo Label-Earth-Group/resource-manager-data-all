@@ -15,6 +15,7 @@ import { Breadcrumbs } from '../components/Breadcrumbs';
 import { useDispatch } from 'globalErrors';
 import { useHandleError } from 'utils/utils';
 import { useSettings } from 'design';
+import { jupyterHubURL } from 'utils/constants';
 
 function PageHeader({ owner, repo, folderPath }) {
   return (
@@ -40,7 +41,6 @@ function generateNBGitPullerLink(
   filepath = null,
   branchName = 'master'
 ) {
-  const jupyterHubURL = 'http://54.201.12.37';
   const repoUrl = `https://github.com/${owner}/${repo}`;
 
   const params = new URLSearchParams({

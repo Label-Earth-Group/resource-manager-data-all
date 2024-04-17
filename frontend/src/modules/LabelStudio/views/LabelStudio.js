@@ -1,15 +1,15 @@
 import { Helmet } from 'react-helmet-async';
-import { leafmapURL } from 'utils/constants';
+import { labelStudioURL } from 'utils/constants';
 
-const leafmapView = () => {
+const LabelStudioView = () => {
   return (
     <>
       <Helmet>
-        <title>GeoToolbox | data.all</title>
+        <title>Labelling | data.all</title>
       </Helmet>
       <embed
-        title="leafmap"
-        src={leafmapURL}
+        title="Label Studio"
+        src={labelStudioURL}
         width="100%"
         height="100%"
         style={{
@@ -20,4 +20,4 @@ const leafmapView = () => {
   );
 };
 
-export default leafmapView;
+export default LabelStudioView;

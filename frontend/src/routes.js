@@ -173,7 +173,11 @@ const StacItemDetail = Loadable(
   lazy(() => import('./modules/EODAG/views/StacItemDetail'))
 );
 
+// labeling or SAM routers
 const SamView = Loadable(lazy(() => import('./modules/Sam/views/SamView')));
+const LabelStudioView = Loadable(
+  lazy(() => import('./modules/LabelStudio/views/LabelStudio.js'))
+);
 
 // PGSTAC routers
 const PGStacCollectionsBrowse = Loadable(
@@ -278,6 +282,14 @@ const routes = [
           {
             path: 'sam',
             element: <SamView />
+          }
+        ]
+      },
+      {
+        children: [
+          {
+            path: 'labelling',
+            element: <LabelStudioView />
           }
         ]
       },
