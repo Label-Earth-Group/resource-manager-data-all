@@ -39,4 +39,6 @@ export const jupyterHubURL = 'http://35.89.148.41'; //the address of server for 
 
 export const leafmapURL = 'http://118.31.15.5:8088/'; //the address of server for voila serving leafmap
 
-export const labelStudioURL = 'http://54.200.211.239:8080/'; //the address for label studio server
+export const labelStudioURL = 'http://localhost:8080'; //the address for label studio server
+export const labelStudioCookies =
+  'sessionid=.eJxVj8FuhDAMRP8lZ0COE3DCsfd-A3JCgHRRsiIgtbvqvxeqPbRHz4yfx09xxFH0gtG6CYyvNYKrNUOorVVQe_LKG4LJShSVyNvMKT54jzkN95voZSVWLvuw5jmmcySpFCF02JhWgtVYiYGPfRmOErbh99TF-aM59reQLmP84DTnxue0b9E1V6R5uaV5z2NY317Zf4CFy3JuTwjaEzrjHY1A2jomOKuwUYYnnBiZSXZdy0S-M9Jr7bFFIquJObgLWkIp12fh8x63L9FrhQDw_QO6gFra:1rx8Xc:b5NtBqp1fYgmZLZZ3RAtIh7wiN66_PGnNAwYbODf5T0; expires=Mon, 22 Apr 2024 16:53:48 GMT; HttpOnly; Max-Age=432000; Path=/; SameSite=Lax';
