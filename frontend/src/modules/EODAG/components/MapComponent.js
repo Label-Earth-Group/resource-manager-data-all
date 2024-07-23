@@ -14,6 +14,7 @@ import { StacGeometryLayer } from './StacMapLayer';
 import { EditControl } from 'react-leaflet-draw';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
+// import { headerHight } from 'design';
 
 /**
  * @typedef LeafletMapComponentProps
@@ -107,7 +108,8 @@ export const LeafletMapComponent = forwardRef((props, ref) => {
       scrollWheelZoom={true}
       center={[40, 120]}
       zoom={8}
-      style={{ height: 'calc(100vh - 120px)' }}
+      style={{ height: '100%' }}
+      // style={{ height: `calc(100vh - ${headerHight}px)` }}
       zoomControl={false}
     >
       <TileLayer

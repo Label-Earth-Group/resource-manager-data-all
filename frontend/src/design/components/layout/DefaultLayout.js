@@ -5,6 +5,7 @@ import { Box } from '@mui/material';
 import { DefaultNavbar } from './DefaultNavbar';
 import { DefaultSidebar } from './DefaultSidebar';
 import { ErrorNotification } from '../ErrorNotification';
+import { headerHeight } from 'design/constants';
 
 export const DefaultLayoutRoot = styled(Box)(({ theme }) => ({
   ...(theme.palette.mode === 'light' && {
@@ -48,7 +49,7 @@ const DefaultLayoutWrapper = styled(Box)({
   display: 'flex',
   flex: '1 1 auto',
   overflow: 'auto',
-  paddingTop: '64px',
+  paddingTop: `${headerHeight}px`,
   flexDirection: 'column',
   height: '100%'
 });
@@ -87,6 +88,23 @@ export const DefaultLayout = () => {
           </DefaultLayoutContainer>
         </DefaultLayoutWrapper>
       </DefaultMain>
+    </DefaultLayoutRoot>
+  );
+};
+
+export const EmptyLayout = () => {
+  const [openDrawer, setOpenDrawer] = useState(true);
+
+  return (
+    <DefaultLayoutRoot>
+      <DefaultNavbar
+        openDrawer={openDrawer}
+        onOpenDrawerChange={setOpenDrawer}
+      />
+      <DefaultLayoutWrapper>
+        <ErrorNotification />
+        <Outlet />
+      </DefaultLayoutWrapper>
     </DefaultLayoutRoot>
   );
 };

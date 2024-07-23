@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { AuthGuard, GuestGuard } from 'authentication';
 import { ReAuthModal } from 'reauthentication';
-import { DefaultLayout, LoadingScreen } from 'design';
+import { EmptyLayout, DefaultLayout, LoadingScreen } from 'design';
 import { ModuleNames, isModuleEnabled } from 'utils';
 import { Navigate } from 'react-router';
 
@@ -171,6 +171,11 @@ const StacCollectionContent = Loadable(
 );
 const StacItemDetail = Loadable(
   lazy(() => import('./modules/EODAG/views/StacItemDetail'))
+);
+
+// remote sensing image search router
+const SearchImage = Loadable(
+  lazy(() => import('./modules/EODAG/views/SearchImage.tsx'))
 );
 
 // labeling or SAM routers
@@ -554,6 +559,22 @@ const routes = [
       {
         path: '*',
         element: <NotFound />
+      }
+    ]
+  },
+  {
+    path: 'search',
+    element: (
+      <AuthGuard>
+        <EmptyLayout />
+        {(process.env.REACT_APP_COGNITO_USER_POOL_ID ||
+          process.env.REACT_APP_CUSTOM_AUTH) && <ReAuthModal />}
+      </AuthGuard>
+    ),
+    children: [
+      {
+        path: '',
+        element: <SearchImage />
       }
     ]
   }

@@ -115,7 +115,7 @@ export const SearchQuery = (props) => {
   );
 
   return (
-    <FormControl sx={{ width: '100%' }}>
+    <FormControl sx={{ height: '100%', width: '100%' }}>
       <Box sx={{ mb: 2 }}>
         <Button
           variant="contained"

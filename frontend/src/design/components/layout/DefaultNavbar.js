@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { AccountPopover } from '../popovers';
 import { Logo } from '../Logo';
 import { SettingsDrawer } from '../SettingsDrawer';
+import { headerHeight } from 'design/constants';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -19,7 +20,7 @@ export const DefaultNavbar = ({ openDrawer, onOpenDrawerChange }) => {
 
   return (
     <AppBar position="fixed" className={classes.appBar}>
-      <Toolbar sx={{ minHeight: 64, maxHeight: 64 }}>
+      <Toolbar sx={{ minHeight: headerHeight, maxHeight: headerHeight }}>
         <IconButton
           size="large"
           edge="start"
