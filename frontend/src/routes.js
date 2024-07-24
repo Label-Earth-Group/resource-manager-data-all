@@ -175,7 +175,7 @@ const StacItemDetail = Loadable(
 
 // remote sensing image search router
 const SearchImage = Loadable(
-  lazy(() => import('./modules/EODAG/views/SearchImage.tsx'))
+  lazy(() => import('./modules/EODAG/views/SearchImage'))
 );
 
 // labeling or SAM routers

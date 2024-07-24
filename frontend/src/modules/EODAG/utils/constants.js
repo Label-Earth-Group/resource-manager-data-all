@@ -85,3 +85,60 @@ export const sensorType = [
   { label: 'OPTICAL' },
   { label: 'RADAR' }
 ];
+
+export const productTree = [
+  {
+    id: '1',
+    label: 'LandSat-4 / 5 / TM',
+    children: [
+      { id: '1-1', label: 'Level-1 product' },
+      { id: '1-2', label: 'Level-2 Surface Reflectance product' },
+      { id: '1-3', label: 'Level-2 Surface Temperature product' },
+      { id: '1-4', label: 'U.S. ARD Surface Reflectance product' },
+      { id: '1-5', label: 'U.S. ARD Surface Temperature product' },
+      { id: '1-6', label: 'Level-3 ...' }
+    ]
+  },
+  {
+    id: '2',
+    label: 'LandSat-7 / ETM+',
+    children: [
+      { id: '2-1', label: 'Level-1 product' },
+      { id: '2-2', label: 'Level-2 Surface Reflectance product' },
+      { id: '2-3', label: 'Level-2 Surface Temperature product' },
+      { id: '2-4', label: 'U.S. ARD Surface Reflectance product' },
+      { id: '2-5', label: 'U.S. ARD Surface Temperature product' },
+      { id: '2-6', label: 'Level-3 ...' }
+    ]
+  },
+  {
+    id: '3',
+    label: 'LandSat-8/9 / OLI, TIRS',
+    children: [
+      { id: '3-1', label: 'Level-1 product' },
+      { id: '3-2', label: 'Level-2 Surface Reflectance product' },
+      { id: '3-3', label: 'Level-2 Surface Temperature product' },
+      { id: '3-4', label: 'U.S. ARD Surface Reflectance product' },
+      { id: '3-5', label: 'U.S. ARD Surface Temperature product' },
+      { id: '3-6', label: 'Level-3 ...' }
+    ]
+  },
+  {
+    id: '4',
+    label: 'Sentinel-1 / C-SAR',
+    children: [
+      { id: '4-1', label: 'Level-0 RAW product' },
+      { id: '4-2', label: 'Level-1 GRD product' },
+      { id: '4-3', label: 'Level-1 SLC product' },
+      { id: '4-4', label: 'Level-2 OCN product' }
+    ]
+  },
+  {
+    id: '5',
+    label: 'Sentinel-2 / MSI',
+    children: [
+      { id: '5-1', label: 'Level-1C product' },
+      { id: '5-2', label: 'Level-2A product' }
+    ]
+  }
+];
