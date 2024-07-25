@@ -36,9 +36,9 @@ export const LeafletMapComponent = forwardRef((props, ref) => {
     drawnItems,
     setDrawnItems,
     stacDataForDisplay,
-    children,
     highlightedItems,
-    setHighlightedItems
+    setHighlightedItems,
+    children
   } = props;
   const mapRef = useRef();
   const featureGroupRef = useRef();

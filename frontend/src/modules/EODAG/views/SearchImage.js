@@ -1,17 +1,21 @@
 /* eslint-disable no-unused-vars */
 
-import { Button, Box } from '@mui/material';
+import { Button, Box, Typography } from '@mui/material';
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
-
+import { TreeItem2 } from '@mui/x-tree-view/TreeItem2';
 import { headerHeight, marginSmall, useSettings } from 'design';
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { LeafletMapComponent } from '../components/MapComponent.js';
+import { MapComponent } from '../components/TestMap.js';
 import { useDispatch } from 'globalErrors';
 import { useHandleError } from '../../../utils/utils.js';
 import { useLazySearchItemsQuery } from '../services/eodagApi.ts';
 import { productTree } from '../utils/constants.js';
+import { CloudCoverSlider } from '../components/CloudCoverSlider.js';
+import { SelectableTree } from '../components/SelectableTree.js';
+import { ProductTags } from '../components/ProductTags.js';
 
 const StacSearch = () => {
   const PAGESIZE = 20;
@@ -22,14 +26,20 @@ const StacSearch = () => {
 
   // ======================== initialize the states ====================================
   // 1.the search states
-  const [searchState, setSearchState] = useState({
-    products: [], //for any additional filters, but into this list under each product
-    spatialExtent: null,
-    temporalExtent: null,
-    cloudCover: null,
-    page: null,
+  const [products, setProducts] = useState([]);
+  const [spatialExtent, setSpatialExtent] = useState(null);
+  const [temporalExtent, setTemporalExtent] = useState(null);
+  const [cloudCover, setCloudCover] = useState([0, 20]);
+  const [page, setPage] = useState(1);
+
+  const searchState = {
+    products: products, //for any additional filters, but into this list under each product
+    spatialExtent: spatialExtent,
+    temporalExtent: temporalExtent,
+    cloudCover: cloudCover,
+    page: page,
     pageSize: PAGESIZE
-  });
+  };
 
   console.log('searchState', searchState);
 
@@ -42,6 +52,7 @@ const StacSearch = () => {
 
   // 3.the UI-control state
   const [currentTab, setCurrentTab] = useState('Search');
+  const [selectedProductTreeIDs, setSelectedProductTreeIDs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [highlightedItems, setHighlightedItems] = useState([]);
 
@@ -74,7 +85,11 @@ const StacSearch = () => {
           height: '100%'
         }}
       >
-        <LeafletMapComponent ref={mapRef}></LeafletMapComponent>
+        {/* <LeafletMapComponent ref={mapRef}></LeafletMapComponent> */}
+        <MapComponent
+          spatialExtent={searchState['spatialExtent']}
+          onSpatialExtentChange={setSpatialExtent}
+        ></MapComponent>
       </div>
       <Box
         sx={{
@@ -87,11 +102,20 @@ const StacSearch = () => {
           boxShadow: 3,
           zIndex: 1000,
           width: '400px',
-          height: `calc(100% - ${headerHeight + 2 * marginSmall}px)`,
-          overflowY: 'auto'
+          height: `calc(100% - ${headerHeight + 2 * marginSmall}px)`
         }}
       >
-        <RichTreeView multiSelect checkboxSelection items={productTree} />
+        <CloudCoverSlider
+          value={searchState['cloudCover']}
+          onChange={setCloudCover}
+        />
+        <Typography variant="body1">影像产品</Typography>
+        <ProductTags products={products} setProducts={setProducts} />
+        <SelectableTree
+          items={productTree}
+          selectedItemIDs={products}
+          setSelectedItemIDs={setProducts}
+        ></SelectableTree>
       </Box>
     </>
   );

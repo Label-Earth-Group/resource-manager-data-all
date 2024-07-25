@@ -1,44 +1,81 @@
-import TreeView from '@mui/lab/TreeView';
-import TreeItem from '@mui/lab/TreeItem';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
+/* eslint-disable no-unused-vars */
+import { Button, Box, Typography } from '@mui/material';
+import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
+import { TreeItem2 } from '@mui/x-tree-view/TreeItem2';
+import React, { useState, useEffect, useRef } from 'react';
+import { useTreeViewApiRef } from '@mui/x-tree-view/hooks';
 
-export const SelectableTree = (data, selectedItems, setSelectedItems) => {
-  const handleToggle = (id) => {
-    setSelectedItems((prevSelected) =>
-      prevSelected.includes(id)
-        ? prevSelected.filter((item) => item !== id)
-        : [...prevSelected, id]
-    );
+function getItemDescendantsIds(item) {
+  const ids = [];
+  item.children?.forEach((child) => {
+    ids.push(child.id);
+    ids.push(...getItemDescendantsIds(child));
+  });
+
+  return ids;
+}
+
+export const SelectableTree = ({
+  items,
+  selectedItemIDs,
+  setSelectedItemIDs
+}) => {
+  const toggledItemRef = React.useRef({});
+  const apiRef = useTreeViewApiRef();
+
+  const handleItemSelectionToggle = (event, itemId, isSelected) => {
+    toggledItemRef.current[itemId] = isSelected;
   };
 
-  const renderTree = (nodes) => (
-    <TreeItem
-      key={nodes.id}
-      nodeId={nodes.id}
-      label={
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={selectedItems.includes(nodes.id)}
-              onChange={() => handleToggle(nodes.id)}
-              onClick={(event) => event.stopPropagation()}
-            />
-          }
-          label={nodes.label}
-          key={nodes.id}
-        />
+  const handleSelectedItemsChange = (event, newSelectedItemIDs) => {
+    setSelectedItemIDs(newSelectedItemIDs);
+
+    // Select / unselect the children of the toggled item
+    const itemIDsToSelect = [];
+    const itemIDsToUnSelect = {};
+    Object.entries(toggledItemRef.current).forEach(([itemId, isSelected]) => {
+      const item = apiRef.current.getItem(itemId);
+      if (isSelected) {
+        itemIDsToSelect.push(...getItemDescendantsIds(item));
+      } else {
+        getItemDescendantsIds(item).forEach((descendantId) => {
+          itemIDsToUnSelect[descendantId] = true;
+        });
       }
-    >
-      {Array.isArray(nodes.children)
-        ? nodes.children.map((node) => renderTree(node))
-        : null}
-    </TreeItem>
-  );
+    });
+
+    const newSelectedItemIDsWithChildren = Array.from(
+      new Set(
+        [...newSelectedItemIDs, ...itemIDsToSelect].filter(
+          (itemId) => !itemIDsToUnSelect[itemId]
+        )
+      )
+    );
+
+    setSelectedItemIDs(newSelectedItemIDsWithChildren);
+
+    toggledItemRef.current = {};
+  };
+
+  const selectedLeafItems = items.filter((item) => {
+    return (
+      selectedItemIDs.includes(item.id) &&
+      apiRef.current.getItemOrderedChildrenIds(item.id).length === 0
+    );
+  });
 
   return (
-    <div style={{ padding: '20px' }}>
-      <TreeView>{data.map((tree) => renderTree(tree))}</TreeView>
-    </div>
+    <Box sx={{ height: 'auto', width: '100%', overflowY: 'auto' }}>
+      <RichTreeView
+        multiSelect
+        checkboxSelection
+        apiRef={apiRef}
+        items={items}
+        selectedItems={selectedItemIDs}
+        onSelectedItemsChange={handleSelectedItemsChange}
+        onItemSelectionToggle={handleItemSelectionToggle}
+        // slots={{ item: TreeItem2 }}
+      />
+    </Box>
   );
 };
