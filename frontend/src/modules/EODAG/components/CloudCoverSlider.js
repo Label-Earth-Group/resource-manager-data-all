@@ -38,19 +38,13 @@ export const CloudCoverSlider = ({ value, onChange }) => {
 
   return (
     <>
-      <Typography variant="body1" style={{ marginRight: 8 }}>
-        云量
-      </Typography>
-      <Box width={'100%'} display="flex" alignItems="center">
-        <Slider
-          value={value}
-          onChange={handleSliderChange}
-          valueLabelDisplay="auto"
-          min={0}
-          max={100}
-          step={1}
-          style={{ width: 200 }}
-        />
+      <Typography variant="body1">云量</Typography>
+      <Box
+        width={'100%'}
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+      >
         <TextField
           value={value[0]}
           onChange={(event) => handleInputChange(0, event)}
@@ -67,7 +61,16 @@ export const CloudCoverSlider = ({ value, onChange }) => {
           }}
           size="small"
           margin="dense"
-          style={{ width: 80, marginLeft: 8 }}
+          style={{ width: 100 }}
+        />
+        <Slider
+          value={value}
+          onChange={handleSliderChange}
+          valueLabelDisplay="auto"
+          min={0}
+          max={100}
+          step={1}
+          style={{ width: 150 }}
         />
         <TextField
           value={value[1]}
@@ -85,7 +88,7 @@ export const CloudCoverSlider = ({ value, onChange }) => {
           }}
           size="small"
           margin="dense"
-          style={{ width: 80, marginLeft: 8 }}
+          style={{ width: 100 }}
         />
       </Box>
     </>

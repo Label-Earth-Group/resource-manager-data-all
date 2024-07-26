@@ -65,7 +65,7 @@ export const SelectableTree = ({
   });
 
   return (
-    <Box sx={{ height: 'auto', width: '100%', overflowY: 'auto' }}>
+    <Box sx={{ height: '70%', width: '100%', overflowY: 'auto' }}>
       <RichTreeView
         multiSelect
         checkboxSelection

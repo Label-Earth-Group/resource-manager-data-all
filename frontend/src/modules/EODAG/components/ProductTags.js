@@ -18,18 +18,24 @@ export function ProductTags({ products, setProducts }) {
     <Paper
       sx={{
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'left',
+        alignContent: 'flex-start',
         flexWrap: 'wrap',
         listStyle: 'none',
-        p: 0.5,
-        m: 0
+        my: 0.5,
+        height: '12%',
+        overflow: 'auto'
       }}
       component="ul"
     >
       {products.map((product) => {
         return (
           <ListItem key={product}>
-            <Chip label={product} onDelete={handleDelete(product)} />
+            <Chip
+              label={product}
+              size="small"
+              onDelete={handleDelete(product)}
+            />
           </ListItem>
         );
       })}
