@@ -1,6 +1,6 @@
 import CqlOperator from './operator';
 
-export default class CqlComparisonOperator extends CqlOperator {
+export class CqlComparisonOperator extends CqlOperator {
   constructor(operator, pred = null, obj = null) {
     super(operator, [pred, obj]);
   }
@@ -32,10 +32,6 @@ export class CqlEqual extends CqlComparisonOperator {
   constructor(pred = null, obj = null) {
     super(CqlEqual.SYMBOL, pred, obj);
   }
-
-  // static get longLabel() {
-  //   return i18n.t('search.equalTo');
-  // }
 }
 
 export class CqlNotEqual extends CqlComparisonOperator {
@@ -48,10 +44,6 @@ export class CqlNotEqual extends CqlComparisonOperator {
   static get label() {
     return '≠';
   }
-
-  // static get longLabel() {
-  //   return i18n.t('search.notEqualTo');
-  // }
 }
 
 export class CqlGreaterThan extends CqlComparisonOperator {
@@ -60,10 +52,6 @@ export class CqlGreaterThan extends CqlComparisonOperator {
   constructor(pred = null, obj = null) {
     super(CqlGreaterThan.SYMBOL, pred, obj);
   }
-
-  // static get longLabel() {
-  //   return i18n.t('search.greaterThan');
-  // }
 }
 
 export class CqlGreaterThanEqual extends CqlComparisonOperator {
@@ -76,10 +64,6 @@ export class CqlGreaterThanEqual extends CqlComparisonOperator {
   static get label() {
     return '≥';
   }
-
-  // static get longLabel() {
-  //   return i18n.t('search.greaterThanEqual');
-  // }
 }
 
 export class CqlLessThan extends CqlComparisonOperator {
@@ -88,10 +72,6 @@ export class CqlLessThan extends CqlComparisonOperator {
   constructor(pred = null, obj = null) {
     super(CqlLessThan.SYMBOL, pred, obj);
   }
-
-  // static get longLabel() {
-  //   return i18n.t('search.lessThan');
-  // }
 }
 
 export class CqlLessThanEqual extends CqlComparisonOperator {
@@ -104,10 +84,6 @@ export class CqlLessThanEqual extends CqlComparisonOperator {
   static get label() {
     return '≤';
   }
-
-  // static get longLabel() {
-  //   return i18n.t('search.lessThanEqual');
-  // }
 }
 
 /* export class CqlIsNull extends CqlComparisonOperator {

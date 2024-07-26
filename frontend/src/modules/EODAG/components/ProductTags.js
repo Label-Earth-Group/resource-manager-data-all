@@ -7,10 +7,10 @@ const ListItem = styled('li')(({ theme }) => ({
   margin: theme.spacing(0.5)
 }));
 
-export function ProductTags({ products, setProducts }) {
-  const handleDelete = (productToDelete) => () => {
-    setProducts((products) =>
-      products.filter((product) => product !== productToDelete)
+export function ProductTags({ products, setProductIDs }) {
+  const handleDeleteID = (productIDToDelete) => () => {
+    setProductIDs((productIDs) =>
+      productIDs.filter((productID) => productID !== productIDToDelete)
     );
   };
 
@@ -30,11 +30,11 @@ export function ProductTags({ products, setProducts }) {
     >
       {products.map((product) => {
         return (
-          <ListItem key={product}>
+          <ListItem key={product['id']}>
             <Chip
-              label={product}
+              label={product['id']}
               size="small"
-              onDelete={handleDelete(product)}
+              onDelete={handleDeleteID(product['id'])}
             />
           </ListItem>
         );

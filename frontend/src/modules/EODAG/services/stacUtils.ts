@@ -8,6 +8,8 @@ import type {
 } from 'types/stac';
 import type { Geometry } from 'geojson';
 import type { GenericObject } from 'types/common';
+import { Utils, stacPagination } from './utils';
+import URI from 'urijs';
 
 export const EODAG_SUMMARY_INDEX: GenericObject = {
   INSTRUMENT: 0,
@@ -212,4 +214,229 @@ export function formatPayload(searchFilters: SearchPayload): SearchPayload {
         requestPayload[key as keyof typeof requestPayload];
     });
   return requestPayloadSorted;
+}
+
+// =======================================================================
+function formatDatetimeQuery(value: any[]): string | undefined {
+  if (!value) {
+    return undefined;
+  }
+  return value
+    .map((dt) => {
+      if (dt instanceof Date) {
+        return dt.toISOString();
+      } else if (dt) {
+        return dt;
+      } else {
+        return '..';
+      }
+    })
+    .join('/');
+}
+
+function formatSortbyForPOST(value: string) {
+  // POST search requires sortby to be an array of objects containing a property name and sort direction.
+  // See spec here: https://api.stacspec.org/v1.0.0-rc.1/item-search/#tag/Item-Search/operation/postItemSearch
+  // This function converts the property name to the desired format.
+  const sortby = {
+    field: '',
+    direction: 'asc'
+  };
+
+  // Check if the value starts with a minus sign ("-")
+  if (value.startsWith('-')) {
+    // sort by descending order
+    sortby.field = value.substring(1);
+    sortby.direction = 'desc';
+  } else {
+    //sort by ascending order
+    sortby.field = value;
+  }
+
+  // Put the object in an array
+  return [sortby];
+}
+
+export function getPaginationLinks(data: { links: any }) {
+  let pages = {};
+  if (Utils.isObject(data)) {
+    let pageLinks = Utils.getLinksWithRels(data.links, stacPagination);
+    for (let pageLink of pageLinks) {
+      let rel = pageLink.rel === 'previous' ? 'prev' : pageLink.rel;
+      pages[rel] = pageLink;
+    }
+  }
+  return pages;
+}
+
+export function addFiltersToLink(
+  link: { method: string; body: any; href: any },
+  filters: { [x: string]: any; limit?: any },
+  itemsPerPage = null
+) {
+  let isEmpty = (value) => {
+    return (
+      value === null ||
+      (typeof value === 'number' && !Number.isFinite(value)) ||
+      (typeof value === 'string' && value.length === 0) ||
+      (typeof value === 'object' && Utils.size(value) === 0)
+    );
+  };
+
+  if (!Utils.isObject(filters)) {
+    filters = {};
+  } else {
+    filters = Object.assign({}, filters);
+  }
+
+  if (typeof filters.limit !== 'number' && typeof itemsPerPage === 'number') {
+    filters.limit = itemsPerPage;
+  }
+
+  if (Utils.hasText(link.method) && link.method.toUpperCase() === 'POST') {
+    let body = Object.assign({}, link.body);
+
+    for (let key in filters) {
+      let value = filters[key];
+      if (isEmpty(value)) {
+        delete body[key];
+        continue;
+      }
+
+      if (key === 'sortby') {
+        value = formatSortbyForPOST(value);
+      } else if (key === 'datetime') {
+        value = formatDatetimeQuery(value);
+      } else if (key === 'filters') {
+        Object.assign(body, value.toJSON());
+        continue;
+      }
+
+      body[key] = value;
+    }
+    return Object.assign({}, link, { body });
+  } else {
+    // GET
+    // Construct new link with search params
+    let url = URI(link.href);
+
+    for (let key in filters) {
+      let value = filters[key];
+      if (isEmpty(value)) {
+        url.removeQuery(key);
+        continue;
+      }
+
+      if (key === 'datetime') {
+        value = formatDatetimeQuery(value);
+      } else if (key === 'bbox') {
+        value = value.join(',');
+      } else if (key === 'collections' || key === 'ids' || key === 'q') {
+        value = value.join(',');
+      } else if (key === 'filters') {
+        let params = value.toText();
+        url.setQuery(params);
+        continue;
+      }
+
+      url.setQuery(key, value);
+    }
+
+    return Object.assign({}, link, { href: url.toString() });
+  }
+}
+
+export function supportsExtension(data, pattern) {
+  if (!Utils.isObject(data) || !Array.isArray(data['stac_extensions'])) {
+    return false;
+  }
+  let regexp = new RegExp('^' + pattern.replaceAll('*', '[^/]+') + '$');
+  return Boolean(data['stac_extensions'].find((uri) => regexp.test(uri)));
+}
+
+export function formatSearchTerms(
+  searchterm: string,
+  target: string | any[] | { [s: string]: unknown } | ArrayLike<unknown>,
+  and = true
+) {
+  if (typeof searchterm !== 'string' || searchterm.length === 0) {
+    return false;
+  }
+  if (Utils.isObject(target)) {
+    target = Object.values(target);
+  } else if (typeof target === 'string') {
+    target = [target];
+  }
+
+  if (!Array.isArray(target)) {
+    return false;
+  }
+
+  let splitChars = /[\s.,;!&({[)}]]+/g;
+
+  // Prepare search terms
+  const searchtermList: string[] = searchterm.toLowerCase().split(splitChars);
+
+  // Prepare text to search in
+  const targetString = target
+    .filter((s) => typeof s === 'string') // Remove non-strings
+    .join(' ') // Merge into a single string
+    .replace(splitChars, ' ') // replace split chars with white spaces
+    .toLowerCase(); // Lowercase
+
+  // Search with "and" or "or"
+  let fn = and ? 'every' : 'some';
+  return searchtermList[fn]((term: string) => targetString.includes(term));
+}
+
+export function formatSearch(searchState: SearchPayload): SearchPayload {
+  const {
+    products,
+    spatialExtent,
+    temporalExtent,
+    cloudCover,
+    // page,
+    pageSize
+    // ...restSearchState
+  } = searchState;
+
+  // the formated payload for post into search api
+  const searchPayload = {
+    limit: pageSize,
+    // page: page,
+    'filter-lang': 'cql-json'
+  };
+
+  if (spatialExtent) {
+    searchPayload['intersects'] = spatialExtent;
+  }
+  if (temporalExtent) {
+    searchPayload['datetime'] = formatDatetimeQuery(temporalExtent);
+  }
+
+  const filters = [];
+
+  if (products && products.length > 0) {
+    filters.push({
+      op: 'or',
+      args: products.map((product) => {
+        return product['filter'];
+      })
+    });
+  }
+
+  if (cloudCover) {
+    filters.push({
+      op: 'between',
+      args: [{ property: 'eo:cloud_cover' }, cloudCover[0], cloudCover[1]]
+    });
+  }
+
+  if (filters.length > 1) {
+    searchPayload['filter'] = { op: 'and', args: filters };
+  } else if (filters.length === 1) {
+    searchPayload['filter'] = filters[0];
+  }
+
+  return searchPayload;
 }

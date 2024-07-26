@@ -22,13 +22,6 @@ export default class Queryable {
     return formatKey(this.id);
   }
 
-  // get description() {
-  //   if (this.isTemporal) {
-  //     return i18n.t('search.dateDescription');
-  //   }
-  //   return '';
-  // }
-
   get supported() {
     return this.isText || this.isNumeric || this.isBoolean;
   }

@@ -10,12 +10,4 @@ export class CqlLike extends CqlComparisonOperator {
   static get label() {
     return '~';
   }
-
-  // static get longLabel() {
-  //   return i18n.t('search.matches');
-  // }
-
-  // static get description() {
-  //   return i18n.t('search.likeOperatorDescription');
-  // }
 }

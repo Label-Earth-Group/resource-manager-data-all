@@ -1,3 +1,5 @@
+import { Utils } from '../utils';
+
 export default class CqlValue {
   constructor(value) {
     this.value = value;
@@ -35,9 +37,9 @@ export class CqlTimestamp extends CqlValue {
     return `TIMESTAMP('${this.toTimestamp()}')`;
   }
 
-  // toTimestamp() {
-  //   return Utils.dateToUTC(this.value).toISOString();
-  // }
+  toTimestamp() {
+    return Utils.dateToUTC(this.value).toISOString();
+  }
 }
 
 export class CqlString extends CqlValue {

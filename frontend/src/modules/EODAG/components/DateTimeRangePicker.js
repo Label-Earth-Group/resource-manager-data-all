@@ -1,17 +1,17 @@
 import React from 'react';
-import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { IconButton, TextField, Box, InputAdornment } from '@mui/material';
+import {
+  DatePicker,
+  DateTimePicker,
+  LocalizationProvider
+} from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import CloseIcon from '@mui/icons-material/Close';
-import { IconButton } from '@mui/material';
 
-export function DateRangePicker({
-  startDate,
-  setStartDate,
-  endDate,
-  setEndDate
-}) {
-  const clearStartDate = () => setStartDate(null);
-  const clearEndDate = () => setEndDate(null);
+export function DateRangePicker({ dateRange, setDateRange }) {
+  const clearStartDate = () => setDateRange([null, dateRange[1]]);
+  const clearEndDate = () => setDateRange([dateRange[0], null]);
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <DateTimePicker
@@ -20,9 +20,9 @@ export function DateRangePicker({
         openTo="year"
         views={['year', 'month', 'day']}
         format="yyyy-MM-dd"
-        value={startDate}
-        maxDate={endDate}
-        onAccept={(newValue) => setStartDate(newValue)}
+        value={dateRange[0]}
+        maxDate={dateRange[1]}
+        onAccept={(newValue) => setDateRange([newValue, dateRange[1]])}
         slotProps={{
           inputAdornment: {
             position: 'start'
@@ -43,9 +43,9 @@ export function DateRangePicker({
         openTo="year"
         views={['year', 'month', 'day']}
         format="yyyy-MM-dd"
-        value={endDate}
-        minDate={startDate}
-        onChange={(newValue) => setEndDate(newValue)}
+        value={dateRange[1]}
+        minDate={dateRange[0]}
+        onChange={(newValue) => setDateRange([dateRange[0], newValue])}
         sx={{ mr: 2, mb: 2 }}
         slotProps={{
           inputAdornment: {
@@ -62,6 +62,60 @@ export function DateRangePicker({
           }
         }}
       />
+    </LocalizationProvider>
+  );
+}
+
+export function CustomDateRangePicker({ dateRange, setDateRange }) {
+  const clearStartDate = () => setDateRange([null, dateRange[1]]);
+  const clearEndDate = () => setDateRange([dateRange[0], null]);
+
+  return (
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <DatePicker
+          label="Start"
+          value={dateRange[0]}
+          onChange={(newValue) => setDateRange([newValue, dateRange[1]])}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              sx={{ mr: 2 }}
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={clearStartDate}>
+                      <CloseIcon />
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+            />
+          )}
+        />
+        <Box sx={{ mx: 2 }}> - </Box>
+        <DatePicker
+          label="End"
+          value={dateRange[1]}
+          onChange={(newValue) => setDateRange([dateRange[0], newValue])}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={clearEndDate}>
+                      <CloseIcon />
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+            />
+          )}
+        />
+      </Box>
     </LocalizationProvider>
   );
 }
