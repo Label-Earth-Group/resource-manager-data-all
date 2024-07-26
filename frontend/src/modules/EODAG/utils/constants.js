@@ -91,11 +91,111 @@ export const productTree = [
     id: '1',
     label: 'LandSat-4 / 5 / TM',
     children: [
-      { id: '1-1', label: 'Level-1 product' },
-      { id: '1-2', label: 'Level-2 Surface Reflectance product' },
-      { id: '1-3', label: 'Level-2 Surface Temperature product' },
-      { id: '1-4', label: 'U.S. ARD Surface Reflectance product' },
-      { id: '1-5', label: 'U.S. ARD Surface Temperature product' },
+      {
+        id: '1-1',
+        label: 'Level-1 product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: 'in',
+              args: [{ property: 'platform' }, ['LANDSAT_4', 'LANDSAT_5']]
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['TM']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'landsat_c2l1']
+            }
+          ]
+        }
+      },
+      {
+        id: '1-2',
+        label: 'Level-2 Surface Reflectance product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: 'in',
+              args: [{ property: 'platform' }, ['LANDSAT_4', 'LANDSAT_5']]
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['TM']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'landsat_c2l2_sr']
+            }
+          ]
+        }
+      },
+      {
+        id: '1-3',
+        label: 'Level-2 Surface Temperature product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: 'in',
+              args: [{ property: 'platform' }, ['LANDSAT_4', 'LANDSAT_5']]
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['TM']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'landsat_c2l2_st']
+            }
+          ]
+        }
+      },
+      {
+        id: '1-4',
+        label: 'U.S. ARD Surface Reflectance product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: 'in',
+              args: [{ property: 'platform' }, ['LANDSAT_4', 'LANDSAT_5']]
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['TM']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'landsat_c2ard_sr']
+            }
+          ]
+        }
+      },
+      {
+        id: '1-5',
+        label: 'U.S. ARD Surface Temperature product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: 'in',
+              args: [{ property: 'platform' }, ['LANDSAT_4', 'LANDSAT_5']]
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['TM']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'landsat_c2ard_st']
+            }
+          ]
+        }
+      },
       { id: '1-6', label: 'Level-3 ...' }
     ]
   },
@@ -103,11 +203,111 @@ export const productTree = [
     id: '2',
     label: 'LandSat-7 / ETM+',
     children: [
-      { id: '2-1', label: 'Level-1 product' },
-      { id: '2-2', label: 'Level-2 Surface Reflectance product' },
-      { id: '2-3', label: 'Level-2 Surface Temperature product' },
-      { id: '2-4', label: 'U.S. ARD Surface Reflectance product' },
-      { id: '2-5', label: 'U.S. ARD Surface Temperature product' },
+      {
+        id: '2-1',
+        label: 'Level-1 product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: '=',
+              args: [{ property: 'platform' }, 'LANDSAT_7']
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['ETM']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'landsat_c2l1']
+            }
+          ]
+        }
+      },
+      {
+        id: '2-2',
+        label: 'Level-2 Surface Reflectance product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: '=',
+              args: [{ property: 'platform' }, 'LANDSAT_7']
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['ETM']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'landsat_c2l2_sr']
+            }
+          ]
+        }
+      },
+      {
+        id: '2-3',
+        label: 'Level-2 Surface Temperature product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: '=',
+              args: [{ property: 'platform' }, 'LANDSAT_7']
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['ETM']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'landsat_c2l2_st']
+            }
+          ]
+        }
+      },
+      {
+        id: '2-4',
+        label: 'U.S. ARD Surface Reflectance product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: '=',
+              args: [{ property: 'platform' }, 'LANDSAT_7']
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['ETM']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'landsat_c2ard_sr']
+            }
+          ]
+        }
+      },
+      {
+        id: '2-5',
+        label: 'U.S. ARD Surface Temperature product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: '=',
+              args: [{ property: 'platform' }, 'LANDSAT_7']
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['ETM']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'landsat_c2ard_st']
+            }
+          ]
+        }
+      },
       { id: '2-6', label: 'Level-3 ...' }
     ]
   },
@@ -115,11 +315,111 @@ export const productTree = [
     id: '3',
     label: 'LandSat-8/9 / OLI, TIRS',
     children: [
-      { id: '3-1', label: 'Level-1 product' },
-      { id: '3-2', label: 'Level-2 Surface Reflectance product' },
-      { id: '3-3', label: 'Level-2 Surface Temperature product' },
-      { id: '3-4', label: 'U.S. ARD Surface Reflectance product' },
-      { id: '3-5', label: 'U.S. ARD Surface Temperature product' },
+      {
+        id: '3-1',
+        label: 'Level-1 product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: 'in',
+              args: [{ property: 'platform' }, ['LANDSAT_8', 'LANDSAT_9']]
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['OLI', 'TIRS']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'landsat_c2l1']
+            }
+          ]
+        }
+      },
+      {
+        id: '3-2',
+        label: 'Level-2 Surface Reflectance product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: 'in',
+              args: [{ property: 'platform' }, ['LANDSAT_8', 'LANDSAT_9']]
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['OLI', 'TIRS']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'landsat_c2l2_sr']
+            }
+          ]
+        }
+      },
+      {
+        id: '3-3',
+        label: 'Level-2 Surface Temperature product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: 'in',
+              args: [{ property: 'platform' }, ['LANDSAT_8', 'LANDSAT_9']]
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['OLI', 'TIRS']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'landsat_c2l2_st']
+            }
+          ]
+        }
+      },
+      {
+        id: '3-4',
+        label: 'U.S. ARD Surface Reflectance product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: 'in',
+              args: [{ property: 'platform' }, ['LANDSAT_8', 'LANDSAT_9']]
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['OLI', 'TIRS']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'landsat_c2ard_sr']
+            }
+          ]
+        }
+      },
+      {
+        id: '3-5',
+        label: 'U.S. ARD Surface Temperature product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: 'in',
+              args: [{ property: 'platform' }, ['LANDSAT_8', 'LANDSAT_9']]
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['OLI', 'TIRS']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'landsat_c2ard_sr']
+            }
+          ]
+        }
+      },
       { id: '3-6', label: 'Level-3 ...' }
     ]
   },
@@ -127,18 +427,498 @@ export const productTree = [
     id: '4',
     label: 'Sentinel-1 / C-SAR',
     children: [
-      { id: '4-1', label: 'Level-0 RAW product' },
-      { id: '4-2', label: 'Level-1 GRD product' },
-      { id: '4-3', label: 'Level-1 SLC product' },
-      { id: '4-4', label: 'Level-2 OCN product' }
+      {
+        id: '4-1',
+        label: 'Level-0 RAW product',
+        children: [
+          {
+            id: '4-1-1',
+            label: 'SW',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: 'in',
+                  args: [
+                    { property: 'platform' },
+                    ['sentinel-1a', 'sentinel-1b']
+                  ]
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['SAR']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'RAW']
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'sar:instrument_mode' }, 'SW']
+                }
+              ]
+            }
+          },
+          {
+            id: '4-1-2',
+            label: 'IW',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: 'in',
+                  args: [
+                    { property: 'platform' },
+                    ['sentinel-1a', 'sentinel-1b']
+                  ]
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['SAR']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'RAW']
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'sar:instrument_mode' }, 'IW']
+                }
+              ]
+            }
+          },
+          {
+            id: '4-1-3',
+            label: 'EW',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: 'in',
+                  args: [
+                    { property: 'platform' },
+                    ['sentinel-1a', 'sentinel-1b']
+                  ]
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['SAR']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'RAW']
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'sar:instrument_mode' }, 'EW']
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        id: '4-2',
+        label: 'Level-1 GRD product',
+        children: [
+          {
+            id: '4-2-1',
+            label: 'SW',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: 'in',
+                  args: [
+                    { property: 'platform' },
+                    ['sentinel-1a', 'sentinel-1b']
+                  ]
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['SAR']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'GRD']
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'sar:instrument_mode' }, 'SW']
+                }
+              ]
+            }
+          },
+          {
+            id: '4-2-2',
+            label: 'IW',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: 'in',
+                  args: [
+                    { property: 'platform' },
+                    ['sentinel-1a', 'sentinel-1b']
+                  ]
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['SAR']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'GRD']
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'sar:instrument_mode' }, 'IW']
+                }
+              ]
+            }
+          },
+          {
+            id: '4-2-3',
+            label: 'EW',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: 'in',
+                  args: [
+                    { property: 'platform' },
+                    ['sentinel-1a', 'sentinel-1b']
+                  ]
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['SAR']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'GRD']
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'sar:instrument_mode' }, 'EW']
+                }
+              ]
+            }
+          },
+          {
+            id: '4-2-3',
+            label: 'WV',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: 'in',
+                  args: [
+                    { property: 'platform' },
+                    ['sentinel-1a', 'sentinel-1b']
+                  ]
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['SAR']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'GRD']
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'sar:instrument_mode' }, 'WV']
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        id: '4-3',
+        label: 'Level-1 SLC product',
+        children: [
+          {
+            id: '4-3-1',
+            label: 'SW',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: 'in',
+                  args: [
+                    { property: 'platform' },
+                    ['sentinel-1a', 'sentinel-1b']
+                  ]
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['SAR']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'SLC']
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'sar:instrument_mode' }, 'IW']
+                }
+              ]
+            }
+          },
+          {
+            id: '4-3-2',
+            label: 'IW',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: 'in',
+                  args: [
+                    { property: 'platform' },
+                    ['sentinel-1a', 'sentinel-1b']
+                  ]
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['SAR']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'SLC']
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'sar:instrument_mode' }, 'IW']
+                }
+              ]
+            }
+          },
+          {
+            id: '4-3-3',
+            label: 'EW',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: 'in',
+                  args: [
+                    { property: 'platform' },
+                    ['sentinel-1a', 'sentinel-1b']
+                  ]
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['SAR']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'GRD']
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'sar:instrument_mode' }, 'EW']
+                }
+              ]
+            }
+          },
+          {
+            id: '4-3-3',
+            label: 'WV',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: 'in',
+                  args: [
+                    { property: 'platform' },
+                    ['sentinel-1a', 'sentinel-1b']
+                  ]
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['SAR']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'GRD']
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'sar:instrument_mode' }, 'WV']
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        id: '4-4',
+        label: 'Level-2 OCN product',
+        children: [
+          {
+            id: '4-4-1',
+            label: 'SW',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: 'in',
+                  args: [
+                    { property: 'platform' },
+                    ['sentinel-1a', 'sentinel-1b']
+                  ]
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['SAR']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'OCN']
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'sar:instrument_mode' }, 'SW']
+                }
+              ]
+            }
+          },
+          {
+            id: '4-4-2',
+            label: 'IW',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: 'in',
+                  args: [
+                    { property: 'platform' },
+                    ['sentinel-1a', 'sentinel-1b']
+                  ]
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['SAR']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'OCN']
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'sar:instrument_mode' }, 'IW']
+                }
+              ]
+            }
+          },
+          {
+            id: '4-4-3',
+            label: 'EW',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: 'in',
+                  args: [
+                    { property: 'platform' },
+                    ['sentinel-1a', 'sentinel-1b']
+                  ]
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['SAR']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'OCN']
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'sar:instrument_mode' }, 'EW']
+                }
+              ]
+            }
+          },
+          {
+            id: '4-4-3',
+            label: 'WV',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: 'in',
+                  args: [
+                    { property: 'platform' },
+                    ['sentinel-1a', 'sentinel-1b']
+                  ]
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['SAR']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'OCN']
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'sar:instrument_mode' }, 'WV']
+                }
+              ]
+            }
+          }
+        ]
+      }
     ]
   },
   {
     id: '5',
     label: 'Sentinel-2 / MSI',
     children: [
-      { id: '5-1', label: 'Level-1C product' },
-      { id: '5-2', label: 'Level-2A product' }
+      {
+        id: '5-1',
+        label: 'Level-1C product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: 'in',
+              args: [{ property: 'platform' }, ['sentinel-2a', 'sentinel-2b']]
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['MSI']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'S2MSI1C']
+            }
+          ]
+        }
+      },
+      {
+        id: '5-2',
+        label: 'Level-2A product',
+        filter: {
+          op: 'and',
+          args: [
+            {
+              op: 'in',
+              args: [{ property: 'platform' }, ['sentinel-2a', 'sentinel-2b']]
+            },
+            {
+              op: 'a_overlaps',
+              args: [{ property: 'instruments' }, ['MSI']]
+            },
+            {
+              op: '=',
+              args: [{ property: 'product:type' }, 'S2MSI2A']
+            }
+          ]
+        }
+      }
     ]
   }
 ];
