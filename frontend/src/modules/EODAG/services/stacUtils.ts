@@ -404,13 +404,16 @@ export function formatSearch(searchState: SearchPayload): SearchPayload {
   const searchPayload = {
     limit: pageSize,
     // page: page,
-    'filter-lang': 'cql-json'
+    'filter-lang': 'cql2-json',
+    fields: {
+      exclude: ['assets']
+    }
   };
 
   if (spatialExtent) {
     searchPayload['intersects'] = spatialExtent;
   }
-  if (temporalExtent) {
+  if (temporalExtent.some((element) => element != null)) {
     searchPayload['datetime'] = formatDatetimeQuery(temporalExtent);
   }
 
@@ -427,8 +430,12 @@ export function formatSearch(searchState: SearchPayload): SearchPayload {
 
   if (cloudCover) {
     filters.push({
-      op: 'between',
-      args: [{ property: 'eo:cloud_cover' }, cloudCover[0], cloudCover[1]]
+      op: '>=',
+      args: [{ property: 'eo:cloud_cover' }, cloudCover[0]]
+    });
+    filters.push({
+      op: '<=',
+      args: [{ property: 'eo:cloud_cover' }, cloudCover[1]]
     });
   }
 

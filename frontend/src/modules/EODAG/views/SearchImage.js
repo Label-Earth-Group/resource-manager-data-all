@@ -86,7 +86,7 @@ const StacSearch = () => {
   const handleReset = () => {
     setProductIDs([]);
     setSpatialExtent(null);
-    setTemporalExtent(null);
+    setTemporalExtent([null, null]);
     setCloudCover([0, 100]);
     setCurrentPage(1);
     setSearchResponse(null);
@@ -145,6 +145,19 @@ const StacSearch = () => {
           height: `calc(100% - ${headerHeight + 2 * marginSmall}px)`
         }}
       >
+        <Box sx={{ mb: 2 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSearchItems}
+            sx={{ mr: 2 }}
+          >
+            查询
+          </Button>
+          <Button variant="contained" color="secondary" onClick={handleReset}>
+            重置
+          </Button>
+        </Box>
         <DateRangePicker
           dateRange={temporalExtent}
           setDateRange={setTemporalExtent}
