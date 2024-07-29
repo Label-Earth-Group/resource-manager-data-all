@@ -107,7 +107,7 @@ export const productTree = [
             },
             {
               op: '=',
-              args: [{ property: 'product:type' }, 'landsat_c2l1']
+              args: [{ property: 'product:type' }, 'landsat-c2l1']
             }
           ]
         }
@@ -128,7 +128,7 @@ export const productTree = [
             },
             {
               op: '=',
-              args: [{ property: 'product:type' }, 'landsat_c2l2_sr']
+              args: [{ property: 'product:type' }, 'landsat-c2l2-sr']
             }
           ]
         }
@@ -149,7 +149,7 @@ export const productTree = [
             },
             {
               op: '=',
-              args: [{ property: 'product:type' }, 'landsat_c2l2_st']
+              args: [{ property: 'product:type' }, 'landsat-c2l2-st']
             }
           ]
         }
@@ -170,7 +170,7 @@ export const productTree = [
             },
             {
               op: '=',
-              args: [{ property: 'product:type' }, 'landsat_c2ard_sr']
+              args: [{ property: 'product:type' }, 'landsat-c2ard-sr']
             }
           ]
         }
@@ -191,7 +191,7 @@ export const productTree = [
             },
             {
               op: '=',
-              args: [{ property: 'product:type' }, 'landsat_c2ard_st']
+              args: [{ property: 'product:type' }, 'landsat-c2ard-st']
             }
           ]
         }
@@ -219,7 +219,7 @@ export const productTree = [
             },
             {
               op: '=',
-              args: [{ property: 'product:type' }, 'landsat_c2l1']
+              args: [{ property: 'product:type' }, 'landsat-c2l1']
             }
           ]
         }
@@ -240,7 +240,7 @@ export const productTree = [
             },
             {
               op: '=',
-              args: [{ property: 'product:type' }, 'landsat_c2l2_sr']
+              args: [{ property: 'product:type' }, 'landsat-c2l2-sr']
             }
           ]
         }
@@ -261,7 +261,7 @@ export const productTree = [
             },
             {
               op: '=',
-              args: [{ property: 'product:type' }, 'landsat_c2l2_st']
+              args: [{ property: 'product:type' }, 'landsat-c2l2-st']
             }
           ]
         }
@@ -282,7 +282,7 @@ export const productTree = [
             },
             {
               op: '=',
-              args: [{ property: 'product:type' }, 'landsat_c2ard_sr']
+              args: [{ property: 'product:type' }, 'landsat-c2ard-sr']
             }
           ]
         }
@@ -303,7 +303,7 @@ export const productTree = [
             },
             {
               op: '=',
-              args: [{ property: 'product:type' }, 'landsat_c2ard_st']
+              args: [{ property: 'product:type' }, 'landsat-c2ard-st']
             }
           ]
         }
@@ -331,7 +331,7 @@ export const productTree = [
             },
             {
               op: '=',
-              args: [{ property: 'product:type' }, 'landsat_c2l1']
+              args: [{ property: 'product:type' }, 'landsat-c2l1']
             }
           ]
         }
@@ -352,7 +352,7 @@ export const productTree = [
             },
             {
               op: '=',
-              args: [{ property: 'product:type' }, 'landsat_c2l2_sr']
+              args: [{ property: 'product:type' }, 'landsat-c2l2-sr']
             }
           ]
         }
@@ -373,7 +373,7 @@ export const productTree = [
             },
             {
               op: '=',
-              args: [{ property: 'product:type' }, 'landsat_c2l2_st']
+              args: [{ property: 'product:type' }, 'landsat-c2l2-st']
             }
           ]
         }
@@ -394,7 +394,7 @@ export const productTree = [
             },
             {
               op: '=',
-              args: [{ property: 'product:type' }, 'landsat_c2ard_sr']
+              args: [{ property: 'product:type' }, 'landsat-c2ard-sr']
             }
           ]
         }
@@ -415,7 +415,7 @@ export const productTree = [
             },
             {
               op: '=',
-              args: [{ property: 'product:type' }, 'landsat_c2ard_sr']
+              args: [{ property: 'product:type' }, 'landsat-c2ard-sr']
             }
           ]
         }
