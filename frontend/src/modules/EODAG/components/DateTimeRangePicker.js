@@ -1,5 +1,11 @@
 import React from 'react';
-import { IconButton, TextField, Box, InputAdornment } from '@mui/material';
+import {
+  IconButton,
+  TextField,
+  Box,
+  InputAdornment,
+  Typography
+} from '@mui/material';
 import {
   DatePicker,
   DateTimePicker,
@@ -14,9 +20,10 @@ export function DateRangePicker({ dateRange, setDateRange }) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Typography component="span" sx={{ mx: 1, lineHeight: '40px' }}>
+        时间范围：
+      </Typography>
       <DateTimePicker
-        sx={{ mr: 2 }}
-        label="Start Date"
         openTo="year"
         views={['year', 'month', 'day']}
         format="yyyy-MM-dd"
@@ -30,23 +37,27 @@ export function DateRangePicker({ dateRange, setDateRange }) {
           textField: {
             InputProps: {
               endAdornment: (
-                <IconButton onClick={clearStartDate}>
+                <IconButton onClick={clearStartDate} sx={{ px: 0, py: 1 }}>
                   <CloseIcon />
                 </IconButton>
               )
+            },
+            inputProps: {
+              sx: { padding: 0 }
             }
           }
         }}
       />
+      <Typography component="span" sx={{ mx: 1, lineHeight: '40px' }}>
+        --
+      </Typography>
       <DateTimePicker
-        label="End Date"
         openTo="year"
         views={['year', 'month', 'day']}
         format="yyyy-MM-dd"
         value={dateRange[1]}
         minDate={dateRange[0]}
         onChange={(newValue) => setDateRange([dateRange[0], newValue])}
-        sx={{ mr: 2 }}
         slotProps={{
           inputAdornment: {
             position: 'start'
@@ -54,10 +65,13 @@ export function DateRangePicker({ dateRange, setDateRange }) {
           textField: {
             InputProps: {
               endAdornment: (
-                <IconButton onClick={clearEndDate}>
+                <IconButton onClick={clearEndDate} sx={{ px: 0, py: 1 }}>
                   <CloseIcon />
                 </IconButton>
               )
+            },
+            inputProps: {
+              sx: { padding: 0 }
             }
           }
         }}
@@ -80,7 +94,7 @@ export function CustomDateRangePicker({ dateRange, setDateRange }) {
           renderInput={(params) => (
             <TextField
               {...params}
-              sx={{ mr: 2 }}
+              sx={{ mx: 2 }}
               InputProps={{
                 ...params.InputProps,
                 endAdornment: (

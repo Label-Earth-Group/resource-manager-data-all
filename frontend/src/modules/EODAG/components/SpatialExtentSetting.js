@@ -3,6 +3,9 @@ import { Button, Box, Typography, Tabs, Tab } from '@mui/material';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useSettings } from 'design';
 import shp from 'shpjs';
+import PublicIcon from '@mui/icons-material/Public';
+import PolylineIcon from '@mui/icons-material/Polyline';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 import * as toGeoJSON from 'togeojson';
 // import { GeoPackageAPI } from '@ngageoint/geopackage';
 
@@ -101,14 +104,30 @@ const FileUploader = ({ setGeoJsonData }) => {
 
 export const SpatialExtentSetting = ({ setSpatialExtent }) => {
   const { settings } = useSettings();
-  const [currentTab, setCurrentTab] = useState('区域绘制');
+  const [currentTab, setCurrentTab] = useState('draw');
   const [storedSpatialData, setStoredSpatialData] = useState({
     drawn: null,
     selected: null,
     uploaded: null
   });
   console.info('storedSpatialData', storedSpatialData);
-  const tabs = ['区域绘制', '行政区选择', '文件导入'];
+  const tabs = [
+    {
+      key: 'draw',
+      label: '区域绘制',
+      icon: <PolylineIcon />
+    },
+    {
+      key: 'select',
+      label: '区域选择',
+      icon: <PublicIcon />
+    },
+    {
+      key: 'upload',
+      label: '文件导入',
+      icon: <FileUploadIcon />
+    }
+  ];
   return (
     <>
       <Tabs
@@ -119,22 +138,22 @@ export const SpatialExtentSetting = ({ setSpatialExtent }) => {
         scrollButtons="auto"
         textColor="primary"
         value={currentTab}
-        variant="fullWidth"
-        sx={{ width: '100%', p: 0 }}
+        variant="standard"
       >
         {tabs.map((tab) => {
           return (
             <Tab
-              key={tab}
-              label={tab}
-              value={tab}
-              // icon={settings.tabIcons ? <Search /> : null}
+              key={tab.key}
+              label={tab.label}
+              value={tab.key}
+              icon={tab.icon}
               iconPosition="start"
+              sx={{ px: 1, py: 0, minHeight: 48 }}
             />
           );
         })}
       </Tabs>
-      {currentTab === '文件导入' && (
+      {currentTab === 'upload' && (
         <FileUploader
           setGeoJsonData={(geojson) => {
             setStoredSpatialData({
