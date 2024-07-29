@@ -4,6 +4,7 @@ import type {
   DateRange,
   EODAGItemAsset,
   Item,
+  SearchState,
   SearchPayload
 } from 'types/stac';
 import type { Geometry } from 'geojson';
@@ -234,6 +235,37 @@ function formatDatetimeQuery(value: any[]): string | undefined {
     .join('/');
 }
 
+function formatSpatialQuery(geometry: any): any | undefined {
+  if (!geometry) {
+    return undefined;
+  }
+  if (geometry['type'] === 'FeatureCollection') {
+    const geo = geometry.features
+      .filter((e) => e?.type === 'Feature')
+      .map((e) => e.geometry)
+      .filter((e) => e.type === 'Polygon');
+    if (geo.length > 1) {
+      geometry = {
+        type: 'MultiPolygon',
+        coordinates: geo.map((e) => e.coordinates)
+      };
+    } else {
+      geometry = geo?.[0];
+    }
+
+    return geometry;
+  } else if (
+    geometry['type'] === 'Feature' &&
+    geometry.geometry.type === 'Polygon'
+  ) {
+    return geometry.geometry;
+  } else if (geometry['type'] === 'Polygon') {
+    return geometry;
+  } else {
+    return undefined;
+  }
+}
+
 function formatSortbyForPOST(value: string) {
   // POST search requires sortby to be an array of objects containing a property name and sort direction.
   // See spec here: https://api.stacspec.org/v1.0.0-rc.1/item-search/#tag/Item-Search/operation/postItemSearch
@@ -389,7 +421,7 @@ export function formatSearchTerms(
   return searchtermList[fn]((term: string) => targetString.includes(term));
 }
 
-export function formatSearch(searchState: SearchPayload): SearchPayload {
+export function formatSearch(searchState: SearchState): SearchPayload {
   const {
     products,
     spatialExtent,
@@ -411,7 +443,7 @@ export function formatSearch(searchState: SearchPayload): SearchPayload {
   };
 
   if (spatialExtent) {
-    searchPayload['intersects'] = spatialExtent;
+    searchPayload['intersects'] = formatSpatialQuery(spatialExtent);
   }
   if (temporalExtent.some((element) => element != null)) {
     searchPayload['datetime'] = formatDatetimeQuery(temporalExtent);

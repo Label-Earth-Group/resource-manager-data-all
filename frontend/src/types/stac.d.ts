@@ -31,6 +31,15 @@ export type SearchPayload = {
   sortby?: Sortby[];
 };
 
+export type SearchState = {
+  products?: Any[];
+  spatialExtent?: Geometry;
+  temporalExtent?: [Date, Date];
+  cloudCover?: [number, number];
+  page?: number;
+  pageSize?: number;
+};
+
 export type LinkBody = SearchPayload & {
   merge?: boolean;
 };
