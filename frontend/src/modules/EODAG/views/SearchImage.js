@@ -158,10 +158,6 @@ const StacSearch = () => {
             重置
           </Button>
         </Box>
-        <DateRangePicker
-          dateRange={temporalExtent}
-          setDateRange={setTemporalExtent}
-        />
         <CloudCoverSlider
           value={searchState['cloudCover']}
           onChange={setCloudCover}
@@ -173,6 +169,25 @@ const StacSearch = () => {
           selectedItemIDs={productIDs}
           setSelectedItemIDs={setProductIDs}
         ></SelectableTree>
+      </Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          right: '0px',
+          mx: `${marginSmall}px`,
+          my: `${marginSmall}px`,
+          backgroundColor: 'white',
+          padding: `${marginSmall}px`,
+          boxShadow: 3,
+          zIndex: 1000,
+          width: `calc(100% - ${3 * marginSmall + 400}px)`,
+          height: '100px'
+        }}
+      >
+        <DateRangePicker
+          dateRange={temporalExtent}
+          setDateRange={setTemporalExtent}
+        />
       </Box>
     </>
   );
