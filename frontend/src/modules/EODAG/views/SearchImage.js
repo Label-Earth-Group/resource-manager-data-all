@@ -189,18 +189,13 @@ const StacSearch = () => {
           height: '100px'
         }}
       >
-        <Grid item>
+        <Grid item sx={{ paddingTop: 1 }}>
           <DateRangePicker
             dateRange={temporalExtent}
             setDateRange={setTemporalExtent}
           />
         </Grid>
-        <Grid
-          item
-          sx={{
-            width: '600px'
-          }}
-        >
+        <Grid item>
           <SpatialExtentSetting
             setSpatialExtent={setSpatialExtent}
           ></SpatialExtentSetting>
