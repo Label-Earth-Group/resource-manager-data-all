@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import { Button, Box, Typography } from '@mui/material';
+import { Button, Box, Typography, Grid } from '@mui/material';
 import { headerHeight, marginSmall, useSettings } from 'design';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -19,6 +19,7 @@ import {
   DateRangePicker,
   CustomDateRangePicker
 } from '../components/DateTimeRangePicker.js';
+import { SpatialExtentSetting } from '../components/SpatialExtentSetting.js';
 import { Utils } from '../services/utils.js';
 
 const StacSearch = () => {
@@ -170,7 +171,11 @@ const StacSearch = () => {
           setSelectedItemIDs={setProductIDs}
         ></SelectableTree>
       </Box>
-      <Box
+      <Grid
+        container
+        direction="row"
+        justifyContent="space-between"
+        alignItems="top"
         sx={{
           position: 'absolute',
           right: '0px',
@@ -184,11 +189,23 @@ const StacSearch = () => {
           height: '100px'
         }}
       >
-        <DateRangePicker
-          dateRange={temporalExtent}
-          setDateRange={setTemporalExtent}
-        />
-      </Box>
+        <Grid item>
+          <DateRangePicker
+            dateRange={temporalExtent}
+            setDateRange={setTemporalExtent}
+          />
+        </Grid>
+        <Grid
+          item
+          sx={{
+            width: '600px'
+          }}
+        >
+          <SpatialExtentSetting
+            setSpatialExtent={setSpatialExtent}
+          ></SpatialExtentSetting>
+        </Grid>
+      </Grid>
     </>
   );
 };

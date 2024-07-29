@@ -32,7 +32,7 @@ export function ProductTags({ products, setProductIDs }) {
         return (
           <ListItem key={product['id']}>
             <Chip
-              label={product['id']}
+              label={product['id'].split(':').pop()}
               size="small"
               onDelete={handleDeleteID(product['id'])}
             />
