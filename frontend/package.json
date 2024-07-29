@@ -83,6 +83,7 @@
     "simplebar": "^5.3.6",
     "simplebar-react": "^2.3.6",
     "stac-layer": "^1.0.0-beta.1",
+    "togeojson": "^0.16.0",
     "underscore": "^1.13.6",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
