@@ -19,64 +19,66 @@ export function DateRangePicker({ dateRange, setDateRange }) {
   const clearEndDate = () => setDateRange([dateRange[0], null]);
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Typography component="span" sx={{ mx: 1, lineHeight: '40px' }}>
-        时间范围：
-      </Typography>
-      <DateTimePicker
-        openTo="year"
-        views={['year', 'month', 'day']}
-        format="yyyy-MM-dd"
-        value={dateRange[0]}
-        maxDate={dateRange[1]}
-        onAccept={(newValue) => setDateRange([newValue, dateRange[1]])}
-        slotProps={{
-          inputAdornment: {
-            position: 'start'
-          },
-          textField: {
-            InputProps: {
-              endAdornment: (
-                <IconButton onClick={clearStartDate} sx={{ px: 0, py: 1 }}>
-                  <CloseIcon />
-                </IconButton>
-              )
+    <Box>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <Typography component="span" sx={{ mx: 1, lineHeight: '40px' }}>
+          时间范围：
+        </Typography>
+        <DateTimePicker
+          openTo="year"
+          views={['year', 'month', 'day']}
+          format="yyyy-MM-dd"
+          value={dateRange[0]}
+          maxDate={dateRange[1]}
+          onAccept={(newValue) => setDateRange([newValue, dateRange[1]])}
+          slotProps={{
+            inputAdornment: {
+              position: 'start'
             },
-            inputProps: {
-              sx: { padding: 0 }
+            textField: {
+              InputProps: {
+                endAdornment: (
+                  <IconButton onClick={clearStartDate} sx={{ px: 0, py: 1 }}>
+                    <CloseIcon />
+                  </IconButton>
+                )
+              },
+              inputProps: {
+                sx: { padding: 0 }
+              }
             }
-          }
-        }}
-      />
-      <Typography component="span" sx={{ mx: 1, lineHeight: '40px' }}>
-        --
-      </Typography>
-      <DateTimePicker
-        openTo="year"
-        views={['year', 'month', 'day']}
-        format="yyyy-MM-dd"
-        value={dateRange[1]}
-        minDate={dateRange[0]}
-        onChange={(newValue) => setDateRange([dateRange[0], newValue])}
-        slotProps={{
-          inputAdornment: {
-            position: 'start'
-          },
-          textField: {
-            InputProps: {
-              endAdornment: (
-                <IconButton onClick={clearEndDate} sx={{ px: 0, py: 1 }}>
-                  <CloseIcon />
-                </IconButton>
-              )
+          }}
+        />
+        <Typography component="span" sx={{ mx: 1, lineHeight: '40px' }}>
+          --
+        </Typography>
+        <DateTimePicker
+          openTo="year"
+          views={['year', 'month', 'day']}
+          format="yyyy-MM-dd"
+          value={dateRange[1]}
+          minDate={dateRange[0]}
+          onChange={(newValue) => setDateRange([dateRange[0], newValue])}
+          slotProps={{
+            inputAdornment: {
+              position: 'start'
             },
-            inputProps: {
-              sx: { padding: 0 }
+            textField: {
+              InputProps: {
+                endAdornment: (
+                  <IconButton onClick={clearEndDate} sx={{ px: 0, py: 1 }}>
+                    <CloseIcon />
+                  </IconButton>
+                )
+              },
+              inputProps: {
+                sx: { padding: 0 }
+              }
             }
-          }
-        }}
-      />
-    </LocalizationProvider>
+          }}
+        />
+      </LocalizationProvider>
+    </Box>
   );
 }
 

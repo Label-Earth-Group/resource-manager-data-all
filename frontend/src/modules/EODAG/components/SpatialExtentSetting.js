@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-import { Tabs, Tab } from '@mui/material';
+import { Box, Tabs, Tab } from '@mui/material';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSettings } from 'design';
 import PublicIcon from '@mui/icons-material/Public';
 import PolylineIcon from '@mui/icons-material/Polyline';
@@ -46,7 +46,7 @@ export const SpatialExtentSetting = ({ setSpatialExtent }) => {
   }, [currentTab, storedSpatialData, setSpatialExtent]);
 
   return (
-    <>
+    <Box>
       <Tabs
         indicatorColor="primary"
         onChange={(event, value) => {
@@ -90,6 +90,6 @@ export const SpatialExtentSetting = ({ setSpatialExtent }) => {
           }}
         />
       )}
-    </>
+    </Box>
   );
 };

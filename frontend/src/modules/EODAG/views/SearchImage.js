@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import { Button, Box, Typography, Grid } from '@mui/material';
+import { Button, Box, Typography, Grid, Stack, Divider } from '@mui/material';
 import { headerHeight, marginSmall, useSettings } from 'design';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -146,19 +146,6 @@ const StacSearch = () => {
           height: `calc(100% - ${headerHeight + 2 * marginSmall}px)`
         }}
       >
-        <Box sx={{ mb: 2 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSearchItems}
-            sx={{ mr: 2 }}
-          >
-            查询
-          </Button>
-          <Button variant="contained" color="secondary" onClick={handleReset}>
-            重置
-          </Button>
-        </Box>
         <CloudCoverSlider
           value={searchState['cloudCover']}
           onChange={setCloudCover}
@@ -171,11 +158,13 @@ const StacSearch = () => {
           setSelectedItemIDs={setProductIDs}
         ></SelectableTree>
       </Box>
-      <Grid
-        container
+      <Stack
         direction="row"
-        justifyContent="space-between"
-        alignItems="top"
+        // justifyContent="space-between"
+        alignItems="center"
+        justifyContent="flex-start"
+        divider={<Divider orientation="vertical" flexItem />}
+        spacing={2}
         sx={{
           position: 'absolute',
           right: '0px',
@@ -189,18 +178,29 @@ const StacSearch = () => {
           height: '100px'
         }}
       >
-        <Grid item sx={{ paddingTop: 1 }}>
-          <DateRangePicker
-            dateRange={temporalExtent}
-            setDateRange={setTemporalExtent}
-          />
-        </Grid>
-        <Grid item>
-          <SpatialExtentSetting
-            setSpatialExtent={setSpatialExtent}
-          ></SpatialExtentSetting>
-        </Grid>
-      </Grid>
+        <DateRangePicker
+          dateRange={temporalExtent}
+          setDateRange={setTemporalExtent}
+        />
+
+        <SpatialExtentSetting
+          setSpatialExtent={setSpatialExtent}
+        ></SpatialExtentSetting>
+
+        <Box sx={{ mb: 2 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSearchItems}
+            sx={{ mr: 2 }}
+          >
+            查询
+          </Button>
+          <Button variant="contained" color="secondary" onClick={handleReset}>
+            重置
+          </Button>
+        </Box>
+      </Stack>
     </>
   );
 };
