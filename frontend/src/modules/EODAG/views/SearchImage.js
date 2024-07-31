@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
 
-import { Button, Box, Typography, Grid, Stack, Divider } from '@mui/material';
-import { headerHeight, marginSmall, useSettings } from 'design';
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { Button, Box, Typography, Stack, Divider } from '@mui/material';
+import { headerHeight, marginSmall } from 'design';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useTheme } from '@mui/styles';
 import { Helmet } from 'react-helmet-async';
 import { MapComponent } from '../components/TestMap.js';
 import { useDispatch } from 'globalErrors';
@@ -20,6 +21,7 @@ import { Utils } from '../services/utils.js';
 const StacSearch = () => {
   const PAGESIZE = 20;
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   // ======================== initialize the states ====================================
   // 1.states for search query
@@ -39,7 +41,7 @@ const StacSearch = () => {
     cloudCover: cloudCover,
     pageSize: PAGESIZE
   };
-  console.log('searchState', searchState);
+  console.info('searchState', searchState);
 
   // 2. states for result display
   /**
@@ -99,47 +101,6 @@ const StacSearch = () => {
       <Helmet>
         <title>Search Remote Sensing Images</title>
       </Helmet>
-      <div
-        style={{
-          position: 'static',
-          top: '0px',
-          left: '0px',
-          width: '100%',
-          height: '100%'
-        }}
-      >
-        <MapComponent
-          spatialExtent={spatialExtent}
-          onSpatialExtentChange={setSpatialExtent}
-        ></MapComponent>
-      </div>
-      <Box
-        sx={{
-          position: 'absolute',
-          left: '0px',
-          bottom: '0px',
-          mx: `${marginSmall}px`,
-          my: `${marginSmall}px`,
-          backgroundColor: 'white',
-          padding: `${marginSmall}px`,
-          boxShadow: 3,
-          zIndex: 1000,
-          width: '400px',
-          height: `calc(100% - ${headerHeight + 4 * marginSmall + 60}px)`
-        }}
-      >
-        <CloudCoverSlider
-          value={searchState['cloudCover']}
-          onChange={setCloudCover}
-        />
-        <Typography variant="body1">影像产品</Typography>
-        <ProductTags products={products} setProductIDs={setProductIDs} />
-        <SelectableTree
-          items={productTree}
-          selectedItemIDs={productIDs}
-          setSelectedItemIDs={setProductIDs}
-        ></SelectableTree>
-      </Box>
       <Stack
         direction="row"
         alignItems="center"
@@ -147,15 +108,10 @@ const StacSearch = () => {
         divider={<Divider orientation="vertical" flexItem variant="middle" />}
         spacing={2}
         sx={{
-          position: 'absolute',
-          right: '0px',
-          mx: `${marginSmall}px`,
-          my: `${marginSmall}px`,
-          backgroundColor: 'white',
           padding: `${marginSmall}px`,
-          boxShadow: 3,
-          zIndex: 1000,
-          width: `calc(100% - ${2 * marginSmall}px)`
+          width: '100%',
+          height: '72px',
+          backgroundColor: theme.palette.background
         }}
       >
         <DateRangePicker
@@ -179,6 +135,44 @@ const StacSearch = () => {
           </Button>
         </Box>
       </Stack>
+      <div
+        style={{
+          position: 'static',
+          top: '60px',
+          left: '0px',
+          width: '100%',
+          height: `calc(100% - 72px)`
+        }}
+      >
+        <MapComponent
+          spatialExtent={spatialExtent}
+          onSpatialExtentChange={setSpatialExtent}
+        ></MapComponent>
+      </div>
+      <Box
+        sx={{
+          position: 'absolute',
+          left: '0px',
+          bottom: '0px',
+          mx: `${marginSmall}px`,
+          my: `${marginSmall}px`,
+          backgroundColor: 'white',
+          padding: `${marginSmall}px`,
+          boxShadow: 3,
+          zIndex: 1000,
+          width: '400px',
+          height: `calc(100% - ${headerHeight + 2 * marginSmall + 72}px)`
+        }}
+      >
+        <CloudCoverSlider value={cloudCover} onChange={setCloudCover} />
+        <Typography variant="body1">影像产品</Typography>
+        <ProductTags products={products} setProductIDs={setProductIDs} />
+        <SelectableTree
+          items={productTree}
+          selectedItemIDs={productIDs}
+          setSelectedItemIDs={setProductIDs}
+        ></SelectableTree>
+      </Box>
     </>
   );
 };

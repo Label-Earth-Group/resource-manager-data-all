@@ -3,6 +3,7 @@ import {
   IconButton,
   TextField,
   Box,
+  Stack,
   InputAdornment,
   Typography
 } from '@mui/material';
@@ -12,6 +13,7 @@ import {
   LocalizationProvider
 } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import zhCN from 'date-fns/locale/zh-CN';
 import CloseIcon from '@mui/icons-material/Close';
 
 export function DateRangePicker({ dateRange, setDateRange }) {
@@ -19,13 +21,13 @@ export function DateRangePicker({ dateRange, setDateRange }) {
   const clearEndDate = () => setDateRange([dateRange[0], null]);
 
   return (
-    <Box>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Typography component="span" sx={{ mr: 1, lineHeight: '40px' }}>
+    <Stack direction="row" alignItems="center" justifyContent="center">
+      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={zhCN}>
+        <Typography component="span" variant="body1" sx={{ mr: 1 }}>
           时间范围：
         </Typography>
         <DateTimePicker
-          openTo="year"
+          openTo="month"
           views={['year', 'month', 'day']}
           format="yyyy-MM-dd"
           value={dateRange[0]}
@@ -38,22 +40,20 @@ export function DateRangePicker({ dateRange, setDateRange }) {
             textField: {
               InputProps: {
                 endAdornment: (
-                  <IconButton onClick={clearStartDate} sx={{ px: 0, py: 1 }}>
+                  <IconButton onClick={clearStartDate}>
                     <CloseIcon />
                   </IconButton>
                 )
               },
-              inputProps: {
-                sx: { padding: 0 }
-              }
+              size: 'small'
             }
           }}
         />
-        <Typography component="span" sx={{ mx: 1, lineHeight: '40px' }}>
+        <Typography component="span" variant="body1" sx={{ mx: 1 }}>
           --
         </Typography>
         <DateTimePicker
-          openTo="year"
+          openTo="month"
           views={['year', 'month', 'day']}
           format="yyyy-MM-dd"
           value={dateRange[1]}
@@ -66,19 +66,17 @@ export function DateRangePicker({ dateRange, setDateRange }) {
             textField: {
               InputProps: {
                 endAdornment: (
-                  <IconButton onClick={clearEndDate} sx={{ px: 0, py: 1 }}>
+                  <IconButton onClick={clearEndDate}>
                     <CloseIcon />
                   </IconButton>
                 )
               },
-              inputProps: {
-                sx: { padding: 0 }
-              }
+              size: 'small'
             }
           }}
         />
       </LocalizationProvider>
-    </Box>
+    </Stack>
   );
 }
 

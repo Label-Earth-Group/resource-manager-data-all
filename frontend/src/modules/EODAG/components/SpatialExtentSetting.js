@@ -65,7 +65,6 @@ export const SpatialExtentSetting = ({ setSpatialExtent }) => {
               value={tab.key}
               icon={tab.icon}
               iconPosition="start"
-              sx={{ px: 1, py: 0, minHeight: 48 }}
             />
           );
         })}
