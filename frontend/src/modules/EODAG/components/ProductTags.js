@@ -23,7 +23,7 @@ export function ProductTags({ products, setProductIDs }) {
         flexWrap: 'wrap',
         listStyle: 'none',
         my: 0.5,
-        height: '12%',
+        height: '120px',
         overflow: 'auto'
       }}
       component="ul"

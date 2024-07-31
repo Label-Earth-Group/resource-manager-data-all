@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Button, Box, Typography } from '@mui/material';
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
-import { TreeItem2 } from '@mui/x-tree-view/TreeItem2';
 import React, { useState, useEffect, useRef } from 'react';
 import { useTreeViewApiRef } from '@mui/x-tree-view/hooks';
 
@@ -65,17 +63,15 @@ export const SelectableTree = ({
   });
 
   return (
-    <Box sx={{ height: '70%', width: '100%', overflowY: 'auto' }}>
-      <RichTreeView
-        multiSelect
-        checkboxSelection
-        apiRef={apiRef}
-        items={items}
-        selectedItems={selectedItemIDs}
-        onSelectedItemsChange={handleSelectedItemsChange}
-        onItemSelectionToggle={handleItemSelectionToggle}
-        // slots={{ item: TreeItem2 }}
-      />
-    </Box>
+    <RichTreeView
+      multiSelect
+      checkboxSelection
+      apiRef={apiRef}
+      items={items}
+      selectedItems={selectedItemIDs}
+      onSelectedItemsChange={handleSelectedItemsChange}
+      onItemSelectionToggle={handleItemSelectionToggle}
+      // slots={{ item: TreeItem2 }}
+    />
   );
 };

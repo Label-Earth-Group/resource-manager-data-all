@@ -164,14 +164,18 @@ const StacSearch = () => {
           height: `calc(100% - ${headerHeight + 2 * marginSmall + 72}px)`
         }}
       >
-        <CloudCoverSlider value={cloudCover} onChange={setCloudCover} />
-        <Typography variant="body1">影像产品</Typography>
-        <ProductTags products={products} setProductIDs={setProductIDs} />
-        <SelectableTree
-          items={productTree}
-          selectedItemIDs={productIDs}
-          setSelectedItemIDs={setProductIDs}
-        ></SelectableTree>
+        <Stack sx={{ height: '100%' }}>
+          <CloudCoverSlider value={cloudCover} onChange={setCloudCover} />
+          <Typography variant="body1">影像产品</Typography>
+          <ProductTags products={products} setProductIDs={setProductIDs} />
+          <Box sx={{ flexBasis: 'auto', flexGrow: 1, overflowY: 'auto' }}>
+            <SelectableTree
+              items={productTree}
+              selectedItemIDs={productIDs}
+              setSelectedItemIDs={setProductIDs}
+            ></SelectableTree>
+          </Box>
+        </Stack>
       </Box>
     </>
   );
