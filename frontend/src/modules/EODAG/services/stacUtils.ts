@@ -438,7 +438,17 @@ export function formatSearch(searchState: SearchState): SearchPayload {
     // page: page,
     'filter-lang': 'cql2-json',
     fields: {
-      exclude: ['assets']
+      include: [
+        'bbox',
+        'type',
+        'geometry',
+        'properties',
+        'description',
+        'stac_version',
+        'stac_extensions',
+        'assets.thumbnail',
+        'assets.reduced_resolution_browse'
+      ]
     }
   };
 

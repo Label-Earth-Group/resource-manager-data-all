@@ -6,6 +6,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useTheme } from '@mui/styles';
 import { Helmet } from 'react-helmet-async';
 import { MapComponent } from '../components/TestMap.js';
+import { StacGeometryLayer } from '../components/StacMapLayer.js';
 import { useDispatch } from 'globalErrors';
 import { useHandleError } from '../../../utils/utils.js';
 import { useLazySearchItemsQuery } from '../services/searchApi.ts';
@@ -16,6 +17,7 @@ import { ProductTags } from '../components/ProductTags.js';
 import { formatSearch } from '../services/stacUtils.ts';
 import { DateRangePicker } from '../components/DateTimeRangePicker.js';
 import { SpatialExtentSetting } from '../components/SpatialExtentSetting.js';
+import { SERPListDisplay, SERPCardDisplay } from '../components/SERP.js';
 import { Utils } from '../services/utils.js';
 
 const StacSearch = () => {
@@ -147,7 +149,15 @@ const StacSearch = () => {
         <MapComponent
           spatialExtent={spatialExtent}
           onSpatialExtentChange={setSpatialExtent}
-        ></MapComponent>
+        >
+          {searchResponse && (
+            <StacGeometryLayer
+              stacData={searchResponse}
+              highlightedItems={highlightedItems}
+              setHighlightedItems={setHighlightedItems}
+            ></StacGeometryLayer>
+          )}
+        </MapComponent>
       </div>
       <Box
         sx={{
@@ -177,6 +187,37 @@ const StacSearch = () => {
           </Box>
         </Stack>
       </Box>
+      {searchResponse && (
+        <Box
+          sx={{
+            position: 'absolute',
+            left: '0px',
+            bottom: '0px',
+            mx: `${marginSmall}px`,
+            my: `${marginSmall}px`,
+            backgroundColor: 'white',
+            padding: `${marginSmall}px`,
+            boxShadow: 3,
+            zIndex: 1000,
+            width: '400px',
+            height: `calc(100% - ${headerHeight + 2 * marginSmall + 72}px)`,
+            overflowY: 'auto'
+          }}
+        >
+          <Box>
+            <Typography>
+              查询到<strong>{searchResponse?.context?.matched}</strong> 条结果
+            </Typography>
+          </Box>
+          <SERPListDisplay
+            features={searchResponse?.features}
+            entryPoint="eodag"
+            showCollection={true}
+            highlightedItems={highlightedItems}
+            setHighlightedItems={setHighlightedItems}
+          ></SERPListDisplay>
+        </Box>
+      )}
     </>
   );
 };
