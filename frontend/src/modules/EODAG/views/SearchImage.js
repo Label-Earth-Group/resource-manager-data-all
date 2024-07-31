@@ -3,9 +3,7 @@
 import { Button, Box, Typography, Grid, Stack, Divider } from '@mui/material';
 import { headerHeight, marginSmall, useSettings } from 'design';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { LeafletMapComponent } from '../components/MapComponent.js';
 import { MapComponent } from '../components/TestMap.js';
 import { useDispatch } from 'globalErrors';
 import { useHandleError } from '../../../utils/utils.js';
@@ -15,19 +13,13 @@ import { CloudCoverSlider } from '../components/CloudCoverSlider.js';
 import { SelectableTree } from '../components/SelectableTree.js';
 import { ProductTags } from '../components/ProductTags.js';
 import { formatSearch } from '../services/stacUtils.ts';
-import {
-  DateRangePicker,
-  CustomDateRangePicker
-} from '../components/DateTimeRangePicker.js';
+import { DateRangePicker } from '../components/DateTimeRangePicker.js';
 import { SpatialExtentSetting } from '../components/SpatialExtentSetting.js';
 import { Utils } from '../services/utils.js';
 
 const StacSearch = () => {
   const PAGESIZE = 20;
-  const { settings } = useSettings();
   const dispatch = useDispatch();
-
-  const mapRef = useRef();
 
   // ======================== initialize the states ====================================
   // 1.states for search query
@@ -35,7 +27,6 @@ const StacSearch = () => {
   const [spatialExtent, setSpatialExtent] = useState(null);
   const [temporalExtent, setTemporalExtent] = useState([null, null]);
   const [cloudCover, setCloudCover] = useState([0, 100]);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const products = useMemo(() => {
     return Utils.filterLeafObjects(productTree, productIDs);
@@ -46,7 +37,6 @@ const StacSearch = () => {
     spatialExtent: spatialExtent,
     temporalExtent: temporalExtent,
     cloudCover: cloudCover,
-    page: currentPage,
     pageSize: PAGESIZE
   };
   console.log('searchState', searchState);
@@ -59,8 +49,6 @@ const StacSearch = () => {
   const [searchResponse, setSearchResponse] = useState(null);
 
   // 3. states solely for UI control
-  const [currentTab, setCurrentTab] = useState('Search');
-  const [selectedProductTreeIDs, setSelectedProductTreeIDs] = useState([]);
   const [highlightedItems, setHighlightedItems] = useState([]);
 
   // ======================= wiring up the states =================================
@@ -70,16 +58,11 @@ const StacSearch = () => {
   useHandleError(searchError, dispatch);
   useEffect(() => {
     setSearchResponse(data);
-  }, [data]); //wiring the display state with rtk-query state
+  }, [data]);
+  //wiring the display state with rtk-query state
 
   // 2. search triggers
   const handleSearchItems = () => {
-    setCurrentPage(1); //every time the search triggers, set the page to start from 1
-    searchItems(formatSearch(searchState), true);
-  };
-
-  const handleSetPage = (page) => {
-    setCurrentPage(page);
     searchItems(formatSearch(searchState), true);
   };
 
@@ -89,7 +72,6 @@ const StacSearch = () => {
     setSpatialExtent(null);
     setTemporalExtent([null, null]);
     setCloudCover([0, 100]);
-    setCurrentPage(1);
     setSearchResponse(null);
     setHighlightedItems([]);
   };
@@ -126,7 +108,6 @@ const StacSearch = () => {
           height: '100%'
         }}
       >
-        {/* <LeafletMapComponent ref={mapRef}></LeafletMapComponent> */}
         <MapComponent
           spatialExtent={spatialExtent}
           onSpatialExtentChange={setSpatialExtent}
@@ -181,11 +162,9 @@ const StacSearch = () => {
           dateRange={temporalExtent}
           setDateRange={setTemporalExtent}
         />
-
         <SpatialExtentSetting
           setSpatialExtent={setSpatialExtent}
         ></SpatialExtentSetting>
-
         <Box sx={{ flex: 'auto', textAlign: 'right' }}>
           <Button
             variant="contained"
