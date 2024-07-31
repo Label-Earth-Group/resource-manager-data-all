@@ -493,8 +493,8 @@ export const productTree = [
             label: 'Level-0 RAW product',
             children: [
               {
-                id: 'product:SW_RAW__0S',
-                label: 'SW',
+                id: 'product:SM_RAW__0S',
+                label: 'SM',
                 filter: {
                   op: 'and',
                   args: [
@@ -515,7 +515,7 @@ export const productTree = [
                     },
                     {
                       op: '=',
-                      args: [{ property: 'sar:instrument_mode' }, 'SW']
+                      args: [{ property: 'sar:instrument_mode' }, 'SM']
                     }
                   ]
                 }
@@ -583,8 +583,8 @@ export const productTree = [
             label: 'Level-1 GRD product',
             children: [
               {
-                id: 'product:SW_GRD__1S',
-                label: 'SW',
+                id: 'product:SM_GRD__1S',
+                label: 'SM',
                 filter: {
                   op: 'and',
                   args: [
@@ -605,7 +605,7 @@ export const productTree = [
                     },
                     {
                       op: '=',
-                      args: [{ property: 'sar:instrument_mode' }, 'SW']
+                      args: [{ property: 'sar:instrument_mode' }, 'SM']
                     }
                   ]
                 }
@@ -701,8 +701,8 @@ export const productTree = [
             label: 'Level-1 SLC product',
             children: [
               {
-                id: 'product:SW_SLC__1S',
-                label: 'SW',
+                id: 'product:SM_SLC__1S',
+                label: 'SM',
                 filter: {
                   op: 'and',
                   args: [
@@ -819,8 +819,8 @@ export const productTree = [
             label: 'Level-2 OCN product',
             children: [
               {
-                id: 'product:SW_OCN__2S',
-                label: 'SW',
+                id: 'product:SM_OCN__2S',
+                label: 'SM',
                 filter: {
                   op: 'and',
                   args: [
@@ -841,7 +841,7 @@ export const productTree = [
                     },
                     {
                       op: '=',
-                      args: [{ property: 'sar:instrument_mode' }, 'SW']
+                      args: [{ property: 'sar:instrument_mode' }, 'SM']
                     }
                   ]
                 }
