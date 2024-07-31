@@ -136,6 +136,7 @@ const StacSearch = () => {
         sx={{
           position: 'absolute',
           left: '0px',
+          bottom: '0px',
           mx: `${marginSmall}px`,
           my: `${marginSmall}px`,
           backgroundColor: 'white',
@@ -143,7 +144,7 @@ const StacSearch = () => {
           boxShadow: 3,
           zIndex: 1000,
           width: '400px',
-          height: `calc(100% - ${headerHeight + 2 * marginSmall}px)`
+          height: `calc(100% - ${headerHeight + 4 * marginSmall + 60}px)`
         }}
       >
         <CloudCoverSlider
@@ -160,10 +161,9 @@ const StacSearch = () => {
       </Box>
       <Stack
         direction="row"
-        // justifyContent="space-between"
         alignItems="center"
         justifyContent="flex-start"
-        divider={<Divider orientation="vertical" flexItem />}
+        divider={<Divider orientation="vertical" flexItem variant="middle" />}
         spacing={2}
         sx={{
           position: 'absolute',
@@ -174,8 +174,7 @@ const StacSearch = () => {
           padding: `${marginSmall}px`,
           boxShadow: 3,
           zIndex: 1000,
-          width: `calc(100% - ${3 * marginSmall + 400}px)`,
-          height: '100px'
+          width: `calc(100% - ${2 * marginSmall}px)`
         }}
       >
         <DateRangePicker
@@ -187,7 +186,7 @@ const StacSearch = () => {
           setSpatialExtent={setSpatialExtent}
         ></SpatialExtentSetting>
 
-        <Box sx={{ mb: 2 }}>
+        <Box sx={{ flex: 'auto', textAlign: 'right' }}>
           <Button
             variant="contained"
             color="primary"

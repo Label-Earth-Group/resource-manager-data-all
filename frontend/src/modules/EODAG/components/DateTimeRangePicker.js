@@ -21,7 +21,7 @@ export function DateRangePicker({ dateRange, setDateRange }) {
   return (
     <Box>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Typography component="span" sx={{ mx: 1, lineHeight: '40px' }}>
+        <Typography component="span" sx={{ mr: 1, lineHeight: '40px' }}>
           时间范围：
         </Typography>
         <DateTimePicker
