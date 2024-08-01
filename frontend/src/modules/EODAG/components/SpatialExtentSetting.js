@@ -7,6 +7,7 @@ import PublicIcon from '@mui/icons-material/Public';
 import PolylineIcon from '@mui/icons-material/Polyline';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { GeoFileLoader } from '../components/GeoFileLoader.js';
+import { RegionSelector } from '../components/RegionSelector.js';
 
 export const SpatialExtentSetting = ({ setSpatialExtent }) => {
   const tabs = [
@@ -89,6 +90,7 @@ export const SpatialExtentSetting = ({ setSpatialExtent }) => {
           }}
         />
       )}
+      {currentTab === 'select' && <RegionSelector></RegionSelector>}
     </Box>
   );
 };

@@ -191,7 +191,7 @@ const StacSearch = () => {
         <Box
           sx={{
             position: 'absolute',
-            left: '0px',
+            right: '0px',
             bottom: '0px',
             mx: `${marginSmall}px`,
             my: `${marginSmall}px`,
@@ -209,13 +209,13 @@ const StacSearch = () => {
               查询到<strong>{searchResponse?.context?.matched}</strong> 条结果
             </Typography>
           </Box>
-          <SERPListDisplay
+          <SERPCardDisplay
             features={searchResponse?.features}
             entryPoint="eodag"
             showCollection={true}
             highlightedItems={highlightedItems}
             setHighlightedItems={setHighlightedItems}
-          ></SERPListDisplay>
+          ></SERPCardDisplay>
         </Box>
       )}
     </>

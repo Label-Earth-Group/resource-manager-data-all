@@ -10,6 +10,7 @@ import { eodagApi } from 'modules/EODAG/services/eodagApi.ts';
 import { pgStacApi } from 'modules/PGSTAC/services/pgStacApi.ts';
 import { titilerApi } from 'modules/PGSTAC/services/titilerApi.ts';
 import { githubApi } from 'modules/GeoJournal/services/githubApi.js';
+import { regionApi } from 'modules/EODAG/services/regionApi.js';
 
 export const store = configureStore({
   reducer: {
@@ -18,7 +19,8 @@ export const store = configureStore({
     [eodagApi.reducerPath]: eodagApi.reducer,
     [pgStacApi.reducerPath]: pgStacApi.reducer,
     [titilerApi.reducerPath]: titilerApi.reducer,
-    [githubApi.reducerPath]: githubApi.reducer
+    [githubApi.reducerPath]: githubApi.reducer,
+    [regionApi.reducerPath]: regionApi.reducer
   },
   devTools: process.env.REACT_APP_ENABLE_REDUX_DEV_TOOLS === 'true',
   middleware: (getDefaultMiddleware) =>
@@ -28,6 +30,7 @@ export const store = configureStore({
       .concat(pgStacApi.middleware)
       .concat(titilerApi.middleware)
       .concat(githubApi.middleware)
+      .concat(regionApi.middleware)
 });
 
 setupListeners(store.dispatch);
