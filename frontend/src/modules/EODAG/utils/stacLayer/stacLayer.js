@@ -74,6 +74,10 @@ export const stacGeometryLayer = (data, options = {}) => {
     data.isItem() ||
     data.isCollection()
   ) {
+    if (data.toGeoJSON().features.length === 0) {
+      log(1, 'No features found in the provided stac data');
+      return null;
+    }
     const layer = L.geoJSON(data.toGeoJSON(), {
       style: options.collectionStyle
     });

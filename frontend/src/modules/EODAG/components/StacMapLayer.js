@@ -55,7 +55,7 @@ export const StacGeometryLayer = memo(
           setHighlightedItems && setHighlightedItems([]);
         }
       };
-    }, [map, stacData]);
+    }, [map, options, setHighlightedItems, stacData]);
 
     // manage the highlighted features
     useEffect(() => {
@@ -79,20 +79,22 @@ export const StacGeometryLayer = memo(
         }
       };
 
-      // set the layer style based on highlighted items
-      const layer = layerRef.current;
-      layer.eachLayer((l) =>
-        l.setStyle(collectionStyle ? collectionStyle : styleFeatureFn)
-      );
-      layer.addTo(map);
+      if (layerRef.current) {
+        // set the layer style based on highlighted items
+        const layer = layerRef.current;
+        layer.eachLayer((l) =>
+          l.setStyle(collectionStyle ? collectionStyle : styleFeatureFn)
+        );
+        layer.addTo(map);
 
-      // set the clicked items to be highlighted
-      setHighlightedItems &&
-        layer.on('click', (event) => {
-          const clicked = event.stac; //this is an array, could be multiple items
-          setHighlightedItems(clicked);
-        });
-    }, [map, highlightedItems, setHighlightedItems]);
+        // set the clicked items to be highlighted
+        setHighlightedItems &&
+          layer.on('click', (event) => {
+            const clicked = event.stac; //this is an array, could be multiple items
+            setHighlightedItems(clicked);
+          });
+      }
+    }, [map, highlightedItems, setHighlightedItems, collectionStyle]);
 
     return null;
   }
