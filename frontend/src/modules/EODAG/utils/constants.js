@@ -430,7 +430,7 @@ export const productTree = [
         children: [
           {
             id: 'product:S2MSI1C',
-            label: 'Level-1C product',
+            label: 'Level-1C Product',
             filter: {
               op: 'and',
               args: [
@@ -454,7 +454,7 @@ export const productTree = [
           },
           {
             id: 'product:S2MSI2A',
-            label: 'Level-2A product',
+            label: 'Level-2A Product',
             filter: {
               op: 'and',
               args: [
@@ -472,6 +472,181 @@ export const productTree = [
                 {
                   op: '=',
                   args: [{ property: 'product:type' }, 'S2MSI2A']
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        id: 'platform:TERRA:instruments:ASTER',
+        label: 'Terra | ASTER',
+        children: [
+          {
+            id: 'product:AST_L1A',
+            label: 'Level-1A Reconstructed Unprocessed Instrument Data',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: '=',
+                  args: [{ property: 'platform' }, 'TERRA']
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['ASTER']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'AST_L1A']
+                }
+              ]
+            }
+          },
+          {
+            id: 'product:AST_L1B',
+            label: 'Level-1B Registered Radiance an the Sensor',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: '=',
+                  args: [{ property: 'platform' }, 'TERRA']
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['ASTER']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'AST_L1B']
+                }
+              ]
+            }
+          },
+          {
+            id: 'product:AST_L1T',
+            label:
+              'Level-1T Registered Radiance at the Sensor (Precision Terrain Corrected)',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: '=',
+                  args: [{ property: 'platform' }, 'TERRA']
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['ASTER']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'AST_L1T']
+                }
+              ]
+            }
+          },
+          {
+            id: 'product:AST_05',
+            label: 'Level-2 Surface Emissivity',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: '=',
+                  args: [{ property: 'platform' }, 'TERRA']
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['ASTER']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'AST_05']
+                }
+              ]
+            }
+          },
+          {
+            id: 'product:AST_07',
+            label: 'Level-2 Surface Reflectance (VNIR & SWIR)',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: '=',
+                  args: [{ property: 'platform' }, 'TERRA']
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['ASTER']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'AST_07']
+                }
+              ]
+            }
+          },
+          {
+            id: 'product:AST_08',
+            label: 'Level-2 Surface Kinetic Temperature',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: '=',
+                  args: [{ property: 'platform' }, 'TERRA']
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['ASTER']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'AST_08']
+                }
+              ]
+            }
+          },
+          {
+            id: 'product:AST_09',
+            label: 'Level-2 Surface Radiance (VNIR & SWIR)',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: '=',
+                  args: [{ property: 'platform' }, 'TERRA']
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['ASTER']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'AST_09']
+                }
+              ]
+            }
+          },
+          {
+            id: 'product:AST_09T',
+            label: 'Level-2 Surface Radiance (TIR)',
+            filter: {
+              op: 'and',
+              args: [
+                {
+                  op: '=',
+                  args: [{ property: 'platform' }, 'TERRA']
+                },
+                {
+                  op: 'a_overlaps',
+                  args: [{ property: 'instruments' }, ['ASTER']]
+                },
+                {
+                  op: '=',
+                  args: [{ property: 'product:type' }, 'AST_09T']
                 }
               ]
             }
