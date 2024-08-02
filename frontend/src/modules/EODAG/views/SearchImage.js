@@ -92,12 +92,6 @@ const StacSearch = () => {
   //   return <>Error</>; //TODO: error display component
   // }
 
-  // last, deal with response result
-  if (searchResponse) {
-    const { features: items } = searchResponse;
-    console.info(items);
-  }
-
   return (
     <>
       <Helmet>

@@ -10,6 +10,7 @@ import {
   CardMedia,
   CardContent,
   Grid,
+  Stack,
   TableContainer,
   Table,
   TableBody,
@@ -22,6 +23,7 @@ import { Label } from 'design';
 import { Link as RouterLink } from 'react-router-dom';
 import { default as createStacObject } from 'stac-js';
 import { useFetchS3Url } from '../services/useFetchS3Url';
+import React, { useRef, useEffect, useCallback } from 'react';
 
 export function SERPListDisplay(props) {
   const theme = useTheme();
@@ -33,13 +35,16 @@ export function SERPListDisplay(props) {
     setHighlightedItems = undefined
   } = props;
 
+  const setListItemHighlighted = useCallback(
+    (feature) => {
+      setHighlightedItems && setHighlightedItems([createStacObject(feature)]);
+    },
+    [setHighlightedItems]
+  );
+
   if (!features || features?.length === 0) {
     return <></>;
   }
-
-  const setListItemHighlighted = (feature) => {
-    setHighlightedItems && setHighlightedItems([createStacObject(feature)]);
-  };
 
   return (
     <TableContainer component={Paper}>
@@ -95,32 +100,40 @@ export function SERPListDisplay(props) {
   );
 }
 
-export function SERPCardDisplay(props) {
-  const theme = useTheme();
-  const {
-    features,
+// use memo to avoid re-rendering
+const ImageCard = React.memo(
+  ({
+    feature,
+    highlighted,
+    setHighlightedItems,
     entryPoint,
-    showCollection = false,
-    highlightedItems = undefined,
-    setHighlightedItems = undefined
-  } = props;
-
-  if (!features || features?.length === 0) {
-    return <></>;
-  }
-
-  const setListItemHighlighted = (feature) => {
-    setHighlightedItems && setHighlightedItems([createStacObject(feature)]);
-  };
-
-  const ImageCard = ({ feature }) => {
+    showCollection
+  }) => {
+    const theme = useTheme();
     const imageS3Path = feature.assets.thumbnail.alternate.s3.href;
     const imageSrc = useFetchS3Url(imageS3Path);
 
+    // if this card is highlighted, scroll to it
+    const ref = useRef(null);
+    useEffect(() => {
+      if (highlighted && ref && ref.current) {
+        ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, [highlighted, ref]);
+
     return (
       <Card
+        ref={ref}
+        onFocus={() => {
+          setHighlightedItems &&
+            setHighlightedItems([createStacObject(feature)]);
+        }}
+        onClick={() => {
+          setHighlightedItems &&
+            setHighlightedItems([createStacObject(feature)]);
+        }}
         sx={
-          highlightedItems?.some((i) => i.id === feature.id)
+          highlighted
             ? {
                 backgroundColor: theme.palette.action.selected,
                 borderTop: `2px solid ${theme.palette.primary.main}`,
@@ -158,17 +171,36 @@ export function SERPCardDisplay(props) {
         <CardContent></CardContent>
       </Card>
     );
-  };
+  }
+);
+
+export function SERPCardDisplay(props) {
+  const {
+    features,
+    entryPoint,
+    showCollection = false,
+    highlightedItems = undefined,
+    setHighlightedItems = undefined
+  } = props;
+
+  if (!features || features?.length === 0) {
+    return <></>;
+  }
 
   return (
     <Box>
-      <Grid container spacing={2}>
+      <Stack spacing={2}>
         {features.map((feature) => (
-          <Grid item xs={'auto'} md={'auto'} key={feature.id}>
-            <ImageCard feature={feature} />
-          </Grid>
+          <ImageCard
+            key={feature.id}
+            feature={feature}
+            highlighted={highlightedItems.some((i) => i.id === feature.id)}
+            setHighlightedItems={setHighlightedItems}
+            entryPoint={entryPoint}
+            showCollection={showCollection}
+          />
         ))}
-      </Grid>
+      </Stack>
     </Box>
   );
 }

@@ -55,7 +55,7 @@ export const StacGeometryLayer = memo(
           setHighlightedItems && setHighlightedItems([]);
         }
       };
-    }, [map, options, setHighlightedItems, stacData]);
+    }, [map, stacData]); // re-initialize the map only when stacData changes, or will cause too many rerenders
 
     // manage the highlighted features
     useEffect(() => {
@@ -94,7 +94,7 @@ export const StacGeometryLayer = memo(
             setHighlightedItems(clicked);
           });
       }
-    }, [map, highlightedItems, setHighlightedItems, collectionStyle]);
+    }, [map, collectionStyle, highlightedItems, setHighlightedItems]);
 
     return null;
   }
